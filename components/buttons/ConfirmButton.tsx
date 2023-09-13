@@ -11,7 +11,7 @@ interface DefaultProps extends ButtonProps {
   width: string;
 }
 
-export default function Button({
+export default function ConfirmButton({
   disabled,
   active,
   width,
