@@ -40,10 +40,6 @@ height: 24px;
 border: none;
 border-radius: 100%;
 color: ${props => props.theme.colors.brown6};
-/* cursor: pointer; */
-/* &:disabled{
-  cursor: not-allowed;;
-} */
 `;
 const CountBox = styled.div`
 flex-grow: 1;
