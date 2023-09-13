@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import Icon from "../../public/navigator.png"
+import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
+import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 
 type NavigatorProps = {
   direction: "prev"|"next";
@@ -7,16 +8,24 @@ type NavigatorProps = {
 
 export function PageNavigatorButton({direction}:NavigatorProps) {
   return <>
-  <NavigatorBox direction={direction}/>
+  <NavigatorBox direction={direction}>
+{direction==="prev" && <ArrowBackIosRoundedIcon/>}
+{direction==="next" && <ArrowForwardIosRoundedIcon/>}
+  </NavigatorBox>
   </>;
 }
 
 
 const NavigatorBox = styled.div<NavigatorProps>`
+display: flex;
+align-items: center;
+justify-content: center;
 cursor: pointer;
-width: 45px;
-height: 45px;
+width: 40px;
+height: 40px;
 border-radius: 100%;
-background: url(${Icon.src}) no-repeat ${props=>props.direction==="prev"?"50% 18%":"50% 84%"};;
-
+/* border: 1px solid black; */
+color: ${props => props.theme.colors.brown6};
+background-color: ${props=>props.theme.colors.brown1};
+filter: drop-shadow(0px 0px 5px rgba(98, 66, 42, 0.15));
 `
