@@ -23,7 +23,7 @@ const NumberBox = styled.button<ActiveProps>`
     props.active ? props.theme.colors.brown5 : props.theme.colors.white};
   color: ${(props) =>
     props.active ? props.theme.colors.brown1 : props.theme.colors.brown5};
-font-size: ${props=>props.theme.fontSize.discription};
+  font-size: ${(props) => props.theme.fontSize.discription};
   &:hover {
     background-color: ${(props) => props.theme.colors.brown5};
     color: ${(props) => props.theme.colors.white};

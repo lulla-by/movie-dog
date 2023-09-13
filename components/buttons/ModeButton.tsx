@@ -3,14 +3,16 @@ import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import WbSunnyRoundedIcon from '@mui/icons-material/WbSunnyRounded';
 
 type ModeProps = {
-  mode: "light"|"dark";
+  mode: 'light' | 'dark';
 };
 
 export function ModeButton({ mode }: ModeProps) {
-  return <ModeBox mode={mode}>
-{mode === "light" && <DarkModeRoundedIcon/>}
-{mode === "dark" && <WbSunnyRoundedIcon/>}
-  </ModeBox>;
+  return (
+    <ModeBox mode={mode}>
+      {mode === 'light' && <DarkModeRoundedIcon />}
+      {mode === 'dark' && <WbSunnyRoundedIcon />}
+    </ModeBox>
+  );
 }
 
 const ModeBox = styled.div<ModeProps>`
@@ -21,7 +23,13 @@ const ModeBox = styled.div<ModeProps>`
   width: 40px;
   height: 40px;
   border-radius: 100%;
-  border: 1px solid ${props => props.theme.colors.brown5};
-  color: ${props => props.mode === "light" ? props.theme.colors.brown1:props.theme.colors.brown5};
-  background-color: ${props => props.mode === "dark" ? props.theme.colors.brown1:props.theme.colors.brown5};
+  border: 1px solid ${(props) => props.theme.colors.brown5};
+  color: ${(props) =>
+    props.mode === 'light'
+      ? props.theme.colors.brown1
+      : props.theme.colors.brown5};
+  background-color: ${(props) =>
+    props.mode === 'dark'
+      ? props.theme.colors.brown1
+      : props.theme.colors.brown5};
 `;

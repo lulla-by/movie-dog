@@ -10,14 +10,20 @@ export function RatingComponent({ rating = 0 }: RatingProps) {
 
   const missingRatingBoxes = Array.from(
     { length: missingRating },
-    (_, index) => <MissingRatingBox key={index} ><StarBorderRoundedIcon/></MissingRatingBox>,
+    (_, index) => (
+      <MissingRatingBox key={index}>
+        <StarBorderRoundedIcon />
+      </MissingRatingBox>
+    ),
   );
   const ratingBoxes = Array.from({ length: rating }, (_, index) => (
-    <RatingBox key={index}><StarRoundedIcon/></RatingBox>
+    <RatingBox key={index}>
+      <StarRoundedIcon />
+    </RatingBox>
   ));
 
-  const text =`평균 별점은 ${rating}점 입니다.`
-  
+  const text = `평균 별점은 ${rating}점 입니다.`;
+
   return (
     <Container>
       <AllyText>{text}</AllyText>
@@ -29,20 +35,19 @@ export function RatingComponent({ rating = 0 }: RatingProps) {
 
 const Container = styled.div`
   display: flex;
-  color: ${props => props.theme.colors.brown8};
+  color: ${(props) => props.theme.colors.brown8};
 `;
 const AllyText = styled.p`
-    position: absolute;
+  position: absolute;
   width: 1px;
   height: 1px;
   overflow: hidden;
   clip-path: polygon(0 0, 0 0, 0 0);
-`
+`;
 const RatingBox = styled.div`
   min-width: 24px;
   height: 24px;
   border: none;
-  
 `;
 const MissingRatingBox = styled.div`
   min-width: 24px;
