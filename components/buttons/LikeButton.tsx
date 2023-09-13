@@ -8,8 +8,6 @@ type LikeButtonProps = {
 };
 
 export function LikeButton({ disabled=false, count=0 }: LikeButtonProps) {
-  console.log(disabled);
-  
   return (
     <Container>
       {disabled ?
