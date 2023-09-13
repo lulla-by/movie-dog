@@ -7,7 +7,7 @@ type LikeButtonProps = {
   count?: number;
 };
 
-export function LikeButton({ disabled = false, count = 0 }: LikeButtonProps) {
+export default function LikeButton({ disabled = false, count = 0 }: LikeButtonProps) {
   return (
     <Container>
       {disabled ? (

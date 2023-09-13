@@ -6,7 +6,7 @@ type NavigatorProps = {
   direction: 'prev' | 'next';
 };
 
-export function PageNavigatorButton({ direction }: NavigatorProps) {
+export default function PageNavigatorButton({ direction }: NavigatorProps) {
   return (
     <>
       <NavigatorBox direction={direction}>

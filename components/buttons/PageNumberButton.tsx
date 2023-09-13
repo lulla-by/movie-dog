@@ -6,7 +6,7 @@ interface ActiveProps {
 interface DefautProps extends ActiveProps {
   number: number;
 }
-export function PageNumberButton({ number, active }: DefautProps) {
+export default function PageNumberButton({ number, active }: DefautProps) {
   return <NumberBox active={active}>{number}</NumberBox>;
 }
 

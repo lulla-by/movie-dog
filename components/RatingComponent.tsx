@@ -4,7 +4,7 @@ import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 type RatingProps = {
   rating?: number;
 };
-export function RatingComponent({ rating = 0 }: RatingProps) {
+export default function RatingComponent({ rating = 0 }: RatingProps) {
   const totalRating = 5;
   const missingRating = totalRating - rating;
 

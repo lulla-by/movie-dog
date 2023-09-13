@@ -6,7 +6,7 @@ type ModeProps = {
   mode: 'light' | 'dark';
 };
 
-export function ModeButton({ mode }: ModeProps) {
+export default function ModeButton({ mode }: ModeProps) {
   return (
     <ModeBox mode={mode}>
       {mode === 'light' && <DarkModeRoundedIcon />}
