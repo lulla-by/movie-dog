@@ -47,7 +47,7 @@ const InputBlock = styled.input<InputTypes>`
   width: 100%;
   padding: 10px;
   font-size: ${({ theme }) => theme.fontSize.discription};
-  color: ${({ theme }) => theme.colors.brown9};
+  color: ${({ theme }) => theme.colors.black};
   border: 1px solid ${theme.colors.gray1};
   border-radius: 4px;
 
