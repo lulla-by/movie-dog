@@ -28,4 +28,5 @@ font-size: ${props=>props.theme.fontSize.discription};
     background-color: ${(props) => props.theme.colors.brown5};
     color: ${(props) => props.theme.colors.white};
   }
+  font-weight: 700;
 `;
