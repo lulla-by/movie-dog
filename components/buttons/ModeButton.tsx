@@ -1,13 +1,11 @@
 import styled from 'styled-components';
-import LightModeIcon from '../../public/light-mode.png';
-import DarkModeIcon from '../../public/dark-mode.png';
+import ModeIcon from "../../public/mode.png"
 
 type ModeProps = {
-  mode: string;
+  mode: "light"|"dark";
 };
 
 export function ModeButton({ mode }: ModeProps) {
-  console.log(LightModeIcon);
   return <ModeContainer mode={mode} />;
 }
 
@@ -19,15 +17,11 @@ const ModeContainer = styled.button<ModeProps>`
   width: 40px;
   height: 40px;
   border-radius: 100%;
-  border: 1px solid ${(props) => props.theme.colors.brown5};
-  background-color: ${(props) =>
-    props.mode === 'dark'
-      ? props.theme.colors.brown5
-      : props.theme.colors.brown1};
-  background-position: ${(props) => props.theme.colors.brown5};
-  background: ${(props) =>
+  border: none;
+  background:  url(${ModeIcon.src}) no-repeat 
+  ${(props) =>
       props.mode === 'dark'
-        ? `url(${LightModeIcon.src})`
-        : ` url(${DarkModeIcon.src})`}
-    no-repeat center;
+        ? `50% 80%`
+        : `50% 20%`} ;
+
 `;
