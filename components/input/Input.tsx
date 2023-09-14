@@ -9,8 +9,9 @@ import {
 } from '@mui/icons-material';
 
 type InputTypes = {
-  type: string;
+  type?: string;
   placeholder?: string;
+  width?: number;
   helperText?: string;
   disabled?: boolean;
   state?: string;
@@ -19,6 +20,7 @@ type InputTypes = {
 function Input({
   type = 'text',
   placeholder = '검색어를 입력해주세요',
+  width = 100,
   helperText,
   disabled,
   state,
@@ -32,7 +34,12 @@ function Input({
 
   return (
     <div>
-      <InputBlock type={type} placeholder={placeholder} disabled={disabled} />
+      <InputBlock
+        type={type}
+        placeholder={placeholder}
+        width={width}
+        disabled={disabled}
+      />
       <HelperTextBlock state={state}>
         {state === undefined ? '' : helperIcon[state]}
         <p>{helperText}</p>
@@ -44,7 +51,7 @@ function Input({
 export default Input;
 
 const InputBlock = styled.input<InputTypes>`
-  width: 100%;
+  width: ${({ width }) => width + '%'};
   padding: 10px;
   font-size: ${({ theme }) => theme.fontSize.discription};
   color: ${({ theme }) => theme.colors.black};
