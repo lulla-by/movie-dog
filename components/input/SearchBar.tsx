@@ -3,7 +3,11 @@ import styled from 'styled-components';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import { useState } from 'react';
 
-function SearchBar() {
+type SearchBarTypes = {
+  width?: number;
+};
+
+function SearchBar({ width = 100 }: SearchBarTypes) {
   const [isFocused, setIsFocused] = useState(false);
 
   const focusInput = () => {
@@ -15,7 +19,7 @@ function SearchBar() {
   };
 
   return (
-    <SearchBox>
+    <SearchBox width={width}>
       <InputBlock
         placeholder="검색어를 입력해주세요."
         onFocus={focusInput}
@@ -31,8 +35,9 @@ function SearchBar() {
 
 export default SearchBar;
 
-const SearchBox = styled.div`
+const SearchBox = styled.div<{ width: number }>`
   position: relative;
+  width: ${({ width }) => width + '%'};
 `;
 
 const InputBlock = styled.input`

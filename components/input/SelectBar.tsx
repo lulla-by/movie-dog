@@ -3,9 +3,13 @@ import styled from 'styled-components';
 
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 
-function SelectBar() {
+type SelectBarTypes = {
+  width?: number;
+};
+
+function SelectBar({ width = 100 }: SelectBarTypes) {
   return (
-    <Wrapper>
+    <Wrapper width={width}>
       <SelectBlock defaultValue="" required>
         <option value="" disabled>
           옵션을 선택해주세요.
@@ -23,8 +27,9 @@ function SelectBar() {
 
 export default SelectBar;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ width: number }>`
   position: relative;
+  width: ${({ width }) => width + '%'};
 `;
 
 const SelectBlock = styled.select`
