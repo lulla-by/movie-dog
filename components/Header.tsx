@@ -27,7 +27,7 @@ export function Header() {
   );
 }
 
-const Container = styled.div`
+const Container = styled.header`
   display: flex;
   justify-content: space-between;
   width: 1280px;
