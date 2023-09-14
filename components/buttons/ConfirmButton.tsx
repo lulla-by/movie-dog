@@ -9,19 +9,21 @@ interface ButtonProps {
 
 interface DefaultProps extends ButtonProps {
   width?: number;
+  text?:string;
 }
 
 export default function ConfirmButton({
   disabled,
   active,
   icon,
-  width=100
+  width=100,
+  text = "확인"
 }: DefaultProps) {
   return (
     <>
       <DefaultButton active={active} disabled={disabled} icon={icon} width={width}>
         {icon && <IconBox icon={icon} />}
-        <TextBox>확인</TextBox>
+        <TextBox>{text}</TextBox>
       </DefaultButton>
     </>
   );
