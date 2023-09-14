@@ -18,15 +18,15 @@ const NumberBox = styled.button<ActiveProps>`
   justify-content: center;
   align-items: center;
   border-radius: 100%;
-  border: 1px solid ${(props) => props.theme.colors.brown5};
-  background-color: ${(props) =>
-    props.active ? props.theme.colors.brown5 : props.theme.colors.white};
-  color: ${(props) =>
-    props.active ? props.theme.colors.brown1 : props.theme.colors.brown5};
-  font-size: ${(props) => props.theme.fontSize.discription};
+  border: 1px solid ${({theme}) => theme.colors.brown5};
+  background-color: ${({theme,active}) =>
+    active ? theme.colors.brown5 : theme.colors.white};
+  color: ${({theme,active}) =>
+    active ? theme.colors.brown1 : theme.colors.brown5};
+  font-size: ${({theme}) => theme.fontSize.discription};
   &:hover {
-    background-color: ${(props) => props.theme.colors.brown5};
-    color: ${(props) => props.theme.colors.white};
+    background-color: ${({theme}) => theme.colors.brown5};
+    color: ${({theme}) => theme.colors.white};
   }
   font-weight: 700;
 `;

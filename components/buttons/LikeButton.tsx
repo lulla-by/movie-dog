@@ -30,7 +30,7 @@ const Container = styled.div`
   align-items: center;
   width: 75px;
   height: 32px;
-  border: 1px solid ${(props) => props.theme.colors.brown6};
+  border: 1px solid ${({theme}) => theme.colors.brown6};
   border-radius: 20px;
   padding: 12px;
 `;
@@ -39,11 +39,11 @@ const IconBox = styled.div<LikeButtonProps>`
   height: 24px;
   border: none;
   border-radius: 100%;
-  color: ${(props) => props.theme.colors.brown6};
-  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+  color: ${({theme}) => theme.colors.brown6};
+  cursor: ${({disabled}) => (disabled ? 'default' : 'pointer')};
 `;
 const CountBox = styled.div`
   flex-grow: 1;
-  font-size: ${(props) => props.theme.fontSize.discription};
-  color: ${(props) => props.theme.colors.brown6};
+  font-size: ${({theme}) => theme.fontSize.discription};
+  color: ${({theme}) => theme.colors.brown6};
 `;
