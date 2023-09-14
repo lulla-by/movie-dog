@@ -6,7 +6,7 @@ export default function Footer() {
       <List>
         <ListItem>MOVIE DOG</ListItem>
         <ListItem>Github - hardy-is-cat, lulla-by</ListItem>
-        <ListItem>영화DB제공 - TMDB</ListItem>
+        <ListItem>영화 DB 제공 - TMDB</ListItem>
       </List>
     </Container>
   );
