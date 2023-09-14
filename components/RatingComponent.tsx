@@ -35,7 +35,7 @@ export default function RatingComponent({ rating = 0 }: RatingProps) {
 
 const Container = styled.div`
   display: flex;
-  color: ${(props) => props.theme.colors.brown8};
+  color: ${({theme}) => theme.colors.brown8};
 `;
 const AllyText = styled.p`
   position: absolute;

@@ -23,13 +23,13 @@ const ModeBox = styled.div<ModeProps>`
   width: 40px;
   height: 40px;
   border-radius: 100%;
-  border: 1px solid ${(props) => props.theme.colors.brown5};
-  color: ${(props) =>
-    props.mode === 'light'
-      ? props.theme.colors.brown1
-      : props.theme.colors.brown5};
-  background-color: ${(props) =>
-    props.mode === 'dark'
-      ? props.theme.colors.brown1
-      : props.theme.colors.brown5};
+  border: 1px solid ${({theme}) => theme.colors.brown5};
+  color: ${({mode,theme}) =>
+    mode === 'light'
+      ? theme.colors.brown1
+      : theme.colors.brown5};
+  background-color: ${({mode,theme}) =>
+    mode === 'dark'
+      ? theme.colors.brown1
+      : theme.colors.brown5};
 `;

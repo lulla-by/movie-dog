@@ -8,48 +8,44 @@ interface ButtonProps {
 }
 
 interface DefaultProps extends ButtonProps {
-  width: string;
+  width?: number;
 }
 
 export default function ConfirmButton({
   disabled,
   active,
-  width,
   icon,
+  width=100
 }: DefaultProps) {
   return (
-    <Container width={width}>
-      <DefaultButton active={active} disabled={disabled} icon={icon}>
+    <>
+      <DefaultButton active={active} disabled={disabled} icon={icon} width={width}>
         {icon && <IconBox icon={icon} />}
         <TextBox>확인</TextBox>
       </DefaultButton>
-    </Container>
+    </>
   );
 }
 
-const Container = styled.div<DefaultProps>`
-  width: ${(props) => props.width + 'px'};
-`;
-
-const DefaultButton = styled.button<ButtonProps>`
+const DefaultButton = styled.button<DefaultProps>`
   display: flex;
   justify-content: space-around;
-  width: 50%;
+  width: ${({width}) => width + '%'};
   margin: auto;
   padding: 10px;
   border: 1px solid ${({ theme }) => theme.colors.brown5};
   border-radius: 4px;
 
-  color: ${(props) =>
-    props.active ? props.theme.colors.white : props.theme.colors.brown5};
-  background-color: ${(props) =>
-    props.active ? props.theme.colors.brown5 : props.theme.colors.white};
+  color: ${({active,theme}) =>
+    active ? theme.colors.white : theme.colors.brown5};
+  background-color: ${({active,theme}) =>
+    active ? theme.colors.brown5 : theme.colors.white};
 
   &:hover {
-    color: ${(props) =>
-      props.icon ? props.theme.colors.brown5 : props.theme.colors.white};
-    background-color: ${(props) =>
-      props.icon ? props.theme.colors.white : props.theme.colors.brown5};
+    color: ${({icon,theme}) =>
+      icon ? theme.colors.brown5 : theme.colors.white};
+    background-color: ${({icon,theme}) =>
+      icon ? theme.colors.white : theme.colors.brown5};
     cursor: pointer;
   }
 
@@ -73,10 +69,10 @@ const IconBox = styled.div<ButtonProps>`
   height: 20px;
   width: 20px;
   background: url(${Icons.src}) no-repeat
-    ${(props) =>
-      props.icon === 'Google'
+    ${({icon}) =>
+      icon === 'Google'
         ? 'right 26% bottom 50%'
-        : props.icon === 'Github'
+        : icon === 'Github'
         ? 'right 26% bottom 95%'
         : null};
 `;

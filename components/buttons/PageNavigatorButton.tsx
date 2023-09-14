@@ -25,7 +25,7 @@ const NavigatorBox = styled.div<NavigatorProps>`
   width: 40px;
   height: 40px;
   border-radius: 100%;
-  color: ${(props) => props.theme.colors.brown6};
-  background-color: ${(props) => props.theme.colors.brown1};
+  color: ${({theme}) => theme.colors.brown6};
+  background-color: ${({theme}) => theme.colors.brown1};
   filter: drop-shadow(0px 0px 5px rgba(98, 66, 42, 0.15));
 `;
