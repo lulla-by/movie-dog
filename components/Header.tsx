@@ -2,21 +2,23 @@ import styled from 'styled-components';
 import ConfirmButton from './buttons/ConfirmButton';
 import SearchBar from './input/SearchBar';
 import ModeButton from './buttons/ModeButton';
-import Logo from '../public/MovieDogLogo.png'
+import Logo from '../public/MovieDogLogo.png';
 
 type Width = {
-  width:number;
-}
+  width: number;
+};
 
 export function Header() {
   return (
     <Container>
       <FlextContainer width={367}>
         <LogoIMG src={Logo.src} alt="로고" />
-        <List>
-          <ListItem>장르별</ListItem>
-          <ListItem>년도별</ListItem>
-        </List>
+        <nav>
+          <List>
+            <ListItem>장르별</ListItem>
+            <ListItem>년도별</ListItem>
+          </List>
+        </nav>
       </FlextContainer>
       <FlextContainer width={450}>
         <SearchBar width={66} />
@@ -35,19 +37,19 @@ const Container = styled.header`
   margin: auto;
 `;
 const LogoIMG = styled.img`
-margin-right: 47px ;
-`
+  margin-right: 47px;
+`;
 const List = styled.ul`
   display: flex;
   font-weight: 700;
-  font-size:${({theme})=>theme.fontSize.headline3};
-  color:${({theme})=>theme.colors.brown9};
-`
+  font-size: ${({ theme }) => theme.fontSize.headline3};
+  color: ${({ theme }) => theme.colors.brown9};
+`;
 const ListItem = styled.li`
   margin-left: 40px;
-`
+`;
 const FlextContainer = styled.div<Width>`
   display: flex;
   align-items: center;
-  width:${({width})=>width+"px"}
-`
+  width: ${({ width }) => width + 'px'};
+`;
