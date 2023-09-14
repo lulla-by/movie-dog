@@ -40,7 +40,8 @@ margin-right: 47px ;
 const List = styled.ul`
   display: flex;
   font-weight: 700;
-  font-size:${({theme})=>theme.fontSize.headline3}
+  font-size:${({theme})=>theme.fontSize.headline3};
+  color:${({theme})=>theme.colors.brown9};
 `
 const ListItem = styled.li`
   margin-left: 40px;
