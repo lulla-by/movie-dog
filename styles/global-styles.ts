@@ -15,10 +15,15 @@ ${reset}
 
   * {
     box-sizing: border-box;
+    line-height: 1.5;
   }
-
+  
   input, button {
     display: block;
+  }
+  
+  p {
+    line-height: 1.5;
   }
 
   .a11y-hidden {
