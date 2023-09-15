@@ -3,8 +3,12 @@ import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 type RatingProps = {
   rating?: number;
+  className?: string;
 };
-export default function RatingComponent({ rating = 0 }: RatingProps) {
+export default function RatingComponent({
+  rating = 0,
+  className,
+}: RatingProps) {
   const totalRating = 5;
   const missingRating = totalRating - rating;
 
@@ -25,7 +29,7 @@ export default function RatingComponent({ rating = 0 }: RatingProps) {
   const text = `평균 별점은 ${rating}점 입니다.`;
 
   return (
-    <Container>
+    <Container className={className}>
       <AllyText>{text}</AllyText>
       {ratingBoxes}
       {missingRatingBoxes}
@@ -35,7 +39,7 @@ export default function RatingComponent({ rating = 0 }: RatingProps) {
 
 const Container = styled.div`
   display: flex;
-  color: ${({theme}) => theme.colors.brown8};
+  color: ${({ theme }) => theme.colors.brown8};
 `;
 const AllyText = styled.p`
   position: absolute;
