@@ -15,6 +15,7 @@ type InputTypes = {
   helperText?: string;
   disabled?: boolean;
   state?: string;
+  className?:string;
 };
 
 function Input({
@@ -24,6 +25,7 @@ function Input({
   helperText,
   disabled,
   state,
+  className="Input"
 }: InputTypes) {
   const helperIcon: { [key: string]: JSX.Element } = {
     error: <ErrorRounded />,
@@ -33,7 +35,7 @@ function Input({
   };
 
   return (
-    <div>
+    <div className={className}>
       <InputBlock
         type={type}
         placeholder={placeholder}

@@ -4,11 +4,12 @@ import WbSunnyRoundedIcon from '@mui/icons-material/WbSunnyRounded';
 
 type ModeProps = {
   mode: 'light' | 'dark';
+  className?:string;
 };
 
-export default function ModeButton({ mode }: ModeProps) {
+export default function ModeButton({ mode,className="ModeButton" }: ModeProps) {
   return (
-    <ModeBox mode={mode}>
+    <ModeBox mode={mode} className={className}>
       {mode === 'light' && <DarkModeRoundedIcon />}
       {mode === 'dark' && <WbSunnyRoundedIcon />}
     </ModeBox>

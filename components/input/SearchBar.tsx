@@ -5,9 +5,10 @@ import { useState } from 'react';
 
 type SearchBarTypes = {
   width?: number;
+  className?:string;
 };
 
-function SearchBar({ width = 100 }: SearchBarTypes) {
+function SearchBar({ width = 100,className="SearchBar" }: SearchBarTypes) {
   const [isFocused, setIsFocused] = useState(false);
 
   const focusInput = () => {
@@ -19,7 +20,7 @@ function SearchBar({ width = 100 }: SearchBarTypes) {
   };
 
   return (
-    <SearchBox width={width}>
+    <SearchBox width={width} className={className}>
       <InputBlock
         placeholder="검색어를 입력해주세요."
         onFocus={focusInput}

@@ -10,6 +10,7 @@ interface ButtonProps {
 interface DefaultProps extends ButtonProps {
   width?: number;
   text?:string;
+  className?:string
 }
 
 export default function ConfirmButton({
@@ -17,11 +18,12 @@ export default function ConfirmButton({
   active,
   icon,
   width=100,
-  text = "확인"
+  text = "확인",
+  className
 }: DefaultProps) {
   return (
     <>
-      <DefaultButton active={active} disabled={disabled} icon={icon} width={width}>
+      <DefaultButton active={active} disabled={disabled} icon={icon} width={width} className={className}>
         {icon && <IconBox icon={icon} />}
         <TextBox>{text}</TextBox>
       </DefaultButton>
