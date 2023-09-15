@@ -32,23 +32,23 @@ export function Header() {
 const Container = styled.header`
   display: flex;
   justify-content: space-between;
-  width: 1280px;
   height: 120px;
-  margin: auto;
-`;
+  border-bottom:1px solid ${({ theme }) => theme.colors.brown5};
+  `;
 const LogoIMG = styled.img`
   margin-right: 47px;
-`;
+  `;
 const List = styled.ul`
   display: flex;
   font-weight: 700;
   font-size: ${({ theme }) => theme.fontSize.headline3};
   color: ${({ theme }) => theme.colors.brown9};
-`;
+  `;
 const ListItem = styled.li`
   margin-left: 40px;
-`;
+  `;
 const FlextContainer = styled.div<Width>`
+margin: auto;
   display: flex;
   align-items: center;
   width: ${({ width }) => width + 'px'};
