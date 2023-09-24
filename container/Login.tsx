@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Input from './input/Input';
-import ConfirmButton from './buttons/ConfirmButton';
+import Input from '../components/input/Input';
+import ConfirmButton from '../components/buttons/ConfirmButton';
 
 export default function Login() {
   return (
