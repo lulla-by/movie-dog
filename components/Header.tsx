@@ -34,6 +34,7 @@ const Container = styled.header`
   justify-content: space-between;
   height: 120px;
   border-bottom:1px solid ${({ theme }) => theme.colors.brown5};
+  min-width:1280px;
   `;
 const LogoIMG = styled.img`
   margin-right: 47px;
