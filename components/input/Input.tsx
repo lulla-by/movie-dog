@@ -15,7 +15,7 @@ type InputTypes = {
   helperText?: string;
   disabled?: boolean;
   state?: string;
-  className?:string;
+  className?: string;
 };
 
 function Input({
@@ -25,7 +25,7 @@ function Input({
   helperText,
   disabled,
   state,
-  className="Input"
+  className = 'Input',
 }: InputTypes) {
   const helperIcon: { [key: string]: JSX.Element } = {
     error: <ErrorRounded />,
@@ -80,11 +80,12 @@ const HelperTextBlock = styled.div<{ state: string | undefined }>`
     if (state === 'correct') return theme.colors.correct;
     if (state === 'warning') return theme.colors.warning;
     if (state === 'info') return theme.colors.info;
+    if (state === 'default') return theme.colors.gray1;
   }};
 
   p {
-    font-size: ${({ theme }) => theme.fontSize.discription};
-  }
+    font-size: ${({ theme }) => theme.fontSize.helperText};
+  } */
 
   svg {
     font-size: ${({ theme }) => theme.fontSize.discription};
