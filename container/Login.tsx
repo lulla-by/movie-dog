@@ -8,7 +8,7 @@ export default function Login() {
       <LoginBox>
         <TitleBox>로그인</TitleBox>
         <Input placeholder="로그인" />
-        <ExtendsInput placeholder="비밀번호" />
+        <ExtendsPasswordInput placeholder="비밀번호" />
         <ExtendsConfirmButton text="로그인" />
         <ExtendsConfirmButton text="회원가입" />
         <TextBox>
@@ -29,6 +29,7 @@ const Container = styled.div`
   width: 1280px;
   margin: auto;
   text-align: center;
+  padding-bottom: 200px;
 `;
 
 const ButtonContainer = styled.div`
@@ -40,7 +41,7 @@ const ExtendsConfirmButton = styled(ConfirmButton)`
   margin: 20px 0px 0px 0px;
 `;
 
-const ExtendsInput = styled(Input)`
+const ExtendsPasswordInput = styled(Input)`
   margin-top: 20px;
 `;
 
