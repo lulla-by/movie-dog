@@ -1,43 +1,13 @@
-import theme from '@/styles/theme';
 import styled from 'styled-components';
-
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
 
-type CardTypes = {
-  cardWidth?: number;
-};
-
-function Card({ cardWidth = 100 }: CardTypes) {
-  const [windowWidth, setWindowWidth] = useState(0);
-  const [imageWidth, setImageWidth] = useState(windowWidth);
-
-  useEffect(() => {
-    setWindowWidth(window.innerWidth);
-
-    const debounce = setTimeout(() => {
-      setImageWidth((windowWidth / 100) * cardWidth);
-    }, 200);
-
-    window.addEventListener('resize', () => setWindowWidth(window.innerWidth));
-
-    return () => {
-      clearTimeout(debounce);
-      window.addEventListener('resize', () =>
-        setWindowWidth(window.innerWidth),
-      );
-    };
-  }, [windowWidth]);
-
+function Card() {
   return (
     <>
-      <CardBlock cardWidth={cardWidth}>
-        <Image
-          src="/images/barbie.jpeg"
-          alt="바비"
-          width={imageWidth}
-          height={(imageWidth / 2) * 3}
-        />
+      <CardBlock>
+        <ImageBlock>
+          <Image src="/images/barbie.jpeg" alt="바비" fill />
+        </ImageBlock>
         <h3>영화제목</h3>
         <p>
           개봉년도・나라
@@ -51,15 +21,15 @@ function Card({ cardWidth = 100 }: CardTypes) {
 
 export default Card;
 
-const CardBlock = styled.div<CardTypes>`
+const ImageBlock = styled.div`
   position: relative;
-  width: ${({ cardWidth }) => cardWidth + '%'};
+  height: 280px;
+  margin-bottom: 8px;
+`;
 
+const CardBlock = styled.div`
   img {
-    margin-bottom: 8px;
     object-fit: cover;
-    top: 0;
-    left: 0;
   }
 
   h3 {

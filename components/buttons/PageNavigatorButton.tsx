@@ -1,15 +1,28 @@
+import { ForwardedRef, MouseEventHandler } from 'react';
 import styled from 'styled-components';
 import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 
 type NavigatorProps = {
   direction: 'prev' | 'next';
+  buttonRef?: ForwardedRef<HTMLButtonElement>;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  className?: string;
 };
 
-export default function PageNavigatorButton({ direction }: NavigatorProps) {
+export default function PageNavigatorButton({
+  buttonRef,
+  direction,
+  onClick,
+  className,
+}: NavigatorProps) {
   return (
     <>
-      <NavigatorBox direction={direction}>
+      <NavigatorBox
+        ref={buttonRef}
+        onClick={onClick}
+        className={`${className} ${direction}-button`}
+      >
         {direction === 'prev' && <ArrowBackIosRoundedIcon />}
         {direction === 'next' && <ArrowForwardIosRoundedIcon />}
       </NavigatorBox>
@@ -17,15 +30,16 @@ export default function PageNavigatorButton({ direction }: NavigatorProps) {
   );
 }
 
-const NavigatorBox = styled.div<NavigatorProps>`
+const NavigatorBox = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   width: 40px;
   height: 40px;
+  border: none;
   border-radius: 100%;
-  color: ${({theme}) => theme.colors.brown6};
-  background-color: ${({theme}) => theme.colors.brown1};
+  color: ${({ theme }) => theme.colors.brown6};
+  background-color: ${({ theme }) => theme.colors.brown1};
   filter: drop-shadow(0px 0px 5px rgba(98, 66, 42, 0.15));
+  cursor: pointer;
 `;
