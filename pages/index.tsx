@@ -3,33 +3,41 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
-import { useEffect } from 'react';
-import SwiperEl from '@/components/SwiperEl';
+import SwiperEl from '@/components/swiper/SwiperEl';
+import styled from 'styled-components';
+import Card from '@/components/Card';
+import ReviewBox from '@/components/ReviewBox';
+import MovieSwiper from '@/components/swiper/MovieSwiper';
 
 export default function Home() {
-  const options = {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_ACCESS_TOKEN_AUTH}`,
-    },
-  };
-
-  const getMovieDB = () => {
-    fetch('https://api.themoviedb.org/3/movie/32142?language=ko-KR', options)
-      .then((response) => response.json())
-      .then((response) => console.log(response))
-      .catch((err) => console.error(err));
-  };
-
-  useEffect(() => {
-    getMovieDB();
-  });
-
   return (
     <>
-      <h1>Movie Dog Main Page</h1>
-      <SwiperEl slidesNumber={[1, 4, 5]} />
+      <WapperBlock>
+        <SwiperBlock slidesNumber={[1, 1, 1]}>
+          <Card />
+        </SwiperBlock>
+        <TitleBlock>박스오피스</TitleBlock>
+        <MovieSwiper slidesNumber={[2, 4, 5]} urlKey="popular" />
+        <TitleBlock>최고평점</TitleBlock>
+        <MovieSwiper slidesNumber={[2, 4, 5]} urlKey="topRated" />
+      </WapperBlock>
     </>
   );
 }
+
+const WapperBlock = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+const TitleBlock = styled.h2`
+  margin-bottom: 20px;
+  color: ${({ theme }) => theme.colors.brown9};
+  font-size: ${({ theme }) => theme.fontSize.headline2};
+  font-weight: 700;
+  text-align: center;
+`;
+
+const SwiperBlock = styled(SwiperEl)`
+  margin-bottom: 50px;
+`;

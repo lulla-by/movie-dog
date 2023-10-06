@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -7,18 +7,50 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperCore } from 'swiper/types';
 import { Navigation } from 'swiper/modules';
 
-import Card from './Card';
-import PageNavigatorButton from './buttons/PageNavigatorButton';
+import PageNavigatorButton from '../buttons/PageNavigatorButton';
+
 import styled from 'styled-components';
 
-type swiperTypes = {
-  slidesNumber: [mobile: number, tablet: number, pc: number];
+const movieListUrl: { [key: string]: string } = {
+  popular: 'https://api.themoviedb.org/3/movie/popular?language=ko-KR&page=1',
+  topRated:
+    'https://api.themoviedb.org/3/movie/top_rated?language=ko-KR&page=1',
+  upcoming: 'https://api.themoviedb.org/3/movie/upcoming?language=ko-KR&page=1',
 };
 
-function SwiperEl({ slidesNumber = [1, 4, 5] }: swiperTypes) {
+type SwiperTypes = {
+  slidesNumber: [mobile: number, tablet: number, pc: number];
+  urlKey?: 'popular' | 'topRated' | 'upcoming';
+  className?: string;
+  children: React.ReactElement;
+};
+
+function SwiperEl({
+  slidesNumber = [1, 4, 5],
+  urlKey,
+  className,
+  children,
+}: SwiperTypes) {
+  const [movieData, setMovieData] = useState([]);
   const prevButtonRef = useRef<HTMLButtonElement>(null);
   const nextButtonRef = useRef<HTMLButtonElement>(null);
   const [mobileSlides, tabletSlides, pcSlides] = slidesNumber;
+
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_ACCESS_TOKEN_AUTH}`,
+    },
+  };
+
+  const getMovieDB = async () => {
+    if (urlKey) {
+      const response = await fetch(movieListUrl[urlKey], options);
+      const json = await response.json();
+      setMovieData(json.results);
+    }
+  };
 
   const swiperOptions = {
     modules: [Navigation],
@@ -52,28 +84,21 @@ function SwiperEl({ slidesNumber = [1, 4, 5] }: swiperTypes) {
     },
   };
 
+  useEffect(() => {
+    getMovieDB();
+  }, []);
+
   return (
     <>
-      <SwiperBlock {...swiperOptions}>
-        <SwiperSlide>
-          <Card />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Card />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Card />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Card />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Card />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Card />
-        </SwiperSlide>
-
+      <SwiperBlock {...swiperOptions} className={className}>
+        {movieData &&
+          movieData.map((movie, i) => {
+            return (
+              <SwiperSlide key={i}>
+                {React.cloneElement(children, { movie: movie })}
+              </SwiperSlide>
+            );
+          })}
         <NavigationButton buttonRef={prevButtonRef} direction="prev" />
         <NavigationButton buttonRef={nextButtonRef} direction="next" />
       </SwiperBlock>
@@ -84,12 +109,14 @@ function SwiperEl({ slidesNumber = [1, 4, 5] }: swiperTypes) {
 export default SwiperEl;
 
 const SwiperBlock = styled(Swiper)`
+  padding: 0 20px;
+
   .prev-button {
-    left: 0;
+    left: 0px;
   }
 
   .next-button {
-    right: 0;
+    right: 0px;
   }
 
   .swiper-button-disabled {

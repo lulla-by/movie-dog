@@ -1,20 +1,69 @@
 import styled from 'styled-components';
 import Image from 'next/image';
+import RatingComponent from './RatingComponent';
 
-function Card() {
+type MovieTypes = {
+  movie?: {
+    title: string;
+    vote_average: number;
+    vote_count: number;
+    release_date: string;
+    poster_path: string;
+    genre_ids: number[];
+  };
+};
+
+const genreId: { [key: number]: string } = {
+  28: '액션',
+  12: '어드벤쳐',
+  16: '애니메이션',
+  35: '코미디',
+  80: '범죄',
+  99: '다큐멘터리',
+  18: '드라마',
+  10751: '가족',
+  14: '판타지',
+  36: '역사',
+  27: '호러',
+  10402: '음악',
+  9648: '미스터리',
+  10749: '로맨스',
+  878: 'SF',
+  10770: 'TV영화',
+  53: '스릴러',
+  10752: '전쟁',
+  37: '서부',
+};
+
+function Card({ movie }: MovieTypes) {
   return (
     <>
-      <CardBlock>
-        <ImageBlock>
-          <Image src="/images/barbie.jpeg" alt="바비" fill />
-        </ImageBlock>
-        <h3>영화제목</h3>
-        <p>
-          개봉년도・나라
-          <br />
-          누적 관객수 000,000명
-        </p>
-      </CardBlock>
+      {movie && (
+        <CardBlock>
+          <ImageBlock>
+            <Image
+              src={`https://www.themoviedb.org/t/p/w600_and_h900_bestv2${movie.poster_path}`}
+              alt={movie.title}
+              fill
+              sizes="(max-width: 768px) 10vw,(max-width: 1200px) 30vw"
+              loading="eager"
+            />
+          </ImageBlock>
+          <h3>{movie.title}</h3>
+          <p>
+            {movie.release_date.slice(0, 4)}・{genreId[movie.genre_ids[0]]}
+          </p>
+          <RatingBlock>
+            <RatingComponent
+              rating={Math.floor((movie.vote_average / 2) * 10) / 10}
+            />
+            <span>
+              {Math.floor((movie.vote_average / 2) * 10) / 10 + '점'}(
+              {movie.vote_count.toLocaleString() + '명'})
+            </span>
+          </RatingBlock>
+        </CardBlock>
+      )}
     </>
   );
 }
@@ -23,8 +72,18 @@ export default Card;
 
 const ImageBlock = styled.div`
   position: relative;
-  height: 280px;
+  height: 300px;
   margin-bottom: 8px;
+
+  @media (min-width: 320px) {
+    height: 480px;
+  }
+  @media (min-width: 480px) {
+    height: 400px;
+  }
+  @media (min-width: 1200px) {
+    height: 320px;
+  }
 `;
 
 const CardBlock = styled.div`
@@ -42,4 +101,10 @@ const CardBlock = styled.div`
   p {
     color: ${({ theme }) => theme.colors.gray1};
   }
+`;
+
+const RatingBlock = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 `;
