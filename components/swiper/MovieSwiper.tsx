@@ -20,22 +20,15 @@ const movieListUrl: { [key: string]: string } = {
 };
 
 type SwiperTypes = {
-  slidesNumber: [mobile: number, tablet: number, pc: number];
   urlKey: 'popular' | 'topRated' | 'upcoming';
   className?: string;
 };
 
-function MovieSwiper({
-  slidesNumber = [1, 4, 5],
-  urlKey,
-  className,
-}: SwiperTypes) {
+function MovieSwiper({ urlKey, className }: SwiperTypes) {
   const [movieData, setMovieData] = useState([]);
 
   const prevButtonRef = useRef<HTMLButtonElement>(null);
   const nextButtonRef = useRef<HTMLButtonElement>(null);
-
-  const [mobileSlides, tabletSlides, pcSlides] = slidesNumber;
 
   const options = {
     method: 'GET',
@@ -62,15 +55,15 @@ function MovieSwiper({
     spaceBetween: 50,
     breakpoints: {
       480: {
-        slidesPerView: mobileSlides,
+        slidesPerView: 1,
         spaceBetween: 10,
       },
       768: {
-        slidesPerView: tabletSlides,
+        slidesPerView: 4,
         spaceBetween: 20,
       },
       1200: {
-        slidesPerView: pcSlides,
+        slidesPerView: 5,
         spaceBetween: 20,
       },
     },
