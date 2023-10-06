@@ -11,37 +11,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import PageNavigatorButton from '../buttons/PageNavigatorButton';
 import ReviewBox from '../ReviewBox';
-
-const reviews = [
-  {
-    rating: 2.5,
-    description: '리뷰내용 블ㅏ블라',
-    title: '영화 제목',
-    writer: '사용자 닉네임',
-    like: 20,
-  },
-  {
-    rating: 4,
-    description: '리뷰내용 블ㅏ블라',
-    title: '영화 제목',
-    writer: '사용자 닉네임',
-    like: 24,
-  },
-  {
-    rating: 5,
-    description: '리뷰내용 블ㅏ블라',
-    title: '영화 제목',
-    writer: '사용자 닉네임',
-    like: 12,
-  },
-  {
-    rating: 3,
-    description: '리뷰내용 블ㅏ블라',
-    title: '영화 제목',
-    writer: '사용자 닉네임',
-    like: 5,
-  },
-];
+import { reviews } from '@/pages/api/data';
 
 type SwiperTypes = {
   className?: string;

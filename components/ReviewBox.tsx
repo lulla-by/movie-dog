@@ -20,7 +20,7 @@ function ReviewBox({ review }: ReviewBoxTypes) {
       <RatingComponentBlock rating={rating} />
       <p>{description}</p>
       <h3>- {title}</h3>
-      <span>{writer}</span>
+      <span>By {writer}</span>
       <LikeButtonBlock count={like} />
     </ReviewBoxBlock>
   );
