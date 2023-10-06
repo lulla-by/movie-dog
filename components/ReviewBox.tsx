@@ -4,21 +4,24 @@ import RatingComponent from './RatingComponent';
 import LikeButton from './buttons/LikeButton';
 
 type ReviewBoxTypes = {
-  rating: number;
+  review: {
+    rating: number;
+    description: string;
+    title: string;
+    writer: string;
+    like: number;
+  };
 };
 
-function ReviewBox({ rating }: ReviewBoxTypes) {
+function ReviewBox({ review }: ReviewBoxTypes) {
+  const { rating, description, title, writer, like } = review;
   return (
     <ReviewBoxBlock>
       <RatingComponentBlock rating={rating} />
-      <p>
-        영화에 대한 한줄평이 출력되는 공간입니다. 공백 포함 한글 기준 최대
-        100자까지 출력됩니다. 야호 영화 너무 재밌어요 꺄올롤로 영화에 대한
-        한줄평이 출력되는 공간입니다. 최대 100자까지 출력됩니다. 야호야호
-      </p>
-      <h3>- 영화 제목이 출력되는 공간입니다.</h3>
-      <span>작성자 닉네임이 출력되는 공간입니다.</span>
-      <LikeButtonBlock count={32} />
+      <p>{description}</p>
+      <h3>- {title}</h3>
+      <span>{writer}</span>
+      <LikeButtonBlock count={like} />
     </ReviewBoxBlock>
   );
 }

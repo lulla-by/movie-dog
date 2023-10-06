@@ -8,18 +8,18 @@ import styled from 'styled-components';
 import Card from '@/components/Card';
 import ReviewBox from '@/components/ReviewBox';
 import MovieSwiper from '@/components/swiper/MovieSwiper';
+import ReviewSwiper from '@/components/swiper/ReviewSwiper';
 
 export default function Home() {
   return (
     <>
       <WapperBlock>
-        <SwiperBlock slidesNumber={[1, 1, 1]}>
-          <Card />
-        </SwiperBlock>
         <TitleBlock>박스오피스</TitleBlock>
-        <MovieSwiper slidesNumber={[2, 4, 5]} urlKey="popular" />
+        <MovieSwiper urlKey="popular" />
         <TitleBlock>최고평점</TitleBlock>
-        <MovieSwiper slidesNumber={[2, 4, 5]} urlKey="topRated" />
+        <MovieSwiper urlKey="topRated" />
+        <TitleBlock>유저 한 줄 평</TitleBlock>
+        <ReviewSwiper />
       </WapperBlock>
     </>
   );
