@@ -90,20 +90,18 @@ function MovieSwiper({
   }, []);
 
   return (
-    <>
-      <SwiperBlock {...swiperOptions} className={className}>
-        {movieData &&
-          movieData.map((movie, i) => {
-            return (
-              <SwiperSlide key={i}>
-                <Card movie={movie} />
-              </SwiperSlide>
-            );
-          })}
-        <NavigationButton buttonRef={prevButtonRef} direction="prev" />
-        <NavigationButton buttonRef={nextButtonRef} direction="next" />
-      </SwiperBlock>
-    </>
+    <SwiperBlock {...swiperOptions} className={className}>
+      {movieData &&
+        movieData.map((movie, i) => {
+          return (
+            <SwiperSlide key={i}>
+              <Card movie={movie} />
+            </SwiperSlide>
+          );
+        })}
+      <NavigationButton buttonRef={prevButtonRef} direction="prev" />
+      <NavigationButton buttonRef={nextButtonRef} direction="next" />
+    </SwiperBlock>
   );
 }
 
