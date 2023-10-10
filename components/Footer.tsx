@@ -3,17 +3,18 @@ import styled from 'styled-components';
 export default function Footer() {
   return (
     <Container>
-      <List>
-        <ListItem>MOVIE DOG</ListItem>
-        <ListItem>Github - hardy-is-cat, lulla-by</ListItem>
-        <ListItem>영화 DB 제공 - TMDB</ListItem>
-      </List>
+        <List>
+          <ListItem>MOVIE DOG</ListItem>
+          <ListItem>Github - hardy-is-cat, lulla-by</ListItem>
+          <ListItem>영화 DB 제공 - TMDB</ListItem>
+        </List>
     </Container>
   );
 }
 
 const Container = styled.footer`
   background-color: ${({ theme }) => theme.colors.brown8};
+  min-width: 1280px;
 `;
 
 const List = styled.ul`
@@ -23,13 +24,13 @@ const List = styled.ul`
   width: 1280px;
   height: 88px;
   margin: auto;
-  `;
+`;
 const ListItem = styled.li`
-color: ${({ theme }) => theme.colors.brown1};
-font-size:${({theme})=> theme.fontSize.discription};
-font-weight: 400;
-&:first-child {
-    font-size: ${({theme})=> theme.fontSize.headline2};
+  color: ${({ theme }) => theme.colors.brown1};
+  font-size: ${({ theme }) => theme.fontSize.discription};
+  font-weight: 400;
+  &:first-child {
+    font-size: ${({ theme }) => theme.fontSize.headline2};
     font-weight: 800;
   }
 `;
