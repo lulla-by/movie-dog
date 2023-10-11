@@ -1,65 +1,108 @@
-import theme from '@/styles/theme';
 import styled from 'styled-components';
-
 import Image from 'next/image';
+import RatingComponent from './RatingComponent';
+
+import { genreId } from '@/pages/api/data';
 import { useEffect, useState } from 'react';
 
-type CardTypes = {
-  cardWidth?: number;
+type MovieTypes = {
+  movie?: {
+    title: string;
+    vote_average: number;
+    vote_count: number;
+    release_date: string;
+    poster_path: string;
+    genre_ids: number[];
+  };
+  ranking: boolean | number;
 };
 
-function Card({ cardWidth = 100 }: CardTypes) {
-  const [windowWidth, setWindowWidth] = useState(0);
-  const [imageWidth, setImageWidth] = useState(windowWidth);
+function Card({ movie, ranking }: MovieTypes) {
+  const [displayRanking, setDisplayRanking] = useState(false);
+
+  const isRankingLessThan10 = () => {
+    if (typeof ranking === 'number' && ranking <= 10) {
+      setDisplayRanking(true);
+    }
+  };
 
   useEffect(() => {
-    setWindowWidth(window.innerWidth);
-
-    const debounce = setTimeout(() => {
-      setImageWidth((windowWidth / 100) * cardWidth);
-    }, 200);
-
-    window.addEventListener('resize', () => setWindowWidth(window.innerWidth));
-
-    return () => {
-      clearTimeout(debounce);
-      window.addEventListener('resize', () =>
-        setWindowWidth(window.innerWidth),
-      );
-    };
-  }, [windowWidth]);
+    isRankingLessThan10();
+  }, []);
 
   return (
     <>
-      <CardBlock cardWidth={cardWidth}>
-        <Image
-          src="/images/barbie.jpeg"
-          alt="바비"
-          width={imageWidth}
-          height={(imageWidth / 2) * 3}
-        />
-        <h3>영화제목</h3>
-        <p>
-          개봉년도・나라
-          <br />
-          누적 관객수 000,000명
-        </p>
-      </CardBlock>
+      {movie && (
+        <CardBlock>
+          {displayRanking && <RankingTag>{ranking}</RankingTag>}
+          <ImageBlock>
+            <Image
+              src={`https://www.themoviedb.org/t/p/w600_and_h900_bestv2${movie.poster_path}`}
+              alt={movie.title}
+              fill
+              sizes="(max-width: 768px) 10vw,(max-width: 1200px) 30vw"
+              loading="eager"
+            />
+          </ImageBlock>
+          <h3>{movie.title}</h3>
+          <p>
+            {movie.release_date.slice(0, 4)}・{genreId[movie.genre_ids[0]]}
+          </p>
+          <RatingBlock>
+            <RatingComponent
+              rating={Math.floor((movie.vote_average / 2) * 10) / 10}
+            />
+            <span>
+              {Math.floor((movie.vote_average / 2) * 10) / 10 + '점'}(
+              {movie.vote_count.toLocaleString() + '명'})
+            </span>
+          </RatingBlock>
+        </CardBlock>
+      )}
     </>
   );
 }
 
 export default Card;
 
-const CardBlock = styled.div<CardTypes>`
+const RankingTag = styled.span`
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: ${({ theme }) => theme.fontSize.headline4};
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.white};
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  z-index: 100;
+`;
+
+const ImageBlock = styled.div`
   position: relative;
-  width: ${({ cardWidth }) => cardWidth + '%'};
+  height: 300px;
+  margin-bottom: 8px;
+
+  @media (min-width: 320px) {
+    height: 480px;
+  }
+  @media (min-width: 480px) {
+    height: 400px;
+  }
+  @media (min-width: 1200px) {
+    height: 320px;
+  }
+`;
+
+const CardBlock = styled.div`
+  position: relative;
 
   img {
-    margin-bottom: 8px;
     object-fit: cover;
-    top: 0;
-    left: 0;
   }
 
   h3 {
@@ -72,4 +115,10 @@ const CardBlock = styled.div<CardTypes>`
   p {
     color: ${({ theme }) => theme.colors.gray1};
   }
+`;
+
+const RatingBlock = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 `;
