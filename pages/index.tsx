@@ -17,11 +17,11 @@ export default function Home() {
         </section>
         <section>
           <TitleBlock>박스오피스</TitleBlock>
-          <MovieSwiper urlKey="popular" />
+          <MovieSwiper urlKey="popular" ranking={true} />
         </section>
         <section>
           <TitleBlock>최고평점</TitleBlock>
-          <MovieSwiper urlKey="topRated" />
+          <MovieSwiper urlKey="topRated" ranking={false} />
         </section>
         <section>
           <TitleBlock>유저 한 줄 평</TitleBlock>

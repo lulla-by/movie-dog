@@ -3,6 +3,7 @@ import Image from 'next/image';
 import RatingComponent from './RatingComponent';
 
 import { genreId } from '@/pages/api/data';
+import { useEffect, useState } from 'react';
 
 type MovieTypes = {
   movie?: {
@@ -13,13 +14,27 @@ type MovieTypes = {
     poster_path: string;
     genre_ids: number[];
   };
+  ranking: boolean | number;
 };
 
-function Card({ movie }: MovieTypes) {
+function Card({ movie, ranking }: MovieTypes) {
+  const [displayRanking, setDisplayRanking] = useState(false);
+
+  const isRankingLessThan10 = () => {
+    if (typeof ranking === 'number' && ranking <= 10) {
+      setDisplayRanking(true);
+    }
+  };
+
+  useEffect(() => {
+    isRankingLessThan10();
+  }, []);
+
   return (
     <>
       {movie && (
         <CardBlock>
+          {displayRanking && <RankingTag>{ranking}</RankingTag>}
           <ImageBlock>
             <Image
               src={`https://www.themoviedb.org/t/p/w600_and_h900_bestv2${movie.poster_path}`}
@@ -50,6 +65,23 @@ function Card({ movie }: MovieTypes) {
 
 export default Card;
 
+const RankingTag = styled.span`
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: ${({ theme }) => theme.fontSize.headline4};
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.white};
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  z-index: 100;
+`;
+
 const ImageBlock = styled.div`
   position: relative;
   height: 300px;
@@ -67,6 +99,8 @@ const ImageBlock = styled.div`
 `;
 
 const CardBlock = styled.div`
+  position: relative;
+
   img {
     object-fit: cover;
   }

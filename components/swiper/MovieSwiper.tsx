@@ -21,10 +21,11 @@ const movieListUrl: { [key: string]: string } = {
 
 type SwiperTypes = {
   urlKey: 'popular' | 'topRated' | 'upcoming';
+  ranking: boolean;
   className?: string;
 };
 
-function MovieSwiper({ urlKey, className }: SwiperTypes) {
+function MovieSwiper({ urlKey, ranking, className }: SwiperTypes) {
   const [movieData, setMovieData] = useState([]);
 
   const prevButtonRef = useRef<HTMLButtonElement>(null);
@@ -88,7 +89,7 @@ function MovieSwiper({ urlKey, className }: SwiperTypes) {
         movieData.map((movie, i) => {
           return (
             <SwiperSlide key={i}>
-              <Card movie={movie} />
+              <Card movie={movie} ranking={ranking && i} />
             </SwiperSlide>
           );
         })}
