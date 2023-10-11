@@ -3,23 +3,30 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
-import SwiperEl from '@/components/swiper/SwiperEl';
 import styled from 'styled-components';
-import Card from '@/components/Card';
-import ReviewBox from '@/components/ReviewBox';
 import MovieSwiper from '@/components/swiper/MovieSwiper';
 import ReviewSwiper from '@/components/swiper/ReviewSwiper';
+import MainVisualSwiper from '@/components/swiper/MainVisualSwiper';
 
 export default function Home() {
   return (
     <>
       <WapperBlock>
-        <TitleBlock>박스오피스</TitleBlock>
-        <MovieSwiper urlKey="popular" />
-        <TitleBlock>최고평점</TitleBlock>
-        <MovieSwiper urlKey="topRated" />
-        <TitleBlock>유저 한 줄 평</TitleBlock>
-        <ReviewSwiper />
+        <section>
+          <MainVisualSwiper />
+        </section>
+        <section>
+          <TitleBlock>박스오피스</TitleBlock>
+          <MovieSwiper urlKey="popular" />
+        </section>
+        <section>
+          <TitleBlock>최고평점</TitleBlock>
+          <MovieSwiper urlKey="topRated" />
+        </section>
+        <section>
+          <TitleBlock>유저 한 줄 평</TitleBlock>
+          <ReviewSwiper />
+        </section>
       </WapperBlock>
     </>
   );
@@ -28,6 +35,10 @@ export default function Home() {
 const WapperBlock = styled.div`
   max-width: 1200px;
   margin: 0 auto;
+
+  section {
+    margin-bottom: 50px;
+  }
 `;
 
 const TitleBlock = styled.h2`
@@ -36,8 +47,4 @@ const TitleBlock = styled.h2`
   font-size: ${({ theme }) => theme.fontSize.headline2};
   font-weight: 700;
   text-align: center;
-`;
-
-const SwiperBlock = styled(SwiperEl)`
-  margin-bottom: 50px;
 `;
