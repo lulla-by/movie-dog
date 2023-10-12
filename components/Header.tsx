@@ -1,3 +1,7 @@
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+
 import styled from 'styled-components';
 
 import Logo from '../public/MovieDogLogo.png';
@@ -9,11 +13,33 @@ import PermIdentityRoundedIcon from '@mui/icons-material/PermIdentityRounded';
 import ConfirmButton from './buttons/ConfirmButton';
 import SearchBar from './input/SearchBar';
 import ModeButton from './buttons/ModeButton';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 export function Header() {
   const router = useRouter();
+  const [isTabBarShowing, setIsTabBarShowing] = useState(true);
+
+  useEffect(() => {
+    let lastScrollY = document.defaultView?.scrollY;
+
+    const onScroll = () => {
+      const presentScrollY = document.defaultView?.scrollY;
+
+      if (lastScrollY !== undefined && presentScrollY !== undefined) {
+        if (lastScrollY < presentScrollY) {
+          setIsTabBarShowing(true);
+          console.log('scroll down');
+        } else {
+          setIsTabBarShowing(false);
+          console.log('scroll up');
+        }
+        lastScrollY = document.defaultView?.scrollY;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll);
+
+    return () => window.addEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <HeaderBlock>
@@ -35,7 +61,7 @@ export function Header() {
           <ModeButton mode="light" />
         </FlexContainer>
       </WrapperBlock>
-      <TabBarBlock>
+      <TabBarBlock className={isTabBarShowing ? '' : 'hide'}>
         <ul>
           <li className={router.pathname === '/' ? 'active' : ''}>
             <MenuRoundedIcon fontSize="large" />
@@ -130,6 +156,12 @@ const TabBarBlock = styled.nav`
   border-top: 1px solid ${({ theme }) => theme.colors.brown5};
   background-color: ${({ theme }) => theme.colors.white};
   z-index: 200;
+  transition: all 0.5s;
+
+  &.hide {
+    bottom: -100%;
+    transition: all 0.5s;
+  }
 
   ul {
     display: flex;
