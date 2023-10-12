@@ -9,21 +9,27 @@ interface ButtonProps {
 
 interface DefaultProps extends ButtonProps {
   width?: number;
-  text?:string;
-  className?:string
+  text?: string;
+  className?: string;
 }
 
 export default function ConfirmButton({
   disabled,
   active,
   icon,
-  width=100,
-  text = "확인",
-  className
+  width = 100,
+  text = '확인',
+  className,
 }: DefaultProps) {
   return (
     <>
-      <DefaultButton active={active} disabled={disabled} icon={icon} width={width} className={className}>
+      <DefaultButton
+        active={active}
+        disabled={disabled}
+        icon={icon}
+        width={width}
+        className={className}
+      >
         {icon && <IconBox icon={icon} />}
         <TextBox>{text}</TextBox>
       </DefaultButton>
@@ -34,21 +40,22 @@ export default function ConfirmButton({
 const DefaultButton = styled.button<DefaultProps>`
   display: flex;
   justify-content: space-around;
-  width: ${({width}) => width + '%'};
+  width: ${({ width }) => width + '%'};
   margin: auto;
   padding: 10px;
   border: 1px solid ${({ theme }) => theme.colors.brown5};
   border-radius: 4px;
+  transition: all 0.2s;
 
-  color: ${({active,theme}) =>
+  color: ${({ active, theme }) =>
     active ? theme.colors.white : theme.colors.brown5};
-  background-color: ${({active,theme}) =>
+  background-color: ${({ active, theme }) =>
     active ? theme.colors.brown5 : theme.colors.white};
 
   &:hover {
-    color: ${({icon,theme}) =>
+    color: ${({ icon, theme }) =>
       icon ? theme.colors.brown5 : theme.colors.white};
-    background-color: ${({icon,theme}) =>
+    background-color: ${({ icon, theme }) =>
       icon ? theme.colors.white : theme.colors.brown5};
     cursor: pointer;
   }
@@ -73,7 +80,7 @@ const IconBox = styled.div<ButtonProps>`
   height: 20px;
   width: 20px;
   background: url(${Icons.src}) no-repeat
-    ${({icon}) =>
+    ${({ icon }) =>
       icon === 'Google'
         ? 'right 26% bottom 50%'
         : icon === 'Github'
