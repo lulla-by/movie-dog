@@ -4,10 +4,13 @@ import WbSunnyRoundedIcon from '@mui/icons-material/WbSunnyRounded';
 
 type ModeProps = {
   mode: 'light' | 'dark';
-  className?:string;
+  className?: string;
 };
 
-export default function ModeButton({ mode,className="ModeButton" }: ModeProps) {
+export default function ModeButton({
+  mode,
+  className = 'ModeButton',
+}: ModeProps) {
   return (
     <ModeBox mode={mode} className={className}>
       {mode === 'light' && <DarkModeRoundedIcon />}
@@ -21,16 +24,11 @@ const ModeBox = styled.div<ModeProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  padding: 6px;
   border-radius: 100%;
-  border: 1px solid ${({theme}) => theme.colors.brown5};
-  color: ${({mode,theme}) =>
-    mode === 'light'
-      ? theme.colors.brown1
-      : theme.colors.brown5};
-  background-color: ${({mode,theme}) =>
-    mode === 'dark'
-      ? theme.colors.brown1
-      : theme.colors.brown5};
+  border: 1px solid ${({ theme }) => theme.colors.brown5};
+  color: ${({ mode, theme }) =>
+    mode === 'light' ? theme.colors.brown1 : theme.colors.brown5};
+  background-color: ${({ mode, theme }) =>
+    mode === 'dark' ? theme.colors.brown1 : theme.colors.brown5};
 `;

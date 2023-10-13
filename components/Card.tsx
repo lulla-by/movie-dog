@@ -34,7 +34,11 @@ function Card({ movie, ranking }: MovieTypes) {
     <>
       {movie && (
         <CardBlock>
-          {displayRanking && <RankingTag>{ranking}</RankingTag>}
+          {displayRanking && (
+            <RankingTag>
+              {typeof ranking === 'number' && ranking + 1}
+            </RankingTag>
+          )}
           <ImageBlock>
             <Image
               src={`https://www.themoviedb.org/t/p/w600_and_h900_bestv2${movie.poster_path}`}

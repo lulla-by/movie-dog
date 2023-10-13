@@ -5,10 +5,10 @@ import { useState } from 'react';
 
 type SearchBarTypes = {
   width?: number;
-  className?:string;
+  className?: string;
 };
 
-function SearchBar({ width = 100,className="SearchBar" }: SearchBarTypes) {
+function SearchBar({ width = 100, className = 'SearchBar' }: SearchBarTypes) {
   const [isFocused, setIsFocused] = useState(false);
 
   const focusInput = () => {
@@ -70,6 +70,8 @@ const ButtonBlock = styled.button<{ isFocused: boolean }>`
   color: ${({ theme }) => theme.colors.gray1};
 
   svg {
+    display: flex;
+    align-items: center;
     font-size: ${({ theme }) => theme.fontSize.headline2};
     color: ${({ theme, isFocused }) => {
       if (isFocused === true) return theme.colors.brown5;
