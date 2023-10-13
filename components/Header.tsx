@@ -27,10 +27,8 @@ export function Header() {
       if (lastScrollY !== undefined && presentScrollY !== undefined) {
         if (lastScrollY < presentScrollY) {
           setIsTabBarShowing(true);
-          console.log('scroll down');
         } else {
           setIsTabBarShowing(false);
-          console.log('scroll up');
         }
         lastScrollY = document.defaultView?.scrollY;
       }
