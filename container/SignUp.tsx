@@ -4,7 +4,9 @@ import ConfirmButton from '../components/buttons/ConfirmButton';
 import { useState } from 'react';
 
 export default function SignUp() {
-  
+  // 이메일 중복확인
+  const [emailDuplication, setEmailDuplication] = useState(false);
+
   // input값 관리
   const [id, setId] = useState<string>('');
   const [nickName, setNickName] = useState<string>('');
@@ -23,6 +25,22 @@ export default function SignUp() {
 
   const passwordConfirmValidation = passWordConfirm === password;
 
+  const validationConfirm = !(
+    emailDuplication == true &&
+    nickNameValidation == true &&
+    passwordValidation == true &&
+    passwordConfirmValidation == true
+  );
+
+  // 중복값 체크
+  const checkEmailDuplication = () => {
+    if (idValidation) {
+      setEmailDuplication(true);
+      return;
+    } else {
+      console.log('이메일을 확인해주세요');
+    }
+  };
 
   //input 값 관리
   const getInputData = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +60,6 @@ export default function SignUp() {
     }
   };
 
-
   return (
     <Container>
       <LoginBox>
@@ -54,7 +71,11 @@ export default function SignUp() {
             placeholder="아이디(이메일 주소)"
             helperText="아이디는 이메일 형식이어야 합니다."
           />
-          <ExtendsConfirmButton width={23} text="중복확인" />
+          <ExtendsConfirmButton
+            onClick={checkEmailDuplication}
+            width={23}
+            text="중복확인"
+          />
         </IdCheckBox>
         <ExtendsDefaultInput
           onChange={getInputData}
@@ -81,7 +102,7 @@ export default function SignUp() {
             console.log('hi');
           }}
           text="회원가입"
-          disabled
+          disabled={validationConfirm}
         />
       </LoginBox>
     </Container>
