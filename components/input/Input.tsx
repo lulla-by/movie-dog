@@ -16,6 +16,7 @@ type InputTypes = {
   disabled?: boolean;
   state?: string;
   className?: string;
+  onChange?:(e:React.ChangeEvent<HTMLInputElement>)=>void;
 };
 
 function Input({
@@ -26,6 +27,7 @@ function Input({
   disabled,
   state,
   className = 'Input',
+  onChange
 }: InputTypes) {
   const helperIcon: { [key: string]: JSX.Element } = {
     error: <ErrorRounded />,
@@ -37,6 +39,7 @@ function Input({
   return (
     <div className={className}>
       <InputBlock
+      onChange={onChange}
         type={type}
         placeholder={placeholder}
         width={width}
