@@ -4,11 +4,25 @@ import ConfirmButton from '../components/buttons/ConfirmButton';
 import { useState } from 'react';
 
 export default function SignUp() {
+  
   // input값 관리
   const [id, setId] = useState<string>('');
   const [nickName, setNickName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passWordConfirm, setPasswordConfirm] = useState<string>('');
+
+  // validation
+  const idPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const idValidation = idPattern.test(id);
+
+  const nickNamePattern = /^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9]{2,8}$/;
+  const nickNameValidation = nickNamePattern.test(nickName);
+
+  const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+  const passwordValidation = passwordPattern.test(password);
+
+  const passwordConfirmValidation = passWordConfirm === password;
+
 
   //input 값 관리
   const getInputData = (e: React.ChangeEvent<HTMLInputElement>) => {
