@@ -1,3 +1,11 @@
+export const options = {
+  method: 'GET',
+  headers: {
+    accept: 'application/json',
+    Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_ACCESS_TOKEN_AUTH}`,
+  },
+};
+
 export const reviews = [
   {
     rating: 2.5,

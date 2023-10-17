@@ -12,6 +12,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import PageNavigatorButton from '../buttons/PageNavigatorButton';
 import Card from '../Card';
 
+import { options } from '@/pages/api/data';
+
 const movieListUrl: { [key: string]: string } = {
   popular: 'https://api.themoviedb.org/3/movie/popular?language=ko-KR&page=1',
   topRated:
@@ -30,14 +32,6 @@ function MovieSwiper({ urlKey, ranking, className }: SwiperTypes) {
 
   const prevButtonRef = useRef<HTMLButtonElement>(null);
   const nextButtonRef = useRef<HTMLButtonElement>(null);
-
-  const options = {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_ACCESS_TOKEN_AUTH}`,
-    },
-  };
 
   const getMovieDB = async () => {
     if (urlKey) {
