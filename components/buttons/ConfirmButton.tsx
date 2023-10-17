@@ -11,6 +11,7 @@ interface DefaultProps extends ButtonProps {
   width?: number;
   text?: string;
   className?: string;
+  onClick?:()=>void
 }
 
 export default function ConfirmButton({
@@ -20,10 +21,12 @@ export default function ConfirmButton({
   width = 100,
   text = '확인',
   className,
+  onClick
 }: DefaultProps) {
   return (
     <>
       <DefaultButton
+      onClick={onClick}
         active={active}
         disabled={disabled}
         icon={icon}
