@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import { genreId } from '@/pages/api/data';
+import Link from 'next/link';
 
 type MovieTypes = {
   movie: {
-    adult: boolean;
+    id: number;
     backdrop_path: string;
     genre_ids: number[];
     overview: string;
@@ -27,7 +28,18 @@ function MainVisual({ movie }: MovieTypes) {
                 ? movie.overview.split(' ', 40).join(' ') + '...'
                 : movie.overview.split(' ', 40).join(' ')}
             </p>
-            <button type="button">보러가기</button>
+            <Link
+              href={{
+                pathname: `/detail/${movie.id}`,
+                query: {
+                  title: movie.title,
+                  overView: movie.overview,
+                },
+              }}
+              as={`/detail/${movie.id}`}
+            >
+              보러가기
+            </Link>
           </DescriptionBlock>
         </OverlayBGBlock>
       </ImageBGBlock>
@@ -90,12 +102,13 @@ const DescriptionBlock = styled.div`
     margin-bottom: 12px;
   }
 
-  button {
+  a {
     display: inline-block;
     padding: 8px 16px;
     background-color: ${({ theme }) => theme.colors.brown6};
     color: ${({ theme }) => theme.colors.white};
     font-size: ${({ theme }) => theme.fontSize.discription};
+    text-decoration: none;
     border: none;
     border-radius: 4px;
     transition: all 0.25s;
