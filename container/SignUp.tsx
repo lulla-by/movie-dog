@@ -3,7 +3,31 @@ import Input from '../components/input/Input';
 import ConfirmButton from '../components/buttons/ConfirmButton';
 import { useState } from 'react';
 
+interface HelperText {
+  id: string;
+  nickName: string;
+  password: string;
+  passWordConfirm: string;
+  [key: string]: string;
+}
+
 export default function SignUp() {
+  const defautlHelperText: HelperText = {
+    id: '아이디는 이메일 형식이어야 합니다.',
+    nickName:
+      '닉네임은 2자 이상 8자 이하의 한글, 영문, 숫자로 이루어져야 합니다.',
+    password:
+      '비밀번호는 8자리 이상이어야 하며, 영문과 숫자를 포함해야 합니다.',
+    passWordConfirm: '비밀번호를 한번 더 입력해주세요.',
+  };
+
+  const [helperText, setHelperrText] = useState({
+    id: defautlHelperText.id,
+    nickName: defautlHelperText.nickName,
+    password: defautlHelperText.password,
+    passWordConfirm: defautlHelperText.passWordConfirm,
+  });
+
   // 이메일 중복확인
   const [emailDuplication, setEmailDuplication] = useState(false);
 
@@ -22,8 +46,9 @@ export default function SignUp() {
 
   const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
   const passwordValidation = passwordPattern.test(password);
+  
 
-  const passwordConfirmValidation = passWordConfirm === password;
+  const passwordConfirmValidation = password === passWordConfirm;
 
   const validationConfirm = !(
     emailDuplication == true &&
@@ -42,22 +67,41 @@ export default function SignUp() {
     }
   };
 
+  const check = (property: string, validation: boolean) => {
+    validation
+      ? setHelperrText({ ...helperText, [property]: `사용가능합니다.` })
+      : setHelperrText({
+          ...helperText,
+          [property]: defautlHelperText[property],
+        });
+  };
+
   //input 값 관리
   const getInputData = (e: React.ChangeEvent<HTMLInputElement>) => {
     switch (e.target.placeholder) {
       case '닉네임':
         setNickName(e.target.value);
+        check('nickName', nickNameValidation);
         break;
       case '비밀번호':
         setPassword(e.target.value);
+        check('password', passwordValidation);
         break;
       case '비밀번호 확인':
         setPasswordConfirm(e.target.value);
+        check("passwordConfirm",passwordConfirmValidation)
         break;
       default:
+        setEmailDuplication(false);
         setId(e.target.value);
+        check('id', idValidation);
         break;
     }
+  };
+
+  // 회원가입
+  const signUp = () => {
+    console.log('회원가입 신청');
   };
 
   return (
@@ -69,7 +113,7 @@ export default function SignUp() {
             onChange={getInputData}
             state="default"
             placeholder="아이디(이메일 주소)"
-            helperText="아이디는 이메일 형식이어야 합니다."
+            helperText={helperText.id}
           />
           <ExtendsConfirmButton
             onClick={checkEmailDuplication}
@@ -81,26 +125,24 @@ export default function SignUp() {
           onChange={getInputData}
           state="default"
           placeholder="닉네임"
-          helperText="닉네임은 2자 이상 8자 이하의 한글, 영문, 숫자로 이루어져야 합니다."
+          helperText={helperText.nickName}
         />
         <ExtendsDefaultInput
           type="password"
           onChange={getInputData}
           state="default"
           placeholder="비밀번호"
-          helperText="비밀번호는 8자리 이상이어야 하며, 영문과 숫자를 포함해야 합니다."
+          helperText={helperText.password}
         />
         <ExtendsDefaultInput
           type="password"
           onChange={getInputData}
           state="default"
           placeholder="비밀번호 확인"
-          helperText="비밀번호를 한번 더 입력해주세요."
+          helperText={helperText.passWordConfirm}
         />
         <ConfirmButton
-          onClick={() => {
-            console.log('hi');
-          }}
+          onClick={signUp}
           text="회원가입"
           disabled={validationConfirm}
         />
