@@ -21,7 +21,14 @@ export default function SignUp() {
     passWordConfirm: '비밀번호를 한번 더 입력해주세요.',
   };
 
-  const [helperText, setHelperrText] = useState({
+  const validatedHelperText: HelperText = {
+    id: '사용가능한 아이디입니다.',
+    nickName: '사용가능한 닉네임 입니다.',
+    password: '사용가능한 비밀번호 입니다.',
+    passWordConfirm: '비밀번호가 일치합니다.',
+  };
+
+  const [helperText, setHelperText] = useState({
     id: defautlHelperText.id,
     nickName: defautlHelperText.nickName,
     password: defautlHelperText.password,
@@ -32,29 +39,34 @@ export default function SignUp() {
   const [emailDuplication, setEmailDuplication] = useState(false);
 
   // input값 관리
-  const [id, setId] = useState<string>('');
-  const [nickName, setNickName] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [passWordConfirm, setPasswordConfirm] = useState<string>('');
+  const [id, setId] = useState('');
+  const [nickName, setNickName] = useState('');
+  const [password, setPassword] = useState('');
 
-  // validation
-  const idPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const idValidation = idPattern.test(id);
+  const [passWordConfirm, setPasswordConfirm] = useState('');
 
-  const nickNamePattern = /^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9]{2,8}$/;
-  const nickNameValidation = nickNamePattern.test(nickName);
+  // 유효성 검증
+  const pattern: Record<string, RegExp> = {
+    id: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    nickName: /^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9]{2,8}$/,
+    password: /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/,
+  };
 
-  const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-  const passwordValidation = passwordPattern.test(password);
-  
+  const validation = (property: string, data: string): boolean => {
+    return pattern[property]?.test(data);
+  };
 
-  const passwordConfirmValidation = password === passWordConfirm;
+  const idValidation = validation('id', id);
+  const nickNameValidation = validation('nickName', nickName);
+  const passwordValidation = validation('password', password);
+  const passwordConfirmValidation =
+    passwordValidation && password === passWordConfirm;
 
   const validationConfirm = !(
-    emailDuplication == true &&
-    nickNameValidation == true &&
-    passwordValidation == true &&
-    passwordConfirmValidation == true
+    emailDuplication === true &&
+    nickNameValidation === true &&
+    passwordValidation === true &&
+    passwordConfirmValidation === true
   );
 
   // 중복값 체크
@@ -67,34 +79,21 @@ export default function SignUp() {
     }
   };
 
-  const check = (property: string, validation: boolean) => {
-    validation
-      ? setHelperrText({ ...helperText, [property]: `사용가능합니다.` })
-      : setHelperrText({
-          ...helperText,
-          [property]: defautlHelperText[property],
-        });
-  };
-
   //input 값 관리
   const getInputData = (e: React.ChangeEvent<HTMLInputElement>) => {
     switch (e.target.placeholder) {
       case '닉네임':
         setNickName(e.target.value);
-        check('nickName', nickNameValidation);
         break;
       case '비밀번호':
         setPassword(e.target.value);
-        check('password', passwordValidation);
         break;
       case '비밀번호 확인':
         setPasswordConfirm(e.target.value);
-        check("passwordConfirm",passwordConfirmValidation)
         break;
       default:
         setEmailDuplication(false);
         setId(e.target.value);
-        check('id', idValidation);
         break;
     }
   };
@@ -102,6 +101,7 @@ export default function SignUp() {
   // 회원가입
   const signUp = () => {
     console.log('회원가입 신청');
+    console.log(id, nickName, password, passWordConfirm);
   };
 
   return (
@@ -113,7 +113,7 @@ export default function SignUp() {
             onChange={getInputData}
             state="default"
             placeholder="아이디(이메일 주소)"
-            helperText={helperText.id}
+            helperText={idValidation ? validatedHelperText.id : helperText.id}
           />
           <ExtendsConfirmButton
             onClick={checkEmailDuplication}
@@ -125,21 +125,29 @@ export default function SignUp() {
           onChange={getInputData}
           state="default"
           placeholder="닉네임"
-          helperText={helperText.nickName}
+          helperText={
+            nickNameValidation ? validatedHelperText.nickName : helperText.nickName
+          }
         />
         <ExtendsDefaultInput
           type="password"
           onChange={getInputData}
           state="default"
           placeholder="비밀번호"
-          helperText={helperText.password}
+          helperText={
+            passwordValidation ? validatedHelperText.password : helperText.password
+          }
         />
         <ExtendsDefaultInput
           type="password"
           onChange={getInputData}
           state="default"
           placeholder="비밀번호 확인"
-          helperText={helperText.passWordConfirm}
+          helperText={
+            passwordConfirmValidation
+              ? validatedHelperText.passWordConfirm
+              : helperText.passWordConfirm
+          }
         />
         <ConfirmButton
           onClick={signUp}
