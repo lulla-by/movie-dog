@@ -9,6 +9,7 @@ type MovieTypes = {
     genre_ids: number[];
     overview: string;
     title: string;
+    original_title: string;
   };
 };
 
@@ -28,16 +29,7 @@ function MainVisual({ movie }: MovieTypes) {
                 ? movie.overview.split(' ', 40).join(' ') + '...'
                 : movie.overview.split(' ', 40).join(' ')}
             </p>
-            <Link
-              href={{
-                pathname: `/detail/${movie.id}`,
-                query: {
-                  title: movie.title,
-                  overView: movie.overview,
-                },
-              }}
-              as={`/detail/${movie.id}`}
-            >
+            <Link href={`/detail/${movie.original_title}/${movie.id}`}>
               보러가기
             </Link>
           </DescriptionBlock>
