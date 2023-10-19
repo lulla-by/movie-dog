@@ -7,6 +7,8 @@ import RatingComponent from '@/components/RatingComponent';
 import ConfirmButton from '@/components/buttons/ConfirmButton';
 
 import { options } from '../api/data';
+import Image from 'next/image';
+import ReviewSwiper from '@/components/swiper/ReviewSwiper';
 
 type MovieDataTypes = {
   id: number;
@@ -20,12 +22,18 @@ type MovieDataTypes = {
   vote_average: number;
 };
 
+type CreditDataTypes = {
+  cast: [{ name: string }];
+  director: { name: string };
+};
+
 function Detail({
   params,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [, movieId] = params.params;
 
   const [movieData, setMovieData] = useState<MovieDataTypes | null>(null);
+  const [creditData, setCreditData] = useState<CreditDataTypes | null>(null);
 
   const getMovieDB = async () => {
     const response = await fetch(
@@ -57,8 +65,23 @@ function Detail({
     });
   };
 
+  const getCreditList = async () => {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/movie/${movieId}/credits?language=ko-KR`,
+      options,
+    );
+    const json = await response.json();
+    const actorList = json.cast.slice(0, 8);
+    const directorObject = json.crew.find((item: any) => {
+      return Object.keys(item).find((key) => item[key] === 'Director');
+    });
+    const { name: directorName } = directorObject;
+    setCreditData({ cast: actorList, director: directorName });
+  };
+
   useEffect(() => {
     getMovieDB();
+    getCreditList();
   }, []);
 
   return (
@@ -66,7 +89,13 @@ function Detail({
       {movieData && (
         <ContentBlock>
           <DetailBlock>
-            <PosterBlock>영화 포스터</PosterBlock>
+            <PosterBlock>
+              <Image
+                src={`http://image.tmdb.org/t/p/w500${movieData.poster_path}`}
+                alt={`${movieData.title}의 포스터`}
+                fill
+              />
+            </PosterBlock>
             <InfoBlock>
               <h1>{movieData.title}</h1>
               <p className="english-title">{movieData.original_title}</p>
@@ -79,10 +108,15 @@ function Detail({
                     (i !== movieData.genres.length - 1 ? ', ' : ''),
                 )}
               </p>
-              <p>감독 : 000・출연 : 000, 000, 000, 000(8명까지)</p>
+              <p>{'감독 : ' + creditData?.director}</p>
+              <p>
+                {`출연 : ${creditData?.cast.map((item) => ' ' + item.name)}`}
+              </p>
               <p>{movieData.overview}</p>
-              <ConfirmButton text="찜" icon="favorite" />
-              <ConfirmButton text="한 줄 평 작성" icon="write" />
+              <div className="buttons">
+                <ConfirmButton text="찜" icon="favorite" />
+                <ConfirmButton text="한 줄 평 작성" icon="write" />
+              </div>
             </InfoBlock>
           </DetailBlock>
         </ContentBlock>
@@ -115,11 +149,14 @@ const DetailBlock = styled.section`
 `;
 
 const PosterBlock = styled.div`
+  position: relative;
   width: 33.33%;
+  height: 480px;
   background-color: green;
 `;
 
 const InfoBlock = styled.div`
+  width: 50%;
   h1 {
     font-size: ${({ theme }) => theme.fontSize.headline2};
   }
@@ -130,5 +167,11 @@ const InfoBlock = styled.div`
 
   .english-title {
     color: ${({ theme }) => theme.colors.gray1};
+  }
+
+  .buttons {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
   }
 `;
