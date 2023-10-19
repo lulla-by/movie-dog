@@ -14,31 +14,45 @@ import Card from '../Card';
 
 import { options } from '@/pages/api/data';
 
-const movieListUrl: { [key: string]: string } = {
+const movieListUrl = {
   popular: 'https://api.themoviedb.org/3/movie/popular?language=ko-KR&page=1',
   topRated:
     'https://api.themoviedb.org/3/movie/top_rated?language=ko-KR&page=1',
   upcoming: 'https://api.themoviedb.org/3/movie/upcoming?language=ko-KR&page=1',
-};
+  similar:
+    'https://api.themoviedb.org/3/movie/movieId/similar?language=ko-KR&page=1',
+} as const;
+
+type APICallType = keyof typeof movieListUrl;
 
 type SwiperTypes = {
-  urlKey: 'popular' | 'topRated' | 'upcoming';
+  urlKey: APICallType;
   ranking: boolean;
   className?: string;
+  movieId?: number;
 };
 
-function MovieSwiper({ urlKey, ranking, className }: SwiperTypes) {
+function MovieSwiper({ urlKey, ranking, className, movieId }: SwiperTypes) {
   const [movieData, setMovieData] = useState([]);
 
   const prevButtonRef = useRef<HTMLButtonElement>(null);
   const nextButtonRef = useRef<HTMLButtonElement>(null);
 
   const getMovieDB = async () => {
-    if (urlKey) {
-      const response = await fetch(movieListUrl[urlKey], options);
+    if (urlKey === 'similar' && movieId) {
+      const similarAPIKey = movieListUrl[urlKey].replace(
+        'movieId',
+        `${movieId}`,
+      );
+      const response = await fetch(similarAPIKey, options);
       const json = await response.json();
       setMovieData(json.results);
+      return;
     }
+
+    const response = await fetch(movieListUrl[urlKey], options);
+    const json = await response.json();
+    setMovieData(json.results);
   };
 
   const swiperOptions = {

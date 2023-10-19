@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import Image from 'next/image';
 
 import styled from 'styled-components';
 
 import RatingComponent from '@/components/RatingComponent';
 import ConfirmButton from '@/components/buttons/ConfirmButton';
+import ReviewSwiper from '@/components/swiper/ReviewSwiper';
+import MovieSwiper from '@/components/swiper/MovieSwiper';
 
 import { options } from '../api/data';
-import Image from 'next/image';
-import ReviewSwiper from '@/components/swiper/ReviewSwiper';
 
 type MovieDataTypes = {
   id: number;
@@ -16,6 +17,7 @@ type MovieDataTypes = {
   original_title: string;
   genres: [{ name: string }];
   overview: string;
+  backdrop_path: string;
   poster_path: string;
   release_date: string;
   runtime: number;
@@ -47,6 +49,7 @@ function Detail({
       original_title,
       genres,
       overview,
+      backdrop_path,
       poster_path,
       release_date,
       runtime,
@@ -58,6 +61,7 @@ function Detail({
       original_title,
       genres,
       overview,
+      backdrop_path,
       poster_path,
       release_date,
       runtime,
@@ -94,6 +98,13 @@ function Detail({
                 src={`http://image.tmdb.org/t/p/w500${movieData.poster_path}`}
                 alt={`${movieData.title}의 포스터`}
                 fill
+                className="pc-tablet-img"
+              />
+              <Image
+                src={`http://image.tmdb.org/t/p/w500${movieData.backdrop_path}`}
+                alt={`${movieData.title}의 스틸컷`}
+                fill
+                className="mobile-img"
               />
             </PosterBlock>
             <InfoBlock>
@@ -119,6 +130,18 @@ function Detail({
               </div>
             </InfoBlock>
           </DetailBlock>
+          <section>
+            <h2>유저 한 줄 평</h2>
+            <ReviewSwiper />
+          </section>
+          <section>
+            <h2>비슷한 영화</h2>
+            <MovieSwiper
+              movieId={movieData.id}
+              urlKey="similar"
+              ranking={false}
+            />
+          </section>
         </ContentBlock>
       )}
     </>
@@ -136,27 +159,79 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const ContentBlock = styled.main`
   max-width: 1200px;
-  background-color: pink;
-  padding: 100px 0;
+  padding-bottom: 100px;
   margin: 0 auto;
+
+  @media (min-width: 600px) {
+    padding: 100px 0;
+  }
+
+  section {
+    margin-bottom: 50px;
+  }
+
+  section:last-child {
+    margin-bottom: 0;
+  }
+
+  section h2 {
+    margin-bottom: 20px;
+    font-size: ${({ theme }) => theme.fontSize.headline2};
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.brown9};
+    text-align: center;
+  }
 `;
 
 const DetailBlock = styled.section`
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+  flex-flow: column;
   gap: 20px;
+
+  @media (min-width: 600px) {
+    flex-flow: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    padding: 0 20px;
+  }
 `;
 
 const PosterBlock = styled.div`
   position: relative;
-  width: 33.33%;
-  height: 480px;
-  background-color: green;
+  width: 100%;
+  height: 0;
+  padding-bottom: 50%; // 스틸컷 가로:세로 2:1비율
+
+  .pc-tablet-img {
+    display: none;
+  }
+  .mobile-img {
+    display: block;
+  }
+
+  @media (min-width: 600px) {
+    width: 33.33%;
+    padding-bottom: 50%; // 포스터 가로:세로 2:3비율
+
+    .pc-tablet-img {
+      display: block;
+    }
+
+    .mobile-img {
+      display: none;
+    }
+  }
 `;
 
 const InfoBlock = styled.div`
-  width: 50%;
+  padding: 0 20px;
+
+  @media (min-width: 600px) {
+    width: 66.66%;
+    padding: 0;
+  }
+
   h1 {
     font-size: ${({ theme }) => theme.fontSize.headline2};
   }
