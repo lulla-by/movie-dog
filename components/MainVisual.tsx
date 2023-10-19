@@ -44,7 +44,7 @@ export default MainVisual;
 const ImageBGBlock = styled.div<{ backdrop: string }>`
   height: 600px;
   background-image: ${({ backdrop }) => {
-    return `url(https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces${backdrop})`;
+    return `url(http://image.tmdb.org/t/p/w1280${backdrop})`;
   }};
   background-size: cover;
   background-position: center center;

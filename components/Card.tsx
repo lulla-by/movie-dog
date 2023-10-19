@@ -41,7 +41,7 @@ function Card({ movie, ranking }: MovieTypes) {
           )}
           <ImageBlock>
             <Image
-              src={`https://www.themoviedb.org/t/p/w600_and_h900_bestv2${movie.poster_path}`}
+              src={`http://image.tmdb.org/t/p/w342${movie.poster_path}`}
               alt={movie.title}
               fill
               sizes="(max-width: 768px) 10vw,(max-width: 1200px) 30vw"
