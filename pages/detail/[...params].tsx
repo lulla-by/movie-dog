@@ -161,6 +161,7 @@ const ContentBlock = styled.main`
   max-width: 1200px;
   padding-bottom: 100px;
   margin: 0 auto;
+  color: ${({ theme }) => theme.colors.black};
 
   @media (min-width: 600px) {
     padding: 100px 0;
@@ -172,6 +173,10 @@ const ContentBlock = styled.main`
 
   section:last-child {
     margin-bottom: 0;
+  }
+
+  section h1 {
+    font-weight: 700;
   }
 
   section h2 {
