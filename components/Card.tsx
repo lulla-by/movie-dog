@@ -1,12 +1,15 @@
-import styled from 'styled-components';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import styled from 'styled-components';
+
 import RatingComponent from './RatingComponent';
 
 import { genreId } from '@/pages/api/data';
-import { useEffect, useState } from 'react';
 
 type MovieTypes = {
   movie?: {
+    id: number;
     title: string;
     vote_average: number;
     vote_count: number;
@@ -33,35 +36,37 @@ function Card({ movie, ranking }: MovieTypes) {
   return (
     <>
       {movie && (
-        <CardBlock>
-          {displayRanking && (
-            <RankingTag>
-              {typeof ranking === 'number' && ranking + 1}
-            </RankingTag>
-          )}
-          <ImageBlock>
-            <Image
-              src={`http://image.tmdb.org/t/p/w342${movie.poster_path}`}
-              alt={movie.title}
-              fill
-              sizes="(max-width: 768px) 10vw,(max-width: 1200px) 30vw"
-              loading="eager"
-            />
-          </ImageBlock>
-          <h3>{movie.title}</h3>
-          <p>
-            {movie.release_date.slice(0, 4)}・{genreId[movie.genre_ids[0]]}
-          </p>
-          <RatingBlock>
-            <RatingComponent
-              rating={Math.floor((movie.vote_average / 2) * 10) / 10}
-            />
-            <span>
-              {Math.floor((movie.vote_average / 2) * 10) / 10 + '점'}(
-              {movie.vote_count.toLocaleString() + '명'})
-            </span>
-          </RatingBlock>
-        </CardBlock>
+        <Link href={`/detail/${movie.title}/${movie.id}`}>
+          <CardBlock>
+            {displayRanking && (
+              <RankingTag>
+                {typeof ranking === 'number' && ranking + 1}
+              </RankingTag>
+            )}
+            <ImageBlock>
+              <Image
+                src={`http://image.tmdb.org/t/p/w342${movie.poster_path}`}
+                alt={movie.title}
+                fill
+                sizes="(max-width: 768px) 10vw,(max-width: 1200px) 30vw"
+                loading="eager"
+              />
+            </ImageBlock>
+            <h3>{movie.title}</h3>
+            <p>
+              {movie.release_date.slice(0, 4)}・{genreId[movie.genre_ids[0]]}
+            </p>
+            <RatingBlock>
+              <RatingComponent
+                rating={Math.floor((movie.vote_average / 2) * 10) / 10}
+              />
+              <span>
+                {Math.floor((movie.vote_average / 2) * 10) / 10 + '점'}(
+                {movie.vote_count.toLocaleString() + '명'})
+              </span>
+            </RatingBlock>
+          </CardBlock>
+        </Link>
       )}
     </>
   );
@@ -125,4 +130,8 @@ const RatingBlock = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
+
+  span {
+    color: ${({ theme }) => theme.colors.black};
+  }
 `;
