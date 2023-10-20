@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import RatingComponent from './RatingComponent';
 
-import { genreId } from '@/pages/api/data';
+import { genreArr } from '@/pages/api/data';
 
 type MovieTypes = {
   movie?: {
@@ -28,6 +28,10 @@ function Card({ movie, ranking }: MovieTypes) {
       setDisplayRanking(true);
     }
   };
+
+  const genreName = genreArr.filter((item) => {
+    return +Object.keys(item)[0] === movie?.genre_ids[0];
+  });
 
   useEffect(() => {
     isRankingLessThan10();
@@ -54,7 +58,7 @@ function Card({ movie, ranking }: MovieTypes) {
             </ImageBlock>
             <h3>{movie.title}</h3>
             <p>
-              {movie.release_date.slice(0, 4)}・{genreId[movie.genre_ids[0]]}
+              {movie.release_date.slice(0, 4)}・{Object.values(genreName[0])[0]}
             </p>
             <RatingBlock>
               <RatingComponent

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { genreId } from '@/pages/api/data';
+import { genreArr } from '@/pages/api/data';
 import Link from 'next/link';
 
 type MovieTypes = {
@@ -14,6 +14,17 @@ type MovieTypes = {
 };
 
 function MainVisual({ movie }: MovieTypes) {
+  const findGenreName = () => {
+    const genreList = [];
+    for (let i = 0; i <= 1; i++) {
+      const correctGenre = genreArr.filter(
+        (item) => +Object.keys(item)[0] === movie.genre_ids[i],
+      );
+      genreList.push(Object.values(correctGenre[0])[0]);
+    }
+    return genreList;
+  };
+
   return (
     <>
       <ImageBGBlock backdrop={movie.backdrop_path}>
@@ -21,8 +32,8 @@ function MainVisual({ movie }: MovieTypes) {
           <DescriptionBlock>
             <h3>{movie.title}</h3>
             <p>
-              {genreId[movie.genre_ids[0]]}
-              {true && '・' + genreId[movie.genre_ids[1]]}
+              {findGenreName()[0]}
+              {true && '・' + findGenreName()[1]}
             </p>
             <p>
               {movie.overview.split(' ', 40).length === 40
