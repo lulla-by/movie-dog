@@ -2,6 +2,9 @@ import styled from 'styled-components';
 import Input from '../components/input/Input';
 import ConfirmButton from '../components/buttons/ConfirmButton';
 import { useState } from 'react';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
+import { authService, db } from '@/fbase';
 
 interface HelperText {
   id: string;
@@ -12,6 +15,27 @@ interface HelperText {
 }
 
 export default function SignUp() {
+  // 회원가입
+  const signup = async () => {
+    try {
+      // 회원가입
+      const data = await createUserWithEmailAndPassword(
+        authService,
+        id,
+        password,
+      );
+
+      // collection 유저정보 추가
+      await setDoc(doc(db, 'users', id), {
+        email: id,
+        uid: data.user.uid,
+        nickName,
+      });
+    } catch (error) {
+      // console.log(error);
+    }
+  };
+
   const defautlHelperText: HelperText = {
     id: '아이디는 이메일 형식이어야 합니다.',
     nickName:
@@ -22,18 +46,11 @@ export default function SignUp() {
   };
 
   const validatedHelperText: HelperText = {
-    id: '사용가능한 아이디입니다.',
+    id: '사용가능한 아이디입니다. 중복검사를 진행해주세요',
     nickName: '사용가능한 닉네임 입니다.',
     password: '사용가능한 비밀번호 입니다.',
     passWordConfirm: '비밀번호가 일치합니다.',
   };
-
-  const [helperText, setHelperText] = useState({
-    id: defautlHelperText.id,
-    nickName: defautlHelperText.nickName,
-    password: defautlHelperText.password,
-    passWordConfirm: defautlHelperText.passWordConfirm,
-  });
 
   // 이메일 중복확인
   const [emailDuplication, setEmailDuplication] = useState(false);
@@ -70,13 +87,24 @@ export default function SignUp() {
   );
 
   // 중복값 체크
-  const checkEmailDuplication = () => {
-    if (idValidation) {
-      setEmailDuplication(true);
-      return;
-    } else {
-      console.log('이메일을 확인해주세요');
-    }
+  const checkEmailDuplication = async (id: string) => {
+
+    let isDuplicate = true;
+
+    const q = query(collection(db, 'users'));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      // 존재할경우
+      if (doc.id === id) {
+        isDuplicate = false;
+        alert('존재하는 이메일입니다.');
+        setId('');
+      } else {
+        //존재하지 않을 경우
+        setEmailDuplication(true);
+      }
+      setEmailDuplication(isDuplicate);
+    });
   };
 
   //input 값 관리
@@ -98,11 +126,22 @@ export default function SignUp() {
     }
   };
 
-  // 회원가입
-  const signUp = () => {
-    console.log('회원가입 신청');
-    console.log(id, nickName, password, passWordConfirm);
-  };
+  let idText;
+
+  // idvalidation이 false일 때
+  if (!idValidation) {
+    idText = '아이디는 이메일 형식이어야 합니다';
+  }
+  // idvalidation이 true이고 emailduplication이 true일 때
+  else if (idValidation && emailDuplication) {
+    idText = '사용 가능한 아이디입니다';
+  }
+  // 그 외의 경우 (idvalidation이 true이고 emailduplication이 false일 때)
+  else {
+    idText = '중복 검사를 진행해주세요';
+  }
+  // console.log(idValidation);
+  // console.log(emailDuplication);
 
   return (
     <Container>
@@ -113,10 +152,12 @@ export default function SignUp() {
             onChange={getInputData}
             state="default"
             placeholder="아이디(이메일 주소)"
-            helperText={idValidation ? validatedHelperText.id : helperText.id}
+            helperText={idText}
           />
           <ExtendsConfirmButton
-            onClick={checkEmailDuplication}
+            onClick={() => {
+              checkEmailDuplication(id);
+            }}
             width={23}
             text="중복확인"
           />
@@ -126,7 +167,9 @@ export default function SignUp() {
           state="default"
           placeholder="닉네임"
           helperText={
-            nickNameValidation ? validatedHelperText.nickName : helperText.nickName
+            nickNameValidation
+              ? validatedHelperText.nickName
+              : defautlHelperText.nickName
           }
         />
         <ExtendsDefaultInput
@@ -135,7 +178,9 @@ export default function SignUp() {
           state="default"
           placeholder="비밀번호"
           helperText={
-            passwordValidation ? validatedHelperText.password : helperText.password
+            passwordValidation
+              ? validatedHelperText.password
+              : defautlHelperText.password
           }
         />
         <ExtendsDefaultInput
@@ -146,11 +191,11 @@ export default function SignUp() {
           helperText={
             passwordConfirmValidation
               ? validatedHelperText.passWordConfirm
-              : helperText.passWordConfirm
+              : defautlHelperText.passWordConfirm
           }
         />
         <ConfirmButton
-          onClick={signUp}
+          onClick={signup}
           text="회원가입"
           disabled={validationConfirm}
         />
