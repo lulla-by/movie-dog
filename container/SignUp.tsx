@@ -88,23 +88,24 @@ export default function SignUp() {
 
   // 중복값 체크
   const checkEmailDuplication = async (id: string) => {
-
+    if (!idValidation) {
+      // 아이디가 이메일 형식이 아니면 중복 확인을 수행하지 않음
+      return;
+    }
+  
     let isDuplicate = true;
-
+  
     const q = query(collection(db, 'users'));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-      // 존재할경우
       if (doc.id === id) {
         isDuplicate = false;
         alert('존재하는 이메일입니다.');
         setId('');
-      } else {
-        //존재하지 않을 경우
-        setEmailDuplication(true);
       }
-      setEmailDuplication(isDuplicate);
     });
+  
+    setEmailDuplication(isDuplicate);
   };
 
   //input 값 관리
