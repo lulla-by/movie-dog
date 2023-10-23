@@ -9,15 +9,27 @@ function CategoryList({
   params,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [genreId, setGenreId] = useState(params.params);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [offset, setOffset] = useState(1);
 
   useEffect(() => {
+    console.log('카테고리 페이지 리랜더링!');
     setGenreId(params.params[0]);
+    setCurrentPage(1);
+    setOffset(1);
+    // console.log(currentPage);
   }, [params.params]);
 
   return (
     <WrapperBlock>
       <GenreSideBar genreId={genreId} setGenreId={setGenreId} />
-      <CardList genreId={genreId} />
+      <CardList
+        genreId={genreId}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        offset={offset}
+        setOffset={setOffset}
+      />
     </WrapperBlock>
   );
 }

@@ -8,16 +8,25 @@ import styled from 'styled-components';
 
 type CardList = {
   genreId: string;
+  currentPage: number;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  offset: number;
+  setOffset: React.Dispatch<React.SetStateAction<number>>;
 };
 
-function CardList({ genreId }: CardList) {
+function CardList({
+  genreId,
+  currentPage,
+  setCurrentPage,
+  offset,
+  setOffset,
+}: CardList) {
   const [movieData, setMovieData] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const CARD_PER_PAGE = 20;
+  // const [currentPage, setCurrentPage] = useState(1);
 
   const getMovieDB = async () => {
     const response = await fetch(
-      `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=ko-KR&page=${currentPage}&sort_by=popularity.desc&with_genres=${genreId}`,
+      `https://api.themoviedb.org/3/discover/movie?include_adult=true&include_video=false&language=ko-KR&page=${currentPage}&sort_by=popularity.desc&with_genres=${genreId}`,
       options,
     );
     const json = await response.json();
@@ -26,7 +35,9 @@ function CardList({ genreId }: CardList) {
 
   useEffect(() => {
     getMovieDB();
-  }, [genreId]);
+    // setCurrentPage(1);
+    console.log('카드 리스트 리랜더링!!!');
+  }, [genreId, currentPage]);
 
   return (
     <WrapperBlock>
@@ -36,7 +47,12 @@ function CardList({ genreId }: CardList) {
             return <Card key={i} ranking={true} movie={movie} />;
           })}
       </CardListBlock>
-      <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      <Pagination
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        offset={offset}
+        setOffset={setOffset}
+      />
     </WrapperBlock>
   );
 }

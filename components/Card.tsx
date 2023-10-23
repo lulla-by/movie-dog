@@ -52,7 +52,7 @@ function Card({ movie, ranking }: MovieTypes) {
                 src={`http://image.tmdb.org/t/p/w342${movie.poster_path}`}
                 alt={movie.title}
                 fill
-                sizes="(max-width: 768px) 10vw,(max-width: 1200px) 30vw"
+                sizes="(max-width: 768px) 50vw,(max-width: 1200px) 70vw"
                 loading="eager"
                 priority
               />
