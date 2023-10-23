@@ -14,7 +14,7 @@ function Pagination({ currentPage, setCurrentPage }: PaginationTypes) {
   };
 
   return (
-    <>
+    <PageButtonWrapper>
       {Array(pageCount)
         .fill(1)
         .map((item, i) => (
@@ -25,14 +25,18 @@ function Pagination({ currentPage, setCurrentPage }: PaginationTypes) {
             {item + i}
           </PageNumButton>
         ))}
-    </>
+    </PageButtonWrapper>
   );
 }
 
 export default Pagination;
 
+const PageButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 const PageNumButton = styled.button`
-  display: inline-block;
   width: 32px;
   height: 32px;
   margin: 0 2px;
@@ -42,7 +46,7 @@ const PageNumButton = styled.button`
   border: none;
   border-radius: 32px;
   cursor: pointer;
-  /* background: none; */
+  background: none;
 
   &.active {
     background-color: ${({ theme }) => theme.colors.brown5};

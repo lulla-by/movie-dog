@@ -5,6 +5,7 @@ import { genreArr } from '@/pages/api/data';
 
 type GenreSideBarTypes = {
   genreId: string;
+  setGenreId: React.Dispatch<React.SetStateAction<number>>;
 };
 
 function GenreSideBar({ genreId }: GenreSideBarTypes) {
@@ -29,7 +30,6 @@ function GenreSideBar({ genreId }: GenreSideBarTypes) {
 export default GenreSideBar;
 
 const SidebarBlock = styled.aside`
-  margin: 50px;
   h2 {
     padding: 12px 20px;
     background-color: ${({ theme }) => theme.colors.brown5};
@@ -40,14 +40,22 @@ const SidebarBlock = styled.aside`
   }
 
   ul {
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    gap: 20px 30px;
     padding: 12px 20px;
     border: 1px solid ${({ theme }) => theme.colors.gray1};
     border-top: none;
     border-radius: 0 0 4px 4px;
+
+    @media (min-width: 1000px) {
+      flex-flow: column;
+      gap: 0px;
+    }
   }
 
   li {
-    margin-bottom: 12px;
     color: ${({ theme }) => theme.colors.gray1};
 
     &.active {
@@ -57,6 +65,10 @@ const SidebarBlock = styled.aside`
 
     a {
       color: inherit;
+    }
+
+    @media (min-width: 1000px) {
+      margin-bottom: 12px;
     }
   }
 

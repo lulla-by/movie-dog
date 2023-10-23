@@ -54,6 +54,7 @@ function Card({ movie, ranking }: MovieTypes) {
                 fill
                 sizes="(max-width: 768px) 10vw,(max-width: 1200px) 30vw"
                 loading="eager"
+                priority
               />
             </ImageBlock>
             <h3>{movie.title}</h3>
@@ -97,18 +98,8 @@ const RankingTag = styled.span`
 
 const ImageBlock = styled.div`
   position: relative;
-  height: 300px;
+  padding-bottom: 150%;
   margin-bottom: 8px;
-
-  @media (min-width: 320px) {
-    height: 480px;
-  }
-  @media (min-width: 480px) {
-    height: 400px;
-  }
-  @media (min-width: 1200px) {
-    height: 320px;
-  }
 `;
 
 const CardBlock = styled.div`
