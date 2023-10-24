@@ -1,14 +1,35 @@
 import styled from 'styled-components';
 import Input from '../components/input/Input';
 import ConfirmButton from '../components/buttons/ConfirmButton';
+import { useState } from 'react';
 
 export default function Login() {
+  const [id, setId] = useState('');
+  const [password, setPassword] = useState('');
+
+  const getInputData = (e: React.ChangeEvent<HTMLInputElement>) => {
+    switch (e.target.placeholder) {
+      case '이메일':
+        setId(e.target.value);
+        break;
+      case '비밀번호':
+        setPassword(e.target.value);
+        break;
+      default:
+        return;
+    }
+  };
+
   return (
     <Container>
       <LoginBox>
         <TitleBox>로그인</TitleBox>
-        <Input placeholder="로그인" />
-        <ExtendsPasswordInput placeholder="비밀번호" />
+        <Input onChange={getInputData} placeholder="이메일" />
+        <ExtendsPasswordInput
+          type="password"
+          onChange={getInputData}
+          placeholder="비밀번호"
+        />
         <ExtendsConfirmButton text="로그인" />
         <ExtendsConfirmButton text="회원가입" />
         <TextBox>
