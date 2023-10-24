@@ -10,12 +10,11 @@ import { LoginsState } from '@/stores/LoginState';
 import { validation } from '@/utils/Validation';
 
 export default function Login() {
-  
   const router = useRouter();
-  
+
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-  
+
   // 로그인 상태 전역관리
   const isLogin = useSetRecoilState(LoginsState);
 
@@ -34,14 +33,19 @@ export default function Login() {
 
   // 로그인 유효성 검증
   const helperText = {
-    id: {valid:'올바른 이메일 형식입니다.',invalid:"아이디는 이메일 형식이어야 합니다."},
-    password:
-    { valid:'올바른 비밀번호 형식입니다.',invalid:"비밀번호는 8자리 이상이어야 하며, 영문과 숫자를 포함해야 합니다."},
+    id: {
+      valid: '올바른 이메일 형식입니다.',
+      invalid: '아이디는 이메일 형식이어야 합니다.',
+    },
+    password: {
+      valid: '올바른 비밀번호 형식입니다.',
+      invalid:
+        '비밀번호는 8자리 이상이어야 하며, 영문과 숫자를 포함해야 합니다.',
+    },
   };
-  
+
   const idValidation = validation('id', id);
   const passwordValidation = validation('password', password);
-  
 
   // 로그인
   const login = async () => {
@@ -62,28 +66,41 @@ export default function Login() {
     <Container>
       <LoginBox>
         <TitleBox>로그인</TitleBox>
-        <Input
-          onChange={getInputData}
-          placeholder="이메일"
-          helperText={idValidation ? helperText.id.valid:helperText.id.invalid}
-        />
-        <ExtendsPasswordInput
-          type="password"
-          onChange={getInputData}
-          placeholder="비밀번호"
-          helperText={passwordValidation ? helperText.password.valid : helperText.password.invalid}
-        />
-        <ExtendsConfirmButton onClick={login} text="로그인" />
-        <Link href="/signup">
-          <ExtendsConfirmButton text="회원가입" />
-        </Link>
-        <TextBox>
-          <p>OR</p>
-        </TextBox>
-        <ButtonContainer>
-          <ExtendsConfirmButton width={48} icon="github" text="깃허브 로그인" />
-          <ExtendsConfirmButton width={48} icon="google" text="구글 로그인" />
-        </ButtonContainer>
+        <fieldset>
+          <LegendContainer>로그인 폼</LegendContainer>
+          <Input
+            onChange={getInputData}
+            placeholder="이메일"
+            helperText={
+              idValidation ? helperText.id.valid : helperText.id.invalid
+            }
+          />
+          <ExtendsPasswordInput
+            type="password"
+            onChange={getInputData}
+            placeholder="비밀번호"
+            helperText={
+              passwordValidation
+                ? helperText.password.valid
+                : helperText.password.invalid
+            }
+          />
+          <ExtendsConfirmButton onClick={login} text="로그인" />
+          <Link href="/signup">
+            <ExtendsConfirmButton text="회원가입" />
+          </Link>
+          <TextBox>
+            <p>OR</p>
+          </TextBox>
+          <ButtonContainer>
+            <ExtendsConfirmButton
+              width={48}
+              icon="github"
+              text="깃허브 로그인"
+            />
+            <ExtendsConfirmButton width={48} icon="google" text="구글 로그인" />
+          </ButtonContainer>
+        </fieldset>
       </LoginBox>
     </Container>
   );
@@ -111,12 +128,13 @@ const ExtendsPasswordInput = styled(Input)`
   margin-top: 20px;
 `;
 
-const LoginBox = styled.div`
+const LoginBox = styled.form`
   width: 386px;
   margin: auto;
 `;
 
 const TitleBox = styled.h1`
+  display: block;
   font-size: ${({ theme }) => theme.fontSize.headline1};
   font-weight: 700;
   margin: 100px 0px;
@@ -140,4 +158,12 @@ const TextBox = styled.div`
     height: 1px;
     border-bottom: 1px solid ${({ theme }) => theme.colors.brown5};
   }
+`;
+
+const LegendContainer = styled.legend`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
 `;
