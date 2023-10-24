@@ -25,6 +25,10 @@ ${reset}
     line-height: 1.5;
   }
 
+  a {
+    text-decoration: none;
+  }
+
   .a11y-hidden {
     position: absolute;
     width: 1px;
