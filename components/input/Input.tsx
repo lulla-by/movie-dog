@@ -62,6 +62,7 @@ const InputBlock = styled.input<InputTypes>`
   color: ${({ theme }) => theme.colors.black};
   border: 1px solid ${theme.colors.gray1};
   border-radius: 4px;
+  height: 40px;
 
   ::placeholder {
     color: ${({ theme }) => theme.colors.gray1};

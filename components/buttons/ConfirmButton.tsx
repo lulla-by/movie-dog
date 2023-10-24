@@ -1,66 +1,94 @@
 import styled from 'styled-components';
-import Icons from '../../public/icon.png';
+import GithubIcon from '../../public/images/icons/icon_github.svg';
+import GoogleIcon from '../../public/images/icons/icon_google.svg';
+import {
+  CreateRounded,
+  FavoriteBorderRounded,
+  FavoriteRounded,
+} from '@mui/icons-material';
 
-interface ButtonProps {
+const buttonIcons = {
+  github: <GithubIcon />,
+  google: <GoogleIcon />,
+  write: <CreateRounded />,
+  favorite: <FavoriteBorderRounded />,
+  'favorite-fill': <FavoriteRounded />,
+} as const;
+
+type IconTypes = keyof typeof buttonIcons;
+
+type ButtonProps = {
+  text?: string;
+  width?: number;
   disabled?: boolean;
   active?: boolean;
-  icon?: string;
-}
-
-interface DefaultProps extends ButtonProps {
-  width?: number;
-  text?: string;
+  icon?: IconTypes;
   className?: string;
   onClick?:()=>void
-}
+};
 
 export default function ConfirmButton({
+  text = '확인',
+  width = 100,
   disabled,
   active,
   icon,
-  width = 100,
-  text = '확인',
   className,
   onClick
-}: DefaultProps) {
+}: ButtonProps) {
   return (
     <>
-      <DefaultButton
+      <ButtonBlock
       onClick={onClick}
         active={active}
         disabled={disabled}
-        icon={icon}
         width={width}
-        className={className}
+        className={`${className} ${active && 'active'}`}
       >
-        {icon && <IconBox icon={icon} />}
-        <TextBox>{text}</TextBox>
-      </DefaultButton>
+        {icon && buttonIcons[icon]}
+        <span>{text}</span>
+      </ButtonBlock>
     </>
   );
 }
 
-const DefaultButton = styled.button<DefaultProps>`
+const ButtonBlock = styled.button<{ width: number }>`
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
   width: ${({ width }) => width + '%'};
-  margin: auto;
-  padding: 10px;
+  padding: 8px 10px;
+  color: ${({ theme }) => theme.colors.brown5};
+  background-color: ${({ theme }) => theme.colors.white};
   border: 1px solid ${({ theme }) => theme.colors.brown5};
   border-radius: 4px;
   transition: all 0.2s;
+  cursor: pointer;
 
-  color: ${({ active, theme }) =>
-    active ? theme.colors.white : theme.colors.brown5};
-  background-color: ${({ active, theme }) =>
-    active ? theme.colors.brown5 : theme.colors.white};
+  span {
+    font-size: ${({ theme }) => theme.fontSize.discription};
+    font-weight: 700;
+    flex-grow: 1;
+  }
+
+  &.active {
+    color: ${({ theme }) => theme.colors.white};
+    background-color: ${({ theme }) => theme.colors.brown5};
+  }
 
   &:hover {
-    color: ${({ icon, theme }) =>
-      icon ? theme.colors.brown5 : theme.colors.white};
-    background-color: ${({ icon, theme }) =>
-      icon ? theme.colors.white : theme.colors.brown5};
-    cursor: pointer;
+    color: ${({ theme }) => theme.colors.white};
+    background-color: ${({ theme }) => theme.colors.brown5};
+
+    svg path {
+      fill: ${({ theme }) => theme.colors.white};
+    }
+  }
+
+  &.active:hover {
+    color: ${({ theme }) => theme.colors.brown5};
+    background-color: ${({ theme }) => theme.colors.white};
   }
 
   &:disabled {
@@ -69,24 +97,4 @@ const DefaultButton = styled.button<DefaultProps>`
     border: 1px solid ${({ theme }) => theme.colors.gray1};
     cursor: not-allowed;
   }
-`;
-
-const TextBox = styled.div`
-  flex-grow: 1;
-  align-items: center;
-  font-weight: 700;
-  font-size: ${({ theme }) => theme.fontSize.discription};
-`;
-
-const IconBox = styled.div<ButtonProps>`
-  left: 10px;
-  height: 20px;
-  width: 20px;
-  background: url(${Icons.src}) no-repeat
-    ${({ icon }) =>
-      icon === 'Google'
-        ? 'right 26% bottom 50%'
-        : icon === 'Github'
-        ? 'right 26% bottom 95%'
-        : null};
 `;

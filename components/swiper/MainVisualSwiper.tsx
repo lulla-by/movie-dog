@@ -12,6 +12,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import PageNavigatorButton from '../buttons/PageNavigatorButton';
 import MainVisual from '../MainVisual';
 
+import { options } from '@/pages/api/data';
+
 type SwiperTypes = {
   className?: string;
 };
@@ -29,14 +31,6 @@ function MainVisualSwiper({ className }: SwiperTypes) {
 
   const prevButtonRef = useRef<HTMLButtonElement>(null);
   const nextButtonRef = useRef<HTMLButtonElement>(null);
-
-  const options = {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_ACCESS_TOKEN_AUTH}`,
-    },
-  };
 
   const getMovieDB = async () => {
     const response = await fetch(
