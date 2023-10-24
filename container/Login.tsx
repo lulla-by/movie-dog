@@ -2,10 +2,18 @@ import styled from 'styled-components';
 import Input from '../components/input/Input';
 import ConfirmButton from '../components/buttons/ConfirmButton';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { firebaseLogin } from '@/utils/UserLogin';
+import { LoginState, LoginToken } from '@/stores/LoginState';
+import { useSetRecoilState } from 'recoil';
 
 export default function Login() {
+  const router = useRouter();
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+
+  const loginState = useSetRecoilState(LoginState);
+  const loginToken = useSetRecoilState(LoginToken);
 
   const getInputData = (e: React.ChangeEvent<HTMLInputElement>) => {
     switch (e.target.placeholder) {
@@ -20,6 +28,22 @@ export default function Login() {
     }
   };
 
+  const login = async () => {
+    if (id.trim().length <= 0 || password.trim().length <= 0) {
+      console.log('올바른 형식이 아님');
+      return;
+    }
+    const userData = await firebaseLogin(id, password);
+
+    if (userData.state === false) {
+      return;
+    }
+
+    loginState(userData.state);
+    loginToken(userData.uid);
+    router.push('/');
+  };
+
   return (
     <Container>
       <LoginBox>
@@ -30,7 +54,7 @@ export default function Login() {
           onChange={getInputData}
           placeholder="비밀번호"
         />
-        <ExtendsConfirmButton text="로그인" />
+        <ExtendsConfirmButton onClick={login} text="로그인" />
         <ExtendsConfirmButton text="회원가입" />
         <TextBox>
           <p>OR</p>
