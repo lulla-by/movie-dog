@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
 import { authService, db } from '@/fbase';
+import { useRouter } from 'next/router';
 
 interface HelperText {
   id: string;
@@ -15,6 +16,7 @@ interface HelperText {
 }
 
 export default function SignUp() {
+  const router = useRouter();
   // 회원가입
   const signup = async () => {
     try {
@@ -34,6 +36,7 @@ export default function SignUp() {
     } catch (error) {
       // console.log(error);
     }
+    router.push('/login');
   };
 
   const defautlHelperText: HelperText = {
@@ -92,9 +95,9 @@ export default function SignUp() {
       // 아이디가 이메일 형식이 아니면 중복 확인을 수행하지 않음
       return;
     }
-  
+
     let isDuplicate = true;
-  
+
     const q = query(collection(db, 'users'));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
@@ -104,7 +107,7 @@ export default function SignUp() {
         setId('');
       }
     });
-  
+
     setEmailDuplication(isDuplicate);
   };
 
@@ -141,8 +144,6 @@ export default function SignUp() {
   else {
     idText = '중복 검사를 진행해주세요';
   }
-  // console.log(idValidation);
-  // console.log(emailDuplication);
 
   return (
     <Container>
