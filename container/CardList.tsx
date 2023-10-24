@@ -36,7 +36,7 @@ function CardList({
   useEffect(() => {
     getMovieDB();
     // setCurrentPage(1);
-    console.log('카드 리스트 리랜더링!!!');
+    // console.log('카드 리스트 리랜더링!!!');
   }, [genreId, currentPage]);
 
   return (

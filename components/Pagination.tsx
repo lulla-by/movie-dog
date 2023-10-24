@@ -38,7 +38,7 @@ function Pagination({
   };
 
   useEffect(() => {
-    console.log('pagination 리랜더링!');
+    // console.log('pagination 리랜더링!');
     // setOffset(1);
     // setCurrentPage(1);
   }, []);

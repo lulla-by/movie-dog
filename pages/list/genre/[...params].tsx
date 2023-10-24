@@ -13,7 +13,7 @@ function CategoryList({
   const [offset, setOffset] = useState(1);
 
   useEffect(() => {
-    console.log('카테고리 페이지 리랜더링!');
+    // console.log('카테고리 페이지 리랜더링!');
     setGenreId(params.params[0]);
     setCurrentPage(1);
     setOffset(1);
