@@ -6,6 +6,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
 import { authService, db } from '@/fbase';
 import { useRouter } from 'next/router';
+import { validation } from '@/utils/Validation';
 
 interface HelperText {
   id: string;
@@ -65,16 +66,6 @@ export default function SignUp() {
 
   const [passWordConfirm, setPasswordConfirm] = useState('');
 
-  // 유효성 검증
-  const pattern: Record<string, RegExp> = {
-    id: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-    nickName: /^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9]{2,8}$/,
-    password: /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/,
-  };
-
-  const validation = (property: string, data: string): boolean => {
-    return pattern[property]?.test(data);
-  };
 
   const idValidation = validation('id', id);
   const nickNameValidation = validation('nickName', nickName);
