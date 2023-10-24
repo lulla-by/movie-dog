@@ -48,7 +48,9 @@ export function Header() {
           </Link>
           <nav className="pc-nav">
             <List>
-              <ListItem>장르별</ListItem>
+              <ListItem>
+                <Link href="/list/genre/28">장르별</Link>
+              </ListItem>
               <ListItem>년도별</ListItem>
             </List>
           </nav>
@@ -139,7 +141,10 @@ const ListItem = styled.li`
   display: inline-block;
   font-weight: 700;
   font-size: ${({ theme }) => theme.fontSize.headline3};
-  color: ${({ theme }) => theme.colors.brown9};
+
+  a {
+    color: ${({ theme }) => theme.colors.brown9};
+  }
 
   @media (min-width: 800px) {
     margin-right: 40px;
