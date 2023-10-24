@@ -24,6 +24,7 @@ type ButtonProps = {
   active?: boolean;
   icon?: IconTypes;
   className?: string;
+  onClick?:()=>void
 };
 
 export default function ConfirmButton({
@@ -33,10 +34,13 @@ export default function ConfirmButton({
   active,
   icon,
   className,
+  onClick
 }: ButtonProps) {
   return (
     <>
       <ButtonBlock
+      onClick={onClick}
+        active={active}
         disabled={disabled}
         width={width}
         className={`${className} ${active && 'active'}`}

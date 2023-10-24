@@ -15,8 +15,8 @@ export default function Login() {
           <p>OR</p>
         </TextBox>
         <ButtonContainer>
-          <ExtendsConfirmButton width={48} icon="Github" text="깃허브 로그인" />
-          <ExtendsConfirmButton width={48} icon="Google" text="구글 로그인" />
+          <ExtendsConfirmButton width={48} icon="github" text="깃허브 로그인" />
+          <ExtendsConfirmButton width={48} icon="google" text="구글 로그인" />
         </ButtonContainer>
       </LoginBox>
     </Container>
