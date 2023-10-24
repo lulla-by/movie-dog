@@ -160,7 +160,6 @@ export default function SignUp() {
             onClick={() => {
               checkEmailDuplication(id);
             }}
-            width={23}
             text="중복확인"
           />
         </IdCheckBox>
@@ -244,4 +243,6 @@ const ExtendsConfirmButton = styled(ConfirmButton)`
   margin-top: 0px;
   margin-right: 0px;
   margin-left: 8px;
+  width: 90px;
+  height: 40px;
 `;
