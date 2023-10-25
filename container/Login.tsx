@@ -48,7 +48,8 @@ export default function Login() {
   const passwordValidation = validation('password', password);
 
   // 로그인
-  const login = async () => {
+  const login = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (id.trim().length <= 0 || password.trim().length <= 0) {
       return;
     }
