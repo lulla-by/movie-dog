@@ -3,7 +3,7 @@ import Input from '../components/input/Input';
 import ConfirmButton from '../components/buttons/ConfirmButton';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { GoogleLogin, firebaseLogin } from '@/utils/UserLogin';
+import { GithubLogin, GoogleLogin, firebaseLogin } from '@/utils/UserLogin';
 import Link from 'next/link';
 import { useSetRecoilState } from 'recoil';
 import { LoginsState } from '@/stores/LoginState';
@@ -63,9 +63,12 @@ export default function Login() {
       userData = await GoogleLogin();
 
       // 에러 발생
+    } else if (targetName === '깃허브 로그인') {
+      userData = await GithubLogin();
     } else {
-     throw new Error("올바르지않은 접근입니다")
+      throw new Error('올바르지않은 접근입니다');
     }
+
     if (userData.state === false) {
       return;
     }
