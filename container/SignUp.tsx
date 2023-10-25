@@ -6,6 +6,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
 import { authService, db } from '@/fbase';
 import { useRouter } from 'next/router';
+import { validation } from '@/utils/Validation';
 
 interface HelperText {
   id: string;
@@ -64,17 +65,6 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
 
   const [passWordConfirm, setPasswordConfirm] = useState('');
-
-  // 유효성 검증
-  const pattern: Record<string, RegExp> = {
-    id: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-    nickName: /^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9]{2,8}$/,
-    password: /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/,
-  };
-
-  const validation = (property: string, data: string): boolean => {
-    return pattern[property]?.test(data);
-  };
 
   const idValidation = validation('id', id);
   const nickNameValidation = validation('nickName', nickName);
@@ -149,57 +139,60 @@ export default function SignUp() {
     <Container>
       <LoginBox>
         <Title>회원가입</Title>
-        <IdCheckBox>
-          <ExtendsEmailInput
+        <fieldset>
+          <LegendContainer>회원가입 폼</LegendContainer>
+          <IdCheckBox>
+            <ExtendsEmailInput
+              onChange={getInputData}
+              state="default"
+              placeholder="아이디(이메일 주소)"
+              helperText={idText}
+            />
+            <ExtendsConfirmButton
+              onClick={() => {
+                checkEmailDuplication(id);
+              }}
+              text="중복확인"
+            />
+          </IdCheckBox>
+          <ExtendsDefaultInput
             onChange={getInputData}
             state="default"
-            placeholder="아이디(이메일 주소)"
-            helperText={idText}
+            placeholder="닉네임"
+            helperText={
+              nickNameValidation
+                ? validatedHelperText.nickName
+                : defautlHelperText.nickName
+            }
           />
-          <ExtendsConfirmButton
-            onClick={() => {
-              checkEmailDuplication(id);
-            }}
-            text="중복확인"
+          <ExtendsDefaultInput
+            type="password"
+            onChange={getInputData}
+            state="default"
+            placeholder="비밀번호"
+            helperText={
+              passwordValidation
+                ? validatedHelperText.password
+                : defautlHelperText.password
+            }
           />
-        </IdCheckBox>
-        <ExtendsDefaultInput
-          onChange={getInputData}
-          state="default"
-          placeholder="닉네임"
-          helperText={
-            nickNameValidation
-              ? validatedHelperText.nickName
-              : defautlHelperText.nickName
-          }
-        />
-        <ExtendsDefaultInput
-          type="password"
-          onChange={getInputData}
-          state="default"
-          placeholder="비밀번호"
-          helperText={
-            passwordValidation
-              ? validatedHelperText.password
-              : defautlHelperText.password
-          }
-        />
-        <ExtendsDefaultInput
-          type="password"
-          onChange={getInputData}
-          state="default"
-          placeholder="비밀번호 확인"
-          helperText={
-            passwordConfirmValidation
-              ? validatedHelperText.passWordConfirm
-              : defautlHelperText.passWordConfirm
-          }
-        />
-        <ConfirmButton
-          onClick={signup}
-          text="회원가입"
-          disabled={validationConfirm}
-        />
+          <ExtendsDefaultInput
+            type="password"
+            onChange={getInputData}
+            state="default"
+            placeholder="비밀번호 확인"
+            helperText={
+              passwordConfirmValidation
+                ? validatedHelperText.passWordConfirm
+                : defautlHelperText.passWordConfirm
+            }
+          />
+          <ConfirmButton
+            onClick={signup}
+            text="회원가입"
+            disabled={validationConfirm}
+          />
+        </fieldset>
       </LoginBox>
     </Container>
   );
@@ -245,4 +238,11 @@ const ExtendsConfirmButton = styled(ConfirmButton)`
   margin-left: 8px;
   width: 90px;
   height: 40px;
+`;
+const LegendContainer = styled.legend`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
 `;
