@@ -3,7 +3,7 @@ import Input from '../components/input/Input';
 import ConfirmButton from '../components/buttons/ConfirmButton';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { firebaseLogin } from '@/utils/UserLogin';
+import { GoogleLogin, firebaseLogin } from '@/utils/UserLogin';
 import Link from 'next/link';
 import { useSetRecoilState } from 'recoil';
 import { LoginsState } from '@/stores/LoginState';
@@ -50,11 +50,22 @@ export default function Login() {
   // 로그인
   const login = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (id.trim().length <= 0 || password.trim().length <= 0) {
-      return;
-    }
-    const userData = await firebaseLogin(id, password);
+    const target = e.target as HTMLButtonElement;
+    const targetName = target.innerText;
+    let userData;
 
+    // 파이어베이스 로그인
+    if (targetName === '로그인') {
+      userData = await firebaseLogin(id, password);
+
+      // 구글 로그인
+    } else if (targetName === '구글 로그인') {
+      userData = await GoogleLogin();
+
+      // 에러 발생
+    } else {
+     throw new Error("올바르지않은 접근입니다")
+    }
     if (userData.state === false) {
       return;
     }
@@ -98,8 +109,14 @@ export default function Login() {
               width={48}
               icon="github"
               text="깃허브 로그인"
+              onClick={login}
             />
-            <ExtendsConfirmButton width={48} icon="google" text="구글 로그인" />
+            <ExtendsConfirmButton
+              width={48}
+              icon="google"
+              text="구글 로그인"
+              onClick={login}
+            />
           </ButtonContainer>
         </fieldset>
       </LoginBox>
