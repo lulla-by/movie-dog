@@ -59,7 +59,8 @@ function Card({ movie, ranking }: MovieTypes) {
             </ImageBlock>
             <h3>{movie.title}</h3>
             <p>
-              {movie.release_date.slice(0, 4)}・{Object.values(genreName[0])[0]}
+              {movie.release_date.slice(0, 4)}・
+              {genreName[0] ? Object.values(genreName[0])[0] : '장르 분류 없음'}
             </p>
             <RatingBlock>
               <RatingComponent
