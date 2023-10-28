@@ -1,12 +1,20 @@
 import Category from '@/components/yearList/Category';
+import YearList from '@/components/yearList/YearList';
+import { GetServerSidePropsContext } from 'next';
 import React from 'react';
 import styled from 'styled-components';
 
+interface YearMainProps {
+  data: any;
+  year: string;
+  idx: string;
+}
 
-function YearMain() {
+function YearMain({ data, year, idx}: YearMainProps) {
   return (
     <WrapperBlock>
       <Category />
+      <YearList year={year} data={data} idx={idx} />
     </WrapperBlock>
   );
 }
@@ -38,3 +46,32 @@ const WrapperBlock = styled.div`
     }
   }
 `;
+
+export const getServerSideProps = async ({
+  params,
+}: GetServerSidePropsContext) => {
+  let year;
+  let idx;
+  if (params === undefined) {
+    year = '2020';
+    idx = '1';
+  } else if (params.parmas[1] == undefined) {
+    year = params.parmas[0];
+    idx = '1';
+  } else {
+    year = params.parmas[0];
+    idx = params.parmas[1];
+  }
+
+  const response = await fetch(
+    `http://localhost:3000/api/movie/${year}/${idx}`,
+  );
+  const { results } = await response.json();
+  return {
+    props: {
+      data: results,
+      year: year,
+      idx: idx,
+    },
+  };
+};
