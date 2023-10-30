@@ -30,7 +30,6 @@ const YearList = ({ year, data, idx }: YearMainsProps) => {
   const idxPage = parseInt(idx);
   const [currentPage, setCurrentPage] = useState(idxPage);
   const totalPages = 50;
-  const itemsPerPage = 10;
 
   const moveIndex = (i: number) => {
     setCurrentPage(i);
@@ -54,17 +53,28 @@ const YearList = ({ year, data, idx }: YearMainsProps) => {
     return pageNumbers;
   };
 
+  function calculateMinIndex(currentValue:number) {
+    const lowerBound = Math.floor((currentValue - 1) / 10) * 10 + 1;
+    return lowerBound;
+  }
+  
+  function calculateMaxIndex(currentValue:number) {
+    const lowerBound = calculateMinIndex(currentValue);
+    const upperBound = lowerBound + 9;
+    return upperBound;
+  }
   const [indexOfLastItem, setIndexOfLastItem] = useState(
-    currentPage * itemsPerPage,
+    calculateMaxIndex(idxPage),
   );
   const [indexOfFirstItem, setIndexOfFirstItem] = useState(
-    indexOfLastItem - itemsPerPage,
+    calculateMinIndex(idxPage),
   );
+
   const currentItems = renderPagination().slice(
-    indexOfFirstItem,
+    indexOfFirstItem-1,
     indexOfLastItem,
   );
-  useEffect(() => {}, [currentPage, indexOfFirstItem, indexOfLastItem]);
+
   return (
     <WrapperBlock>
       <CardListBlock>
@@ -85,13 +95,15 @@ const YearList = ({ year, data, idx }: YearMainsProps) => {
           />
         )}
         {currentItems}
-        <PageNavigatorButton
-          direction="next"
-          onClick={() => {
-            setIndexOfFirstItem((prev) => prev + 10);
-            setIndexOfLastItem((prev) => prev + 10);
-          }}
-        />
+        {indexOfLastItem <= 40 && (
+          <PageNavigatorButton
+            direction="next"
+            onClick={() => {
+              setIndexOfFirstItem((prev) => prev + 10);
+              setIndexOfLastItem((prev) => prev + 10);
+            }}
+          />
+        )}
       </PageButtonWrapper>
     </WrapperBlock>
   );
