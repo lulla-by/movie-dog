@@ -10,6 +10,8 @@ import ReviewSwiper from '@/components/swiper/ReviewSwiper';
 import MovieSwiper from '@/components/swiper/MovieSwiper';
 
 import { options } from '../api/data';
+import ReviewModal from '@/components/modal/ReviewModal';
+import Modal from '@/components/modal/Modal';
 
 type MovieDataTypes = {
   id: number;
@@ -36,6 +38,8 @@ function Detail({
 
   const [movieData, setMovieData] = useState<MovieDataTypes | null>(null);
   const [creditData, setCreditData] = useState<CreditDataTypes | null>(null);
+
+  const [isOpened, setIsOpened] = useState(false);
 
   const getMovieDB = async () => {
     const response = await fetch(
@@ -90,6 +94,9 @@ function Detail({
 
   return (
     <>
+      <Modal setIsOpened={setIsOpened} isOpened={isOpened}>
+        <ReviewModal setIsOpened={setIsOpened} />
+      </Modal>
       {movieData && (
         <ContentBlock>
           <DetailBlock>
@@ -126,7 +133,11 @@ function Detail({
               <p>{movieData.overview}</p>
               <div className="buttons">
                 <ConfirmButton text="찜" icon="favorite" />
-                <ConfirmButton text="한 줄 평 작성" icon="write" />
+                <ConfirmButton
+                  text="한 줄 평 작성"
+                  icon="write"
+                  onClick={() => setIsOpened(true)}
+                />
               </div>
             </InfoBlock>
           </DetailBlock>
