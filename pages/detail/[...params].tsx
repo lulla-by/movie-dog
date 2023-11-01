@@ -94,11 +94,15 @@ function Detail({
 
   return (
     <>
-      <Modal setIsOpened={setIsOpened} isOpened={isOpened}>
-        <ReviewModal setIsOpened={setIsOpened} />
-      </Modal>
       {movieData && (
         <ContentBlock>
+          <Modal setIsOpened={setIsOpened} isOpened={isOpened}>
+            <ReviewModal
+              setIsOpened={setIsOpened}
+              movieId={movieData!.id}
+              movieTitle={movieData!.title}
+            />
+          </Modal>
           <DetailBlock>
             <PosterBlock>
               <Image

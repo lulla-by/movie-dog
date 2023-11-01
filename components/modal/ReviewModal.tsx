@@ -1,11 +1,127 @@
+import { db } from '@/fbase';
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from 'firebase/firestore';
+import { ChangeEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import RatingComponent from '../RatingComponent';
+import ConfirmButton from '../buttons/ConfirmButton';
 
 type ReviewModalTypes = {
+  movieId: number;
+  movieTitle: string;
   setIsOpened: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function ReviewModal({ setIsOpened }: ReviewModalTypes) {
-  return <button onClick={() => setIsOpened(false)}>닫기</button>;
+type ExistReviewTypes = {
+  reviewId: string;
+  content: string;
+  movieId: number;
+  movieTitle: string;
+  rating: number;
+  userName: string;
+};
+
+function ReviewModal({ movieId, movieTitle, setIsOpened }: ReviewModalTypes) {
+  const [reviewText, setReviewText] = useState('');
+  const [existReview, setExistReview] = useState<ExistReviewTypes>();
+  const uid = JSON.parse(localStorage.getItem('userData') || '{}').uid;
+
+  // textarea value 상태 관리
+  const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    if (reviewText.length > 99) {
+      setReviewText(e.target.value.substring(0, 99));
+      return;
+    }
+    setReviewText(e.target.value);
+  };
+
+  // 기존 리뷰가 있을 경우 불러오는 로직
+  const loadExistReview = async () => {
+    const q = query(collection(db, 'reviews'), where('movieId', '==', movieId));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      setExistReview({
+        reviewId: doc.id,
+        content: doc.data().content,
+        movieId: doc.data().movieId,
+        movieTitle: doc.data().movieTitle,
+        rating: doc.data().rating,
+        userName: doc.data().userName,
+      });
+      setReviewText(doc.data().content);
+    });
+  };
+
+  // 리뷰 작성 및 업데이트 로직
+  const submitReview = async () => {
+    if (existReview) {
+      alert('리뷰가 수정되었습니다.');
+      await updateDoc(doc(db, 'reviews', existReview.reviewId), {
+        content: reviewText,
+      });
+    } else {
+      alert('리뷰가 작성되었습니다.');
+      await addDoc(collection(db, 'reviews'), {
+        content: reviewText,
+        movieId: movieId,
+        movieTitle: movieTitle,
+        rating: 4,
+        uid: uid,
+      });
+    }
+    setIsOpened(false);
+    location.reload();
+  };
+
+  useEffect(() => {
+    loadExistReview();
+  }, []);
+
+  return (
+    <>
+      <TitleBlock>&lt;{movieTitle}&gt;의 한 줄 평</TitleBlock>
+      <RatingComponent />
+      <TextBlock
+        placeholder="해당 영화의 한 줄 평을 입력해주세요."
+        onChange={onChange}
+        value={reviewText}
+      />
+      <LengthBlock>{reviewText.length}/100</LengthBlock>
+      <ConfirmButton
+        text={existReview?.content ? '수정' : '작성'}
+        onClick={submitReview}
+        disabled={!reviewText}
+      />
+    </>
+  );
 }
 
 export default ReviewModal;
+
+const TitleBlock = styled.h3`
+  margin-bottom: 8px;
+  font-size: ${({ theme }) => theme.fontSize.headline3};
+  color: ${({ theme }) => theme.colors.black};
+  font-weight: 700;
+`;
+
+const TextBlock = styled.textarea`
+  width: 100%;
+  height: 10rem;
+  padding: 8px;
+  margin: 8px 0;
+  border: 1px solid ${({ theme }) => theme.colors.gray1};
+  resize: none;
+`;
+
+const LengthBlock = styled.p`
+  margin-bottom: 8px;
+  text-align: right;
+`;
