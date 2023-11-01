@@ -87,6 +87,21 @@ function Detail({
     setCreditData({ cast: actorList, director: directorName });
   };
 
+  const handleReviewButton = () => {
+    if (localStorage.getItem('userData')) {
+      setIsOpened(true);
+    } else {
+      alert('로그인이 필요한 서비스입니다.');
+    }
+  };
+
+  const handleLikeButton = () => {
+    if (localStorage.getItem('userData')) {
+    } else {
+      alert('로그인이 필요한 서비스입니다.');
+    }
+  };
+
   useEffect(() => {
     getMovieDB();
     getCreditList();
@@ -140,7 +155,7 @@ function Detail({
                 <ConfirmButton
                   text="한 줄 평 작성"
                   icon="write"
-                  onClick={() => setIsOpened(true)}
+                  onClick={handleReviewButton}
                 />
               </div>
             </InfoBlock>
