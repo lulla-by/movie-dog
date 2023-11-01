@@ -5,8 +5,24 @@ import theme from '@/styles/theme';
 import '../public/fonts/styles.css';
 import Layout from '@/layout/Layout';
 import { RecoilRoot } from 'recoil';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+
+  const storePathValues = () => {
+    const storage = globalThis?.sessionStorage;
+    if (!storage) return;
+    const prevPath = storage.getItem('currentPath');
+    storage.setItem('prevPath', prevPath || '');
+    storage.setItem('currentPath', globalThis.location.pathname);
+  };
+
+  useEffect(() => {
+    storePathValues();
+  }, [router.asPath]);
+
   return (
     <RecoilRoot>
       <ThemeProvider theme={theme}>
