@@ -6,10 +6,11 @@ import StarRoundedIcon from '@mui/icons-material/StarRounded';
 
 type StarRating = {
   rating: number;
-  readonly: boolean;
+  starSize?: number;
+  readonly?: boolean;
 };
 
-function StarRating({ rating, readonly }: StarRating) {
+function StarRating({ rating, starSize = 24, readonly = true }: StarRating) {
   const [ratedStar, setRatedStar] = useState(rating);
 
   const onChange = (index: number) => {
@@ -30,6 +31,7 @@ function StarRating({ rating, readonly }: StarRating) {
             key={i}
             onClick={() => onChange(i + 1)}
             ratedStar={ratedStar}
+            starSize={starSize}
           >
             <FillStarBlock key={i} />
           </StarWrapper>
@@ -47,24 +49,24 @@ const StarsWrapper = styled.div`
   display: flex;
 `;
 
-const StarWrapper = styled.div<{ ratedStar: number }>`
+const StarWrapper = styled.div<{ ratedStar: number; starSize: number }>`
   position: relative;
-  width: 12px;
-  height: 24px;
+  width: ${({ starSize }) => starSize / 2 + 'px'};
+  height: ${({ starSize }) => starSize + 'px'};
   overflow: hidden;
 
   svg {
     fill: none;
+    font-size: ${({ starSize }) => starSize + 'px'};
   }
 
   svg path {
-    transform-origin: center center;
     stroke: ${({ theme }) => theme.colors.brown8};
     stroke-width: 2px;
   }
 
   &:nth-child(2n) svg {
-    left: -12px;
+    left: ${({ starSize }) => -(starSize / 2) + 'px'};
   }
 
   &:nth-child(-n + ${({ ratedStar }) => ratedStar}) {
