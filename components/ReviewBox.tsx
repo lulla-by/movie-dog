@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import RatingComponent from './RatingComponent';
+import StarRating from './StarRating';
 import LikeButton from './buttons/LikeButton';
 
 type ReviewBoxTypes = {
@@ -17,7 +17,7 @@ function ReviewBox({ review }: ReviewBoxTypes) {
   const { rating, description, title, writer, like } = review;
   return (
     <ReviewBoxBlock>
-      <RatingComponentBlock rating={rating} />
+      <RatingComponentBlock rating={rating * 2} starSize={24} />
       <p>{description}</p>
       <h3>- {title}</h3>
       <span>By {writer}</span>
@@ -58,8 +58,8 @@ const ReviewBoxBlock = styled.article`
   }
 `;
 
-const RatingComponentBlock = styled(RatingComponent)`
-  margin-bottom: 10px;
+const RatingComponentBlock = styled(StarRating)`
+  margin-bottom: 8px;
 `;
 
 const LikeButtonBlock = styled(LikeButton)`

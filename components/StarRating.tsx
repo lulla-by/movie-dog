@@ -8,9 +8,15 @@ type StarRating = {
   rating: number;
   starSize?: number;
   readonly?: boolean;
+  className?: string;
 };
 
-function StarRating({ rating, starSize = 24, readonly = true }: StarRating) {
+function StarRating({
+  rating,
+  starSize = 24,
+  readonly = true,
+  className,
+}: StarRating) {
   const [ratedStar, setRatedStar] = useState(rating);
 
   const onChange = (index: number) => {
@@ -23,7 +29,7 @@ function StarRating({ rating, starSize = 24, readonly = true }: StarRating) {
   }, []);
 
   return (
-    <StarsWrapper>
+    <StarsWrapper className={className}>
       {Array(10)
         .fill(1)
         .map((_, i) => (
