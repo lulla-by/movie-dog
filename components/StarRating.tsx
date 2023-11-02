@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -9,6 +9,7 @@ type StarRating = {
   starSize?: number;
   readonly?: boolean;
   className?: string;
+  setReviewRating?: React.Dispatch<SetStateAction<number>>;
 };
 
 function StarRating({
@@ -16,17 +17,19 @@ function StarRating({
   starSize = 24,
   readonly = true,
   className,
+  setReviewRating,
 }: StarRating) {
   const [ratedStar, setRatedStar] = useState(rating);
 
   const onChange = (index: number) => {
     if (readonly) return;
     setRatedStar(index);
+    if (setReviewRating) setReviewRating(index);
   };
 
   useEffect(() => {
     setRatedStar(rating);
-  }, []);
+  }, [rating]);
 
   return (
     <StarsWrapper className={className}>

@@ -8,10 +8,12 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 import { ChangeEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import RatingComponent from '../RatingComponent';
+
 import ConfirmButton from '../buttons/ConfirmButton';
+import StarRating from '../StarRating';
 
 type ReviewModalTypes = {
   movieId: number;
@@ -25,11 +27,12 @@ type ExistReviewTypes = {
   movieId: number;
   movieTitle: string;
   rating: number;
-  userName: string;
+  userNickName: string;
 };
 
 function ReviewModal({ movieId, movieTitle, setIsOpened }: ReviewModalTypes) {
   const [reviewText, setReviewText] = useState('');
+  const [reviewRating, setReviewRating] = useState(0);
   const [existReview, setExistReview] = useState<ExistReviewTypes>();
   const uid = JSON.parse(localStorage.getItem('userData') || '{}').uid;
 
@@ -53,27 +56,37 @@ function ReviewModal({ movieId, movieTitle, setIsOpened }: ReviewModalTypes) {
         movieId: doc.data().movieId,
         movieTitle: doc.data().movieTitle,
         rating: doc.data().rating,
-        userName: doc.data().userName,
+        userNickName: doc.data().userNickName,
       });
       setReviewText(doc.data().content);
+      setReviewRating(doc.data().rating);
     });
   };
 
   // 리뷰 작성 및 업데이트 로직
   const submitReview = async () => {
+    // 유저 닉네임 가져오기
+    let userNickName;
+    getAuth().currentUser?.providerData.forEach((profile) => {
+      userNickName = profile.displayName;
+    });
+
+    // 이미 작성된 리뷰가 있을 경우 나눠지는 로직
     if (existReview) {
       alert('리뷰가 수정되었습니다.');
       await updateDoc(doc(db, 'reviews', existReview.reviewId), {
         content: reviewText,
+        rating: reviewRating,
       });
     } else {
       alert('리뷰가 작성되었습니다.');
       await addDoc(collection(db, 'reviews'), {
         content: reviewText,
-        movieId: movieId,
-        movieTitle: movieTitle,
-        rating: 4,
-        uid: uid,
+        movieId,
+        movieTitle,
+        rating: reviewRating,
+        uid,
+        userNickName,
       });
     }
     setIsOpened(false);
@@ -87,7 +100,13 @@ function ReviewModal({ movieId, movieTitle, setIsOpened }: ReviewModalTypes) {
   return (
     <>
       <TitleBlock>&lt;{movieTitle}&gt;의 한 줄 평</TitleBlock>
-      <RatingComponent />
+      <StarRating
+        rating={reviewRating || 0}
+        readonly={false}
+        setReviewRating={setReviewRating}
+        starSize={20}
+      />
+      <p>{`(${reviewRating / 2} 점)`}</p>
       <TextBlock
         placeholder="해당 영화의 한 줄 평을 입력해주세요."
         onChange={onChange}
