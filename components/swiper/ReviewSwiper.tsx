@@ -1,4 +1,7 @@
-import { useRef } from 'react';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '@/fbase';
+
+import { useEffect, useRef, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -11,15 +14,25 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import PageNavigatorButton from '../buttons/PageNavigatorButton';
 import ReviewBox from '../ReviewBox';
-import { reviews } from '@/pages/api/data';
 
 type SwiperTypes = {
+  movieId: number;
   className?: string;
 };
 
-function ReviewSwiper({ className }: SwiperTypes) {
+type ReviewDataTypes = {
+  movieTitle: string;
+  movieId: string;
+  userNickName: string;
+  uid: number;
+  content: string;
+  rating: number;
+};
+
+function ReviewSwiper({ movieId, className }: SwiperTypes) {
   const prevButtonRef = useRef<HTMLButtonElement>(null);
   const nextButtonRef = useRef<HTMLButtonElement>(null);
+  const [reviewData, setReviewData] = useState<ReviewDataTypes[]>([]);
 
   const swiperOptions = {
     modules: [Navigation],
@@ -53,10 +66,30 @@ function ReviewSwiper({ className }: SwiperTypes) {
     },
   };
 
+  const loadExistReview = async () => {
+    const q = query(collection(db, 'reviews'), where('movieId', '==', movieId));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      const data = {
+        movieTitle: doc.data().movieTitle,
+        movieId: doc.data().movieId,
+        userNickName: doc.data().userNickName,
+        uid: doc.data().uid,
+        content: doc.data().content,
+        rating: doc.data().rating,
+      };
+      setReviewData([data, ...reviewData]);
+    });
+  };
+
+  useEffect(() => {
+    loadExistReview();
+  }, []);
+
   return (
     <SwiperBlock {...swiperOptions} className={className}>
-      {reviews &&
-        reviews.map((review, i) => {
+      {reviewData &&
+        reviewData.map((review, i) => {
           return (
             <SwiperSlide key={i}>
               <ReviewBox review={review} />

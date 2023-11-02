@@ -174,7 +174,7 @@ function Detail({
           </DetailBlock>
           <section>
             <h2>유저 한 줄 평</h2>
-            <ReviewSwiper />
+            <ReviewSwiper movieId={movieData.id} />
           </section>
           <section>
             <h2>비슷한 영화</h2>
