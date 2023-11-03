@@ -13,7 +13,7 @@ import PermIdentityRoundedIcon from '@mui/icons-material/PermIdentityRounded';
 import ConfirmButton from './buttons/ConfirmButton';
 import SearchBar from './input/SearchBar';
 import ModeButton from './buttons/ModeButton';
-import { useRecoilState} from 'recoil';
+import { useRecoilState } from 'recoil';
 import { LoginsState } from '@/stores/LoginState';
 
 export function Header() {
@@ -21,7 +21,7 @@ export function Header() {
   const [isTabBarShowing, setIsTabBarShowing] = useState(true);
 
   const [isLogin, setIsLogin] = useRecoilState(LoginsState);
-  
+
   useEffect(() => {
     const isLogin = window.localStorage.getItem('userData');
     if (!isLogin) {
@@ -51,11 +51,12 @@ export function Header() {
     return () => window.addEventListener('scroll', onScroll);
   }, []);
 
-  const Logout = () => {
+  const logout = () => {
     const data = confirm('로그아웃하시겠습니까?');
     if (data) {
       window.localStorage.removeItem('userData');
       setIsLogin(false);
+      location.reload();
     }
   };
 
@@ -83,7 +84,7 @@ export function Header() {
             </Link>
           ) : (
             <ConfirmButton
-              onClick={Logout}
+              onClick={logout}
               className="login-btn pc-nav"
               text="로그아웃"
             />
@@ -152,7 +153,7 @@ const FlexContainer = styled.div`
   }
 
   .login-btn {
-    width: 90px;
+    width: 120px;
   }
 `;
 

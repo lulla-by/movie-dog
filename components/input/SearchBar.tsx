@@ -63,7 +63,7 @@ const SearchBox = styled.form<{ width: number }>`
 
 const InputBlock = styled.input`
   width: 100%;
-  padding: 10px;
+  padding: 8px 10px;
   font-size: ${({ theme }) => theme.fontSize.discription};
   color: ${({ theme }) => theme.colors.black};
   border: 1px solid ${({ theme }) => theme.colors.gray1};

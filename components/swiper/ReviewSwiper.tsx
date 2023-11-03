@@ -1,4 +1,7 @@
-import { useRef } from 'react';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '@/fbase';
+
+import { useEffect, useRef, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -11,15 +14,25 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import PageNavigatorButton from '../buttons/PageNavigatorButton';
 import ReviewBox from '../ReviewBox';
-import { reviews } from '@/pages/api/data';
 
 type SwiperTypes = {
+  movieId: number;
   className?: string;
 };
 
-function ReviewSwiper({ className }: SwiperTypes) {
+type ReviewDataTypes = {
+  movieTitle: string;
+  movieId: string;
+  userNickName: string;
+  uid: number;
+  content: string;
+  rating: number;
+};
+
+function ReviewSwiper({ movieId, className }: SwiperTypes) {
   const prevButtonRef = useRef<HTMLButtonElement>(null);
   const nextButtonRef = useRef<HTMLButtonElement>(null);
+  const [reviewData, setReviewData] = useState<ReviewDataTypes[]>([]);
 
   const swiperOptions = {
     modules: [Navigation],
@@ -53,19 +66,59 @@ function ReviewSwiper({ className }: SwiperTypes) {
     },
   };
 
+  const loadExistReview = async () => {
+    let querySnapshot;
+    const reviewList: ReviewDataTypes[] = [];
+
+    // 메인에서 사용시엔 movieId에 0을 넣어 전체 리뷰를 불러옴
+    if (movieId === 0) {
+      querySnapshot = await getDocs(collection(db, 'reviews'));
+    } else {
+      const q = query(
+        collection(db, 'reviews'),
+        where('movieId', '==', movieId),
+      );
+      querySnapshot = await getDocs(q);
+    }
+    querySnapshot.forEach((doc) => {
+      const data = {
+        movieTitle: doc.data().movieTitle,
+        movieId: doc.data().movieId,
+        userNickName: doc.data().userNickName,
+        uid: doc.data().uid,
+        content: doc.data().content,
+        rating: doc.data().rating,
+      };
+      reviewList.unshift(data);
+    });
+    setReviewData(reviewList);
+  };
+
+  useEffect(() => {
+    loadExistReview();
+  }, []);
+
   return (
-    <SwiperBlock {...swiperOptions} className={className}>
-      {reviews &&
-        reviews.map((review, i) => {
-          return (
-            <SwiperSlide key={i}>
-              <ReviewBox review={review} />
-            </SwiperSlide>
-          );
-        })}
-      <NavigationButton buttonRef={prevButtonRef} direction="prev" />
-      <NavigationButton buttonRef={nextButtonRef} direction="next" />
-    </SwiperBlock>
+    <>
+      {reviewData[0] ? (
+        <SwiperBlock {...swiperOptions} className={className}>
+          {reviewData.map((review, i) => {
+            return (
+              <SwiperSlide key={i}>
+                <ReviewBox review={review} />
+              </SwiperSlide>
+            );
+          })}
+
+          <NavigationButton buttonRef={prevButtonRef} direction="prev" />
+          <NavigationButton buttonRef={nextButtonRef} direction="next" />
+        </SwiperBlock>
+      ) : (
+        <NoReviewBox>
+          작성된 리뷰가 없습니다. 첫번째 리뷰를 작성해주세요!
+        </NoReviewBox>
+      )}
+    </>
   );
 }
 
@@ -85,6 +138,11 @@ const SwiperBlock = styled(Swiper)`
   .swiper-button-disabled {
     visibility: hidden;
   }
+`;
+
+const NoReviewBox = styled.p`
+  padding: 100px 0;
+  text-align: center;
 `;
 
 const NavigationButton = styled(PageNavigatorButton)`
