@@ -67,8 +67,19 @@ function ReviewSwiper({ movieId, className }: SwiperTypes) {
   };
 
   const loadExistReview = async () => {
-    const q = query(collection(db, 'reviews'), where('movieId', '==', movieId));
-    const querySnapshot = await getDocs(q);
+    let querySnapshot;
+    const reviewList: ReviewDataTypes[] = [];
+
+    // 메인에서 사용시엔 movieId에 0을 넣어 전체 리뷰를 불러옴
+    if (movieId === 0) {
+      querySnapshot = await getDocs(collection(db, 'reviews'));
+    } else {
+      const q = query(
+        collection(db, 'reviews'),
+        where('movieId', '==', movieId),
+      );
+      querySnapshot = await getDocs(q);
+    }
     querySnapshot.forEach((doc) => {
       const data = {
         movieTitle: doc.data().movieTitle,
@@ -78,8 +89,9 @@ function ReviewSwiper({ movieId, className }: SwiperTypes) {
         content: doc.data().content,
         rating: doc.data().rating,
       };
-      setReviewData([data, ...reviewData]);
+      reviewList.push(data);
     });
+    setReviewData(reviewList);
   };
 
   useEffect(() => {

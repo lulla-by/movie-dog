@@ -19,6 +19,7 @@ function StarRating({
   className,
   setReviewRating,
 }: StarRating) {
+  console.log(rating);
   const [ratedStar, setRatedStar] = useState(rating);
 
   const onChange = (index: number) => {

@@ -6,19 +6,17 @@ import LikeButton from './buttons/LikeButton';
 type ReviewBoxTypes = {
   review: {
     movieTitle: string;
-    movieId: string;
     userNickName: string;
-    uid: number;
     content: string;
     rating: number;
   };
 };
 
 function ReviewBox({ review }: ReviewBoxTypes) {
-  const { movieTitle, movieId, userNickName, uid, content, rating } = review;
+  const { movieTitle, userNickName, content, rating } = review;
   return (
     <ReviewBoxBlock>
-      <RatingComponentBlock rating={rating * 2} starSize={24} />
+      <RatingComponentBlock rating={rating} starSize={24} />
       <p>{content}</p>
       <h3>- {movieTitle}</h3>
       <span>By {userNickName}</span>

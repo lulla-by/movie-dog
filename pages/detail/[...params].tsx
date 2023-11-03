@@ -5,7 +5,7 @@ import Image from 'next/image';
 import styled from 'styled-components';
 
 import ConfirmButton from '@/components/buttons/ConfirmButton';
-import ReviewSwiper from '@/components/swiper/ReviewSwiper';
+import MovieReviewSwiper from '@/components/swiper/ReviewSwiper';
 import MovieSwiper from '@/components/swiper/MovieSwiper';
 
 import { options } from '../api/data';
@@ -174,7 +174,7 @@ function Detail({
           </DetailBlock>
           <section>
             <h2>유저 한 줄 평</h2>
-            <ReviewSwiper movieId={movieData.id} />
+            <MovieReviewSwiper movieId={movieData.id} />
           </section>
           <section>
             <h2>비슷한 영화</h2>

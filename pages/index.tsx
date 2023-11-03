@@ -25,7 +25,7 @@ export default function Home() {
         </section>
         <section>
           <TitleBlock>유저 한 줄 평</TitleBlock>
-          <ReviewSwiper />
+          <ReviewSwiper movieId={0} />
         </section>
       </WapperBlock>
     </>
