@@ -99,18 +99,26 @@ function ReviewSwiper({ movieId, className }: SwiperTypes) {
   }, []);
 
   return (
-    <SwiperBlock {...swiperOptions} className={className}>
-      {reviewData &&
-        reviewData.map((review, i) => {
-          return (
-            <SwiperSlide key={i}>
-              <ReviewBox review={review} />
-            </SwiperSlide>
-          );
-        })}
-      <NavigationButton buttonRef={prevButtonRef} direction="prev" />
-      <NavigationButton buttonRef={nextButtonRef} direction="next" />
-    </SwiperBlock>
+    <>
+      {reviewData[0] ? (
+        <SwiperBlock {...swiperOptions} className={className}>
+          {reviewData.map((review, i) => {
+            return (
+              <SwiperSlide key={i}>
+                <ReviewBox review={review} />
+              </SwiperSlide>
+            );
+          })}
+
+          <NavigationButton buttonRef={prevButtonRef} direction="prev" />
+          <NavigationButton buttonRef={nextButtonRef} direction="next" />
+        </SwiperBlock>
+      ) : (
+        <NoReviewBox>
+          작성된 리뷰가 없습니다. 첫번째 리뷰를 작성해주세요!
+        </NoReviewBox>
+      )}
+    </>
   );
 }
 
@@ -130,6 +138,11 @@ const SwiperBlock = styled(Swiper)`
   .swiper-button-disabled {
     visibility: hidden;
   }
+`;
+
+const NoReviewBox = styled.p`
+  padding: 100px 0;
+  text-align: center;
 `;
 
 const NavigationButton = styled(PageNavigatorButton)`

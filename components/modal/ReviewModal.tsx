@@ -67,8 +67,11 @@ function ReviewModal({ movieId, movieTitle, setIsOpened }: ReviewModalTypes) {
   const submitReview = async () => {
     // 유저 닉네임 가져오기
     let userNickName;
-    getAuth().currentUser?.providerData.forEach((profile) => {
-      userNickName = profile.displayName;
+    const q = query(collection(db, 'users'), where('uid', '==', uid));
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+      userNickName = doc.data().nickName;
     });
 
     // 이미 작성된 리뷰가 있을 경우 나눠지는 로직
@@ -77,6 +80,7 @@ function ReviewModal({ movieId, movieTitle, setIsOpened }: ReviewModalTypes) {
       await updateDoc(doc(db, 'reviews', existReview.reviewId), {
         content: reviewText,
         rating: reviewRating,
+        userNickName,
       });
     } else {
       alert('리뷰가 작성되었습니다.');
