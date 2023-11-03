@@ -89,7 +89,7 @@ function ReviewSwiper({ movieId, className }: SwiperTypes) {
         content: doc.data().content,
         rating: doc.data().rating,
       };
-      reviewList.push(data);
+      reviewList.unshift(data);
     });
     setReviewData(reviewList);
   };
