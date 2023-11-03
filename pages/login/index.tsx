@@ -1,7 +1,9 @@
+import Login from "@/container/Login";
+
 export default function LoginPage() {
   return (
     <>
-     <h1>Movie Dog Login Page</h1>
+    <Login/>
     </>
   )
 }

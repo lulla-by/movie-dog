@@ -28,6 +28,7 @@ const fontSize = {
   headline4: "1.125rem",
   headline5: "1rem",
   discription: "1rem",
+  helperText:"0.875rem"
 };
 
 export type ColorTypes = typeof colors;

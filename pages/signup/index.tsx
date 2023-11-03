@@ -1,7 +1,7 @@
+import SignUp from "@/container/SignUp";
+
 export default function SignUpPage() {
   return (
-    <>
-     <h1>Movie Dog SignUp Page</h1>
-    </>
+   <SignUp/>
   )
 }
