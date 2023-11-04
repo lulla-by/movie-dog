@@ -11,7 +11,6 @@ type YearMainsProps = {
 };
 
 const YearList = ({ year, data, idx }: YearMainsProps) => {
-  console.log(data)
   const router = useRouter();
   const idxPage = parseInt(idx);
   const [currentPage, setCurrentPage] = useState(idxPage);
@@ -66,8 +65,6 @@ const YearList = ({ year, data, idx }: YearMainsProps) => {
       <CardListBlock>
         {data &&
           data.map((movie: Movie) => {
-            console.log(movie);
-            
             return <YearItem movie={movie} key={movie.id} />;
           })}
       </CardListBlock>
