@@ -78,10 +78,4 @@ const CardListBlock = styled.div`
       width: calc(25% - 15px);
     }
   }
-
-  @media (min-width: 1200px) {
-    & > a {
-      width: calc(20% - 16px);
-    }
-  }
 `;

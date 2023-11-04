@@ -1,6 +1,8 @@
-import styled from 'styled-components';
-import { genreArr } from '@/pages/api/data';
 import Link from 'next/link';
+
+import styled from 'styled-components';
+
+import { genreArr } from '@/pages/api/data';
 
 type MovieTypes = {
   movie: {
@@ -16,11 +18,13 @@ type MovieTypes = {
 function MainVisual({ movie }: MovieTypes) {
   const findGenreName = () => {
     const genreList = [];
-    for (let i = 0; i <= 1; i++) {
-      const correctGenre = genreArr.filter(
-        (item) => +Object.keys(item)[0] === movie.genre_ids[i],
-      );
-      genreList.push(Object.values(correctGenre[0])[0]);
+    if (movie.genre_ids[0]) {
+      for (let i = 0; i < movie.genre_ids.length; i++) {
+        const correctGenre = genreArr.filter(
+          (item) => +Object.keys(item)[0] === movie.genre_ids[i],
+        );
+        genreList.push(Object.values(correctGenre[0])[0]);
+      }
     }
     return genreList;
   };
@@ -32,8 +36,8 @@ function MainVisual({ movie }: MovieTypes) {
           <DescriptionBlock>
             <h3>{movie.title}</h3>
             <p>
-              {findGenreName()[0]}
-              {true && '・' + findGenreName()[1]}
+              {findGenreName()[0] ? findGenreName()[0] : '장르 분류 없음'}
+              {findGenreName()[1] ? '・' + findGenreName()[1] : ''}
             </p>
             <p>
               {movie.overview.split(' ', 40).length === 40
@@ -41,7 +45,7 @@ function MainVisual({ movie }: MovieTypes) {
                 : movie.overview.split(' ', 40).join(' ')}
             </p>
             <Link href={`/detail/${movie.original_title}/${movie.id}`}>
-              보러가기
+              상세정보
             </Link>
           </DescriptionBlock>
         </OverlayBGBlock>

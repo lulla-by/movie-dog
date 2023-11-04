@@ -66,7 +66,7 @@ export default function Login() {
     } else if (targetName === '깃허브 로그인') {
       userData = await GithubLogin();
     } else {
-      throw new Error('올바르지않은 접근입니다');
+      throw new Error('올바르지 않은 접근입니다');
     }
 
     if (userData.state === false) {
@@ -74,7 +74,7 @@ export default function Login() {
     }
     window.localStorage.setItem('userData', JSON.stringify(userData));
     isLogin(true);
-    router.push('/');
+    router.push(globalThis.sessionStorage.getItem('prevPath') || '/');
   };
 
   return (
