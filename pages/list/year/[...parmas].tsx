@@ -1,11 +1,12 @@
 import Category from '@/components/yearList/Category';
 import YearList from '@/components/yearList/YearList';
+import { Movie } from '@/utils/type/MovieType';
 import { GetServerSidePropsContext } from 'next';
 import React from 'react';
 import styled from 'styled-components';
 
 interface YearMainProps {
-  data: any;
+  data: Movie[];
   year: string;
   idx: string;
 }

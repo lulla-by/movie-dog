@@ -3,29 +3,15 @@ import styled from 'styled-components';
 import PageNavigatorButton from '../buttons/PageNavigatorButton';
 import YearItem from './YearItem';
 import { useRouter } from 'next/router';
+import { Movie } from '@/utils/type/MovieType';
 type YearMainsProps = {
   year: string;
-  data: any;
+  data: Movie[];
   idx: string;
 };
 
-type Movie = {
-  adult: boolean;
-  backdrop_path: string | null;
-  genre_ids: number[];
-  id: number;
-  original_language: string;
-  original_title: string;
-  overview: string;
-  popularity: number;
-  poster_path: string | null;
-  release_date: string;
-  title: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
-};
 const YearList = ({ year, data, idx }: YearMainsProps) => {
+  console.log(data)
   const router = useRouter();
   const idxPage = parseInt(idx);
   const [currentPage, setCurrentPage] = useState(idxPage);
@@ -80,6 +66,8 @@ const YearList = ({ year, data, idx }: YearMainsProps) => {
       <CardListBlock>
         {data &&
           data.map((movie: Movie) => {
+            console.log(movie);
+            
             return <YearItem movie={movie} key={movie.id} />;
           })}
       </CardListBlock>
