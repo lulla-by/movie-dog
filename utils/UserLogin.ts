@@ -11,8 +11,6 @@ type UidType = {
   state: boolean;
 };
 
-
-
 // Firebase 로그인
 export const firebaseLogin = async (
   id: string,
@@ -40,10 +38,6 @@ export const firebaseLogin = async (
   }
 };
 
-
-
-
-
 // Google 로그인
 export const GoogleLogin = async (): Promise<UidType> => {
   // Google 로그인을 위한 인증 공급자를 생성
@@ -60,7 +54,7 @@ export const GoogleLogin = async (): Promise<UidType> => {
       await setDoc(doc(db, 'users', user.email), {
         email: user.email,
         uid: user.uid,
-        nickName: user.displayName,
+        nickName: user.displayName || user.email.split('@')[0],
       });
     }
     return { uid, state: true };
@@ -69,9 +63,6 @@ export const GoogleLogin = async (): Promise<UidType> => {
     return { uid: '', state: false };
   }
 };
-
-
-
 
 // Github로그인
 export const GithubLogin = async () => {
@@ -87,7 +78,7 @@ export const GithubLogin = async () => {
       await setDoc(doc(db, 'users', user.email), {
         email: user.email,
         uid: user.uid,
-        nickName: user.displayName,
+        nickName: user.displayName || user.email.split('@')[0],
       });
     }
     return { uid, state: true };

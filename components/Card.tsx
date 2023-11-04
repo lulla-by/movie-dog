@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import styled from 'styled-components';
 
-import RatingComponent from './RatingComponent';
+import StarRating from './StarRating';
 
 import { genreArr } from '@/pages/api/data';
 
@@ -59,11 +59,13 @@ function Card({ movie, ranking }: MovieTypes) {
             </ImageBlock>
             <h3>{movie.title}</h3>
             <p>
-              {movie.release_date.slice(0, 4)}・{Object.values(genreName[0])[0]}
+              {movie.release_date.slice(0, 4)}・
+              {genreName[0] ? Object.values(genreName[0])[0] : '장르 분류 없음'}
             </p>
             <RatingBlock>
-              <RatingComponent
-                rating={Math.floor((movie.vote_average / 2) * 10) / 10}
+              <StarRating
+                rating={Math.floor(movie.vote_average)}
+                starSize={20}
               />
               <span>
                 {Math.floor((movie.vote_average / 2) * 10) / 10 + '점'}(

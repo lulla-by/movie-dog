@@ -24,7 +24,7 @@ type ButtonProps = {
   active?: boolean;
   icon?: IconTypes;
   className?: string;
-  onClick?:(e: React.MouseEvent<HTMLButtonElement>)=>void
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 export default function ConfirmButton({
@@ -34,13 +34,12 @@ export default function ConfirmButton({
   active,
   icon,
   className,
-  onClick
+  onClick,
 }: ButtonProps) {
   return (
     <>
       <ButtonBlock
-      onClick={onClick}
-      active={active}
+        onClick={onClick}
         disabled={disabled}
         width={width}
         className={`${className} ${active && 'active'}`}

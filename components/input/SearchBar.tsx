@@ -1,7 +1,9 @@
-import theme from '@/styles/theme';
+import { FormEvent, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
+
 import styled from 'styled-components';
+
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
-import { useState } from 'react';
 
 type SearchBarTypes = {
   width?: number;
@@ -10,6 +12,8 @@ type SearchBarTypes = {
 
 function SearchBar({ width = 100, className = 'SearchBar' }: SearchBarTypes) {
   const [isFocused, setIsFocused] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   const focusInput = () => {
     setIsFocused(true);
@@ -19,14 +23,30 @@ function SearchBar({ width = 100, className = 'SearchBar' }: SearchBarTypes) {
     setIsFocused(false);
   };
 
+  const searchMovie = (e: FormEvent<HTMLFormElement>) => {
+    if (inputRef.current!.value) {
+      e.preventDefault();
+      router.push({
+        pathname: `/search/[keyword]`,
+        query: { keyword: inputRef.current!.value },
+      });
+      inputRef.current!.value = '';
+    } else {
+      e.preventDefault();
+      alert('검색어를 입력해주세요.');
+    }
+  };
+
   return (
-    <SearchBox width={width} className={className}>
+    <SearchBox width={width} className={className} onSubmit={searchMovie}>
       <InputBlock
+        type="text"
         placeholder="검색어를 입력해주세요."
         onFocus={focusInput}
         onBlur={blurInput}
+        ref={inputRef}
       />
-      <ButtonBlock type="button" isFocused={isFocused}>
+      <ButtonBlock type="submit" isFocused={isFocused}>
         <span className="a11y-hidden">검색하기</span>
         <SearchRoundedIcon />
       </ButtonBlock>
@@ -36,17 +56,17 @@ function SearchBar({ width = 100, className = 'SearchBar' }: SearchBarTypes) {
 
 export default SearchBar;
 
-const SearchBox = styled.div<{ width: number }>`
+const SearchBox = styled.form<{ width: number }>`
   position: relative;
   width: ${({ width }) => width + '%'};
 `;
 
 const InputBlock = styled.input`
   width: 100%;
-  padding: 10px;
+  padding: 8px 10px;
   font-size: ${({ theme }) => theme.fontSize.discription};
   color: ${({ theme }) => theme.colors.black};
-  border: 1px solid ${theme.colors.gray1};
+  border: 1px solid ${({ theme }) => theme.colors.gray1};
   border-radius: 4px;
   transition: all 0.15s;
 
@@ -56,7 +76,7 @@ const InputBlock = styled.input`
 
   :focus {
     outline: none;
-    border: 1px solid ${theme.colors.brown5};
+    border: 1px solid ${({ theme }) => theme.colors.brown5};
   }
 `;
 
@@ -65,9 +85,11 @@ const ButtonBlock = styled.button<{ isFocused: boolean }>`
   top: 50%;
   right: 0;
   transform: translateY(-50%);
+  height: 100%;
   border: none;
   background: none;
   color: ${({ theme }) => theme.colors.gray1};
+  cursor: pointer;
 
   svg {
     display: flex;

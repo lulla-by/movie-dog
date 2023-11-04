@@ -4,12 +4,14 @@ import Image from 'next/image';
 
 import styled from 'styled-components';
 
-import RatingComponent from '@/components/RatingComponent';
 import ConfirmButton from '@/components/buttons/ConfirmButton';
-import ReviewSwiper from '@/components/swiper/ReviewSwiper';
+import MovieReviewSwiper from '@/components/swiper/ReviewSwiper';
 import MovieSwiper from '@/components/swiper/MovieSwiper';
 
 import { options } from '../api/data';
+import ReviewModal from '@/components/modal/ReviewModal';
+import Modal from '@/components/modal/Modal';
+import StarRating from '@/components/StarRating';
 
 type MovieDataTypes = {
   id: number;
@@ -22,6 +24,7 @@ type MovieDataTypes = {
   release_date: string;
   runtime: number;
   vote_average: number;
+  vote_count: number;
 };
 
 type CreditDataTypes = {
@@ -36,6 +39,8 @@ function Detail({
 
   const [movieData, setMovieData] = useState<MovieDataTypes | null>(null);
   const [creditData, setCreditData] = useState<CreditDataTypes | null>(null);
+
+  const [isOpened, setIsOpened] = useState(false);
 
   const getMovieDB = async () => {
     const response = await fetch(
@@ -54,6 +59,7 @@ function Detail({
       release_date,
       runtime,
       vote_average,
+      vote_count,
     } = json;
     setMovieData({
       id,
@@ -66,6 +72,7 @@ function Detail({
       release_date,
       runtime,
       vote_average,
+      vote_count,
     });
   };
 
@@ -83,6 +90,21 @@ function Detail({
     setCreditData({ cast: actorList, director: directorName });
   };
 
+  const handleReviewButton = () => {
+    if (localStorage.getItem('userData')) {
+      setIsOpened(true);
+    } else {
+      alert('로그인이 필요한 서비스입니다.');
+    }
+  };
+
+  const handleLikeButton = () => {
+    if (localStorage.getItem('userData')) {
+    } else {
+      alert('로그인이 필요한 서비스입니다.');
+    }
+  };
+
   useEffect(() => {
     getMovieDB();
     getCreditList();
@@ -92,6 +114,13 @@ function Detail({
     <>
       {movieData && (
         <ContentBlock>
+          <Modal setIsOpened={setIsOpened} isOpened={isOpened}>
+            <ReviewModal
+              setIsOpened={setIsOpened}
+              movieId={movieData!.id}
+              movieTitle={movieData!.title}
+            />
+          </Modal>
           <DetailBlock>
             <PosterBlock>
               <Image
@@ -110,7 +139,16 @@ function Detail({
             <InfoBlock>
               <h1>{movieData.title}</h1>
               <p className="english-title">{movieData.original_title}</p>
-              <RatingComponent rating={movieData.vote_average} />
+              <RatingBlock>
+                <StarRating
+                  rating={Math.floor(movieData.vote_average)}
+                  starSize={24}
+                />
+                <span>
+                  {Math.floor((movieData.vote_average / 2) * 10) / 10 + '점'}(
+                  {movieData.vote_count.toLocaleString() + '명 / TMBD 기준'})
+                </span>
+              </RatingBlock>
               <p>
                 {movieData.release_date + ' 개봉'}・{movieData.runtime + '분'}・
                 {movieData.genres.map(
@@ -126,13 +164,17 @@ function Detail({
               <p>{movieData.overview}</p>
               <div className="buttons">
                 <ConfirmButton text="찜" icon="favorite" />
-                <ConfirmButton text="한 줄 평 작성" icon="write" />
+                <ConfirmButton
+                  text="한 줄 평 작성"
+                  icon="write"
+                  onClick={handleReviewButton}
+                />
               </div>
             </InfoBlock>
           </DetailBlock>
           <section>
             <h2>유저 한 줄 평</h2>
-            <ReviewSwiper />
+            <MovieReviewSwiper movieId={movieData.id} />
           </section>
           <section>
             <h2>비슷한 영화</h2>
@@ -254,4 +296,11 @@ const InfoBlock = styled.div`
     gap: 20px;
     margin-top: 20px;
   }
+`;
+
+const RatingBlock = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4px;
 `;
