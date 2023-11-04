@@ -2,6 +2,7 @@ import Category from '@/components/yearList/Category';
 import YearList from '@/components/yearList/YearList';
 import { Movie } from '@/utils/type/MovieType';
 import { GetServerSidePropsContext } from 'next';
+import { ParsedUrlQuery } from 'querystring';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -48,31 +49,28 @@ const WrapperBlock = styled.div`
   }
 `;
 
-export const getServerSideProps = async ({
-  params,
-}: GetServerSidePropsContext) => {
-  let year;
-  let idx;
-  if (params === undefined) {
-    year = '2020';
-    idx = '1';
-  } else if (params.parmas[1] == undefined) {
-    year = params.parmas[0];
-    idx = '1';
-  } else {
-    year = params.parmas[0];
-    idx = params.parmas[1];
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const params: ParsedUrlQuery | undefined = context.params;
+
+  //params가 undefined인지 확인하고, 해당 경우 기본값인 year와 idx를 설정
+  let year = '2020';
+  let idx = '1';
+
+  if (params && params.parmas) {
+    // params.parmas가 존재하고 배열인지 여부를 확인하고, 값에 접근하여 year와 idx 변수를 설정
+    const paramArray = Array.isArray(params.parmas) ? params.parmas : [params.parmas];
+    year = paramArray[0] as string;
+    idx = paramArray[1] ? paramArray[1] as string : '1';
   }
 
-  const response = await fetch(
-    `http://localhost:3000/api/movie/${year}/${idx}`,
-  );
+  const response = await fetch(`http://localhost:3000/api/movie/${year}/${idx}`);
   const { results } = await response.json();
+
   return {
     props: {
       data: results,
       year: year,
-      idx: idx,
+      idx: idx
     },
   };
 };
