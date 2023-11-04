@@ -10,7 +10,10 @@ const Category = () => {
     { '1990': '1990' },
     { '1980': '1980' },
     { '1970': '1970' },
-    { '1960': '그이전' },
+    { '1960': '1960' },
+    { '1950': '1950' },
+    { '1940': '1940' },
+    { '1930': '1930' },
   ];
   const currentYear = new Date().getFullYear().toString();
   let [yearId, setYearId] = useState(currentYear);
