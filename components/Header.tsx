@@ -21,7 +21,9 @@ export function Header() {
   const [isTabBarShowing, setIsTabBarShowing] = useState(true);
 
   const [isLogin, setIsLogin] = useRecoilState(LoginsState);
+  
   const currentYear = new Date().getFullYear().toString();
+
   useEffect(() => {
     const isLogin = window.localStorage.getItem('userData');
     if (!isLogin) {
