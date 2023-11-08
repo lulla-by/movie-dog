@@ -21,6 +21,8 @@ export function Header() {
   const [isTabBarShowing, setIsTabBarShowing] = useState(true);
 
   const [isLogin, setIsLogin] = useRecoilState(LoginsState);
+  
+  const currentYear = new Date().getFullYear().toString();
 
   useEffect(() => {
     const isLogin = window.localStorage.getItem('userData');
@@ -72,7 +74,9 @@ export function Header() {
               <ListItem>
                 <Link href="/list/genre/28">장르별</Link>
               </ListItem>
-              <ListItem>년도별</ListItem>
+              <ListItem>
+                <Link href={`/list/year/${currentYear}`}>년도별</Link>
+              </ListItem>
             </List>
           </nav>
         </FlexContainer>
