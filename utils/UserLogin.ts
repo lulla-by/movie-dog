@@ -83,7 +83,7 @@ export const GithubLogin = async () => {
     }
     return { uid, state: true };
   } catch (error) {
-    console.log(error);
+    alert("기존에 가입된 계정이 있습니다. 이메일-회원가입으로 로그인해주세요")
     return { uid: '', state: false };
   }
 };

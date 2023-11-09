@@ -44,8 +44,17 @@ export default function Login() {
     },
   };
 
-  const idValidation = validation('id', id);
+  const gmailRegex = /@gmail\.com$/;
+
+  const idValidation = validation('id', id) && !gmailRegex.test(id);
   const passwordValidation = validation('password', password);
+
+
+  if (gmailRegex.test(id)) {
+    helperText.id.invalid = '구글로그인을 사용해주세요.';
+  } else {
+    helperText.id.invalid = `아이디는 이메일형식 이어야 합니다.`;
+  }
 
   // 로그인
   const login = async (e: React.MouseEvent<HTMLButtonElement>) => {
