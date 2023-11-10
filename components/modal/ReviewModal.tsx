@@ -47,8 +47,14 @@ function ReviewModal({ movieId, movieTitle, setIsOpened }: ReviewModalTypes) {
 
   // 기존 리뷰가 있을 경우 불러오는 로직
   const loadExistReview = async () => {
-    const q = query(collection(db, 'reviews'), where('movieId', '==', movieId));
+    const q = query(
+      collection(db, 'reviews'),
+      where('movieId', '==', movieId),
+      where('uid', '==', uid),
+    );
+    console.log(q);
     const querySnapshot = await getDocs(q);
+
     querySnapshot.forEach((doc) => {
       setExistReview({
         reviewId: doc.id,
@@ -98,7 +104,7 @@ function ReviewModal({ movieId, movieTitle, setIsOpened }: ReviewModalTypes) {
   };
 
   useEffect(() => {
-    loadExistReview();
+    if (localStorage.getItem('userData')) loadExistReview();
   }, []);
 
   return (
