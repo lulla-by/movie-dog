@@ -66,7 +66,10 @@ export default function SignUp() {
 
   const [passWordConfirm, setPasswordConfirm] = useState('');
 
-  const idValidation = validation('id', id);
+
+  const gmailRegex = /@gmail\.com$/;
+
+  const idValidation = validation('id', id) && !gmailRegex.test(id);
   const nickNameValidation = validation('nickName', nickName);
   const passwordValidation = validation('password', password);
   const passwordConfirmValidation =
@@ -124,7 +127,11 @@ export default function SignUp() {
 
   // idvalidation이 false일 때
   if (!idValidation) {
-    idText = '아이디는 이메일 형식이어야 합니다';
+    if (gmailRegex.test(id)) {
+      idText = '로그인 페이지의 구글로그인을 사용해주세요.';
+    } else {
+      idText = `아이디는 이메일형식 이어야 합니다.`;
+    }
   }
   // idvalidation이 true이고 emailduplication이 true일 때
   else if (idValidation && emailDuplication) {
