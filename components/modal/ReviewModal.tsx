@@ -52,7 +52,6 @@ function ReviewModal({ movieId, movieTitle, setIsOpened }: ReviewModalTypes) {
       where('movieId', '==', movieId),
       where('uid', '==', uid),
     );
-    console.log(q);
     const querySnapshot = await getDocs(q);
 
     querySnapshot.forEach((doc) => {
@@ -123,11 +122,15 @@ function ReviewModal({ movieId, movieTitle, setIsOpened }: ReviewModalTypes) {
         value={reviewText}
       />
       <LengthBlock>{reviewText.length}/100</LengthBlock>
-      <ConfirmButton
-        text={existReview?.content ? '수정' : '작성'}
-        onClick={submitReview}
-        disabled={!reviewText}
-      />
+      <ButtonBlock>
+        <ConfirmButton
+          text={existReview?.content ? '수정' : '작성'}
+          onClick={submitReview}
+          disabled={!reviewText}
+          active
+        />
+        <ConfirmButton text="닫기" onClick={() => setIsOpened(false)} />
+      </ButtonBlock>
     </>
   );
 }
@@ -153,4 +156,14 @@ const TextBlock = styled.textarea`
 const LengthBlock = styled.p`
   margin-bottom: 8px;
   text-align: right;
+`;
+
+const ButtonBlock = styled.div`
+  display: flex;
+  flex-flow: column;
+  gap: 12px;
+
+  @media (min-width: 768px) {
+    flex-flow: row;
+  }
 `;

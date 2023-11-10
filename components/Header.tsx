@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
+import { authService } from '@/fbase';
 import { useRecoilState } from 'recoil';
 import { LoginsState } from '@/stores/LoginState';
 
@@ -65,6 +66,7 @@ export function Header() {
     if (data) {
       window.localStorage.removeItem('userData');
       setIsLogin(false);
+      authService.signOut();
       location.reload();
     }
   };
