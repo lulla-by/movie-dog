@@ -12,6 +12,18 @@ import Modal from '@/components/modal/Modal';
 import StarRating from '@/components/StarRating';
 
 import { options } from '../api/data';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from 'firebase/firestore';
+import { db } from '@/fbase';
+import { getAuth } from 'firebase/auth';
 
 type MovieDataTypes = {
   id: number;
@@ -35,12 +47,16 @@ type CreditDataTypes = {
 function Detail({
   params,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const auth = getAuth();
+  const uid = auth.currentUser?.uid;
   const [, movieId] = params.params;
 
   const [movieData, setMovieData] = useState<MovieDataTypes | null>(null);
   const [creditData, setCreditData] = useState<CreditDataTypes | null>(null);
 
   const [isOpened, setIsOpened] = useState(false);
+  const [isLiked, setIsliked] = useState(false);
+  const [likedMovies, setLikedMovies] = useState<number[]>([]);
 
   const getMovieDB = async () => {
     const response = await fetch(
@@ -90,6 +106,14 @@ function Detail({
     setCreditData({ cast: actorList, director: directorName });
   };
 
+  const isLikedMovie = async () => {
+    if (uid) {
+      const docSnap = await getDoc(doc(db, 'likes', uid));
+      setLikedMovies(docSnap.data()?.likedMovies);
+      setIsliked(docSnap.data()?.likedMovies.includes(+movieId));
+    }
+  };
+
   const handleReviewButton = () => {
     if (localStorage.getItem('userData')) {
       setIsOpened(true);
@@ -98,8 +122,27 @@ function Detail({
     }
   };
 
-  const handleLikeButton = () => {
-    if (localStorage.getItem('userData')) {
+  const handleLikeButton = async () => {
+    if (uid) {
+      if (isLiked) {
+        alert('찜목록에서 삭제되었습니다.');
+        await updateDoc(doc(db, 'likes', uid), {
+          likedMovies: likedMovies.filter((item) => item !== +movieId),
+        });
+        setIsliked(false);
+      } else {
+        alert('찜목록에 추가되었습니다.');
+        if (likedMovies) {
+          setDoc(doc(db, 'likes', uid), {
+            likedMovies: [...likedMovies, +movieId],
+          });
+        } else {
+          setDoc(doc(db, 'likes', uid), {
+            likedMovies: [+movieId],
+          });
+        }
+        setIsliked(true);
+      }
     } else {
       alert('로그인이 필요한 서비스입니다.');
     }
@@ -108,6 +151,7 @@ function Detail({
   useEffect(() => {
     getMovieDB();
     getCreditList();
+    isLikedMovie();
   }, [params]);
 
   return (
@@ -128,6 +172,7 @@ function Detail({
                 alt={`${movieData.title}의 포스터`}
                 fill
                 sizes="(max-width: 768px) 50vw,(max-width: 1200px) 70vw"
+                priority
                 className="pc-tablet-img"
               />
               <Image
@@ -135,6 +180,7 @@ function Detail({
                 alt={`${movieData.title}의 스틸컷`}
                 fill
                 sizes="(max-width: 768px) 50vw,(max-width: 1200px) 70vw"
+                priority
                 className="mobile-img"
               />
             </PosterBlock>
@@ -165,7 +211,11 @@ function Detail({
               </p>
               <p>{movieData.overview}</p>
               <div className="buttons">
-                <ConfirmButton text="찜" icon="favorite" />
+                <ConfirmButton
+                  text={isLiked ? '찜 해제' : '찜하기'}
+                  icon={isLiked ? 'favorite-fill' : 'favorite'}
+                  onClick={handleLikeButton}
+                />
                 <ConfirmButton
                   text="한 줄 평 작성"
                   icon="write"

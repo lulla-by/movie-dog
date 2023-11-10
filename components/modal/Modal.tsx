@@ -32,7 +32,7 @@ const ModalBG = styled.div<{ isOpened: boolean }>`
 const ModalBlock = styled.div<{ isOpened: boolean }>`
   display: ${({ isOpened }) => (isOpened ? 'block' : 'none')};
   position: absolute;
-  width: 50%;
+  width: 80%;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -40,4 +40,8 @@ const ModalBlock = styled.div<{ isOpened: boolean }>`
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: 12px;
   z-index: 501;
+
+  @media (min-width: 768px) {
+    width: 60%;
+  }
 `;
