@@ -38,12 +38,12 @@ const YearList = ({ year, data, idx }: YearMainsProps) => {
     return pageNumbers;
   };
 
-  function calculateMinIndex(currentValue:number) {
+  function calculateMinIndex(currentValue: number) {
     const lowerBound = Math.floor((currentValue - 1) / 10) * 10 + 1;
     return lowerBound;
   }
-  
-  function calculateMaxIndex(currentValue:number) {
+
+  function calculateMaxIndex(currentValue: number) {
     const lowerBound = calculateMinIndex(currentValue);
     const upperBound = lowerBound + 9;
     return upperBound;
@@ -56,7 +56,7 @@ const YearList = ({ year, data, idx }: YearMainsProps) => {
   );
 
   const currentItems = renderPagination().slice(
-    indexOfFirstItem-1,
+    indexOfFirstItem - 1,
     indexOfLastItem,
   );
 
@@ -112,12 +112,6 @@ const CardListBlock = styled.div`
   @media (min-width: 768px) {
     & > a {
       width: calc(25% - 15px);
-    }
-  }
-
-  @media (min-width: 1200px) {
-    & > a {
-      width: calc(20% - 16px);
     }
   }
 `;

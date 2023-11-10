@@ -7,11 +7,11 @@ import styled from 'styled-components';
 import ConfirmButton from '@/components/buttons/ConfirmButton';
 import MovieReviewSwiper from '@/components/swiper/ReviewSwiper';
 import MovieSwiper from '@/components/swiper/MovieSwiper';
-
-import { options } from '../api/data';
 import ReviewModal from '@/components/modal/ReviewModal';
 import Modal from '@/components/modal/Modal';
 import StarRating from '@/components/StarRating';
+
+import { options } from '../api/data';
 
 type MovieDataTypes = {
   id: number;
@@ -108,7 +108,7 @@ function Detail({
   useEffect(() => {
     getMovieDB();
     getCreditList();
-  }, []);
+  }, [params]);
 
   return (
     <>
@@ -127,12 +127,14 @@ function Detail({
                 src={`http://image.tmdb.org/t/p/w500${movieData.poster_path}`}
                 alt={`${movieData.title}의 포스터`}
                 fill
+                sizes="(max-width: 768px) 50vw,(max-width: 1200px) 70vw"
                 className="pc-tablet-img"
               />
               <Image
                 src={`http://image.tmdb.org/t/p/w500${movieData.backdrop_path}`}
                 alt={`${movieData.title}의 스틸컷`}
                 fill
+                sizes="(max-width: 768px) 50vw,(max-width: 1200px) 70vw"
                 className="mobile-img"
               />
             </PosterBlock>
