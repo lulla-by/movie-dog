@@ -3,6 +3,7 @@ import MyPageContainer from '@/container/MyPage';
 import { GetStaticPaths } from 'next';
 import { collection, doc, getDoc, getDocs, query } from 'firebase/firestore';
 import { db } from '@/fbase';
+import { ReviewType, UserDataProps } from '@/utils/type/UserDataType';
 
 type PathsType = {
   params: {
@@ -16,37 +17,10 @@ type ParmasType = {
   };
 };
 
-type Genres = {
-  id: number;
-  name: string;
-};
-
-type ReviewType = {
-  content: string;
-  genres: Genres[];
-  movieId: number;
-  movieTitel: string;
-  poster_path: string;
-  rating: number;
-  uid: string;
-  userNickName: string;
-};
-
-type PageProps<T, S> = {
-    reviewArr: T[];
-    likeArr: S[];
-};
-
-interface LikesType {
-  genres: Genres[];
-  id: number;
-  movieTitle: string;
-  poster_path: string;
-  release_date: string;
-}
-
-function UserPage(props: PageProps<ReviewType, LikesType>) {
-  return <MyPageContainer likeArr={props.likeArr} reviewArr={props.reviewArr}/>;
+function UserPage(props: UserDataProps) {
+  return (
+    <MyPageContainer likeArr={props.likeArr} reviewArr={props.reviewArr} />
+  );
 }
 
 export default UserPage;
