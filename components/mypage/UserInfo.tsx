@@ -1,56 +1,60 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Genres, UserDataProps } from '@/utils/type/UserDataType';
 
-type Genres = {
-  id: number;
-  name: string;
-};
-
-type ReviewType = {
-  content: string;
-  genres: Genres[];
-  movieId: number;
-  movieTitel: string;
-  poster_path: string;
-  rating: number;
-  uid: string;
-  userNickName: string;
-};
-
-type PageProps<T, S> = {
-    reviewArr: T[];
-    likeArr: S[];
-};
-
-interface LikesType {
-  genres: Genres[];
-  id: number;
-  movieTitle: string;
-  poster_path: string;
-  release_date: string;
-}
-
-function UserInfo({likeArr,reviewArr}: PageProps<ReviewType, LikesType>) {
-  const userName = reviewArr[0].userNickName
+function UserInfo({ likeArr, reviewArr }: UserDataProps) {
+  const userName = reviewArr[0].userNickName;
   let reviewCount = reviewArr.length == 0 ? '00' : `${reviewArr.length}`;
-  let likeMovieCount = likeArr.length == 0 ? '00' : `${likeArr.length}`;;
+  let likeMovieCount = likeArr.length == 0 ? '00' : `${likeArr.length}`;
   let watchMovieCount = `00`;
 
   const noPosterUrl = new URL('../../public/nooposter.png', import.meta.url)
     .href;
 
-  const genleList = [
-    '공포',
-    '액션',
-    '로맨스',
-    '코미디',
-    '액션',
-    '로맨스',
-    '코미디',
-    '액션',
-    '로맨스',
-    '코미디',
-  ];
+  const allData = [...reviewArr, ...likeArr];
+
+  // allData에서 영화의 id를 중복되지 않게 가져오기
+  const uniqueMovieIds = Array.from(
+    new Set(allData.map((item) => item.movieId)),
+  );
+
+  // 각 uniqueMovieIds에 대한 첫 번째 데이터의 movieId와 genres 가져오기
+  const result = uniqueMovieIds.map((movieId) => {
+    const firstData = allData.find((item) => item.movieId === movieId);
+    return {
+      movieId: movieId,
+      genres: firstData ? firstData.genres : [],
+    };
+  });
+
+  const allGenres = result.flatMap((item) => item.genres);
+
+  // 각 장르의 등장 횟수를 세어주는 함수
+  const countGenres = (genres: Genres[]) => {
+    const genreCount: { [key: string]: number } = {};
+
+    genres.forEach((genre) => {
+      const { name } = genre;
+      genreCount[name] = (genreCount[name] || 0) + 1;
+    });
+
+    return genreCount;
+  };
+
+  // 모든 장르의 등장 횟수를 세기
+  const genreCount = countGenres(allGenres);
+
+  // 등장 횟수에 따라 장르를 내림차순으로 정렬
+  const sortedGenres = Object.keys(genreCount).sort(
+    (a, b) => genreCount[b] - genreCount[a],
+  );
+
+  // 정렬된 키를 기반으로 새로운 배열 생성
+  const sortedGenreCount = sortedGenres.map((name) => ({
+    name,
+    count: genreCount[name],
+  }));
+
   return (
     <UserInfoWrapper>
       <UserInfoBox>
@@ -62,16 +66,25 @@ function UserInfo({likeArr,reviewArr}: PageProps<ReviewType, LikesType>) {
           </FigureBox>
           <ul>
             <li>내가 본 영화 : {watchMovieCount}개</li>
-            <li>찜 해 둔 영화 : {parseInt(likeMovieCount) < 10 ? `0${likeMovieCount}`:likeMovieCount}개</li>
-            <li>내가 쓴 한 줄 평 : {parseInt(reviewCount) < 10 ? `0${reviewCount}`:reviewCount}개</li>
+            <li>
+              찜 해 둔 영화 :{' '}
+              {parseInt(likeMovieCount) < 10
+                ? `0${likeMovieCount}`
+                : likeMovieCount}
+              개
+            </li>
+            <li>
+              내가 쓴 한 줄 평 :{' '}
+              {parseInt(reviewCount) < 10 ? `0${reviewCount}` : reviewCount}개
+            </li>
           </ul>
         </LayoutBox>
       </UserInfoBox>
       <UserGenres>
         <TitleBox>나의 선호 장르</TitleBox>
         <GenresListBox>
-          {genleList.map((item) => (
-            <li>{item}</li>
+          {sortedGenreCount.map((item) => (
+            <li key={item.name}>{item.name}</li>
           ))}
         </GenresListBox>
       </UserGenres>
