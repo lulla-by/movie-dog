@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import UserInfo from '@/components/mypage/UserInfo';
 import UserMovieList from '@/components/mypage/UserMovieList';
 import UserReviewList from '@/components/mypage/UserReviewList';
