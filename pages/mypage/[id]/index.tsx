@@ -1,30 +1,47 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import MyPageContainer from '@/container/MyPage';
 import { GetStaticPaths, GetStaticProps } from 'next';
-import { collection, getDocs, query } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query } from 'firebase/firestore';
 import { db } from '@/fbase';
 
-type Params = {
+type PathsType = {
   params: {
     id: string;
   };
-}
+};
+
+type Genres = {
+  id: number;
+  name: string;
+};
+
+type ReviewType = {
+  content: string;
+  genres: Genres[];
+  movieId: number;
+  movieTitel: string;
+  poster_path: string;
+  rating: number;
+  uid: string;
+  userNickName: string;
+};
+
+type ParmasType = {
+  params: {
+    id: string;
+  };
+};
 
 function UserPage(props: GetStaticProps) {
-  console.log(props);
-
-  return <MyPageContainer />;
+  return <MyPageContainer props={props} />;
 }
 
 export default UserPage;
 
-
-
 export const getStaticPaths: GetStaticPaths = async () => {
-
   const q = query(collection(db, 'users'));
   const usersSnapshot = await getDocs(q);
-  const paths: Params[] = [];
+  const paths: PathsType[] = [];
   usersSnapshot.forEach((userDoc) => {
     const id = userDoc.data().uid;
 
@@ -35,12 +52,25 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return { paths, fallback: false };
 };
 
+export const getStaticProps = async ({ params }: ParmasType) => {
+  // review data get
+  const reviewQuery = query(collection(db, 'reviews'));
+  const reviewSnapshot = await getDocs(reviewQuery);
+  let allReviewArr: ReviewType[] = [];
+  reviewSnapshot.forEach((review) => {
+    allReviewArr.push(review.data() as ReviewType);
+  });
+  const reviewArr = allReviewArr.filter((item) => item.uid == params.id);
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  // async여야 함
+  // like data get
+  const likesDocRef = doc(db, 'likes', params.id);
+  const likesSnap = await getDoc(likesDocRef);
+  const likeArr = likesSnap.data()?.likedMovies;
+
   return {
     props: {
-      params,
+      reviewArr,
+      likeArr,
     },
   };
 };
