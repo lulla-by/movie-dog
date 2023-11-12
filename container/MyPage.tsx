@@ -1,15 +1,45 @@
-import React, { useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import UserInfo from '@/components/mypage/UserInfo';
 import UserMovieList from '@/components/mypage/UserMovieList';
 import UserReviewList from '@/components/mypage/UserReviewList';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 
-function MyPageContainer() {
+type PageProps<T, S> = {
+    reviewArr: T[];
+    likeArr: S[];
+};
+
+type Genres = {
+  id: number;
+  name: string;
+};
+
+interface LikesType {
+  genres: Genres[];
+  id: number;
+  movieTitle: string;
+  poster_path: string;
+  release_date: string;
+}
+
+type ReviewType = {
+  content: string;
+  genres: Genres[];
+  movieId: number;
+  movieTitel: string;
+  poster_path: string;
+  rating: number;
+  uid: string;
+  userNickName: string;
+};
+function MyPageContainer({likeArr,reviewArr}: PageProps<ReviewType, LikesType>) {
+
+console.log(likeArr,reviewArr);
+
   const router = useRouter();
   const [userData, setUserData] = useState({ uid: '', state: false });
-  const { uid, state } = userData;
-  
+
   useEffect(() => {
     const data = localStorage.getItem('userData');
     if (!data) {
@@ -23,7 +53,7 @@ function MyPageContainer() {
 
   return (
     <MyPageWrapper>
-      <UserInfo />
+      <UserInfo likeArr={likeArr} reviewArr={reviewArr}/>
       <UserMovieList />
       <UserReviewList />
     </MyPageWrapper>

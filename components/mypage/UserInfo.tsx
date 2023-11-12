@@ -1,24 +1,69 @@
 import React from 'react';
 import styled from 'styled-components';
 
-function UserInfo() {
+type Genres = {
+  id: number;
+  name: string;
+};
+
+type ReviewType = {
+  content: string;
+  genres: Genres[];
+  movieId: number;
+  movieTitel: string;
+  poster_path: string;
+  rating: number;
+  uid: string;
+  userNickName: string;
+};
+
+type PageProps<T, S> = {
+    reviewArr: T[];
+    likeArr: S[];
+};
+
+interface LikesType {
+  genres: Genres[];
+  id: number;
+  movieTitle: string;
+  poster_path: string;
+  release_date: string;
+}
+
+function UserInfo({likeArr,reviewArr}: PageProps<ReviewType, LikesType>) {
+  const userName = reviewArr[0].userNickName
+  let reviewCount = reviewArr.length == 0 ? '00' : `${reviewArr.length}`;
+  let likeMovieCount = likeArr.length == 0 ? '00' : `${likeArr.length}`;;
+  let watchMovieCount = `00`;
+
   const noPosterUrl = new URL('../../public/nooposter.png', import.meta.url)
     .href;
 
-  const genleList = ['공포', '액션', '로맨스', '코미디', '액션', '로맨스', '코미디', '액션', '로맨스', '코미디'];
+  const genleList = [
+    '공포',
+    '액션',
+    '로맨스',
+    '코미디',
+    '액션',
+    '로맨스',
+    '코미디',
+    '액션',
+    '로맨스',
+    '코미디',
+  ];
   return (
     <UserInfoWrapper>
       <UserInfoBox>
         <LayoutBox>
-          <TitleBox>OOO님의 마이페이지</TitleBox>
+          <TitleBox>{userName}님의 페이지</TitleBox>
           <FigureBox>
             <UserProfileImage src={noPosterUrl} alt="유저의 프로필 사진" />
             <UserProfielCapion>OOO님의 프로필 사진</UserProfielCapion>
           </FigureBox>
           <ul>
-            <li>내가 본 영화 : 00개</li>
-            <li>찜 해 둔 영화 : 00개</li>
-            <li>내가 쓴 한 줄 평 : 00개</li>
+            <li>내가 본 영화 : {watchMovieCount}개</li>
+            <li>찜 해 둔 영화 : {parseInt(likeMovieCount) < 10 ? `0${likeMovieCount}`:likeMovieCount}개</li>
+            <li>내가 쓴 한 줄 평 : {parseInt(reviewCount) < 10 ? `0${reviewCount}`:reviewCount}개</li>
           </ul>
         </LayoutBox>
       </UserInfoBox>
@@ -98,7 +143,7 @@ const UserInfoBox = styled.div`
   }
 `;
 const UserGenres = styled.div`
- min-width: 380px;
+  min-width: 380px;
   border: 1px solid ${({ theme }) => theme.colors.brown5};
   background-color: ${({ theme }) => theme.colors.brown1};
   height: 189px;
@@ -136,7 +181,7 @@ const GenresListBox = styled.ul`
     color: ${({ theme }) => theme.colors.brown5};
     display: inline-block;
     padding: 4px 12px;
-    line-height: 150%; 
+    line-height: 150%;
     border-radius: 4px;
     border: 1px solid var(--brown-5, #c58555);
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
