@@ -1,30 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import PageNavigatorButton from '../buttons/PageNavigatorButton';
+import { LikeDataProps } from '@/utils/type/UserDataType';
 
-function UserMovieList() {
-  const noPosterUrl = new URL('../../public/nooposter.png', import.meta.url)
-    .href;
-  const mockupData = Array.from({ length: 12 }, (_, index) => ({
-    movieTitle: `영화 ${index + 1}`,
-    release_date: getRandomDate(),
-    poster_path: noPosterUrl,
-  }));
-  function getRandomDate() {
-    const year = Math.floor(Math.random() * (2023 - 2000 + 1)) + 2000; // 2000년부터 2023년까지의 랜덤한 년도
-    const month = Math.floor(Math.random() * 12) + 1; // 1월부터 12월까지의 랜덤한 월
-    const day = Math.floor(Math.random() * 28) + 1; // 1일부터 28일까지의 랜덤한 일
-
-    return `${year}-${month.toString().padStart(2, '0')}-${day
-      .toString()
-      .padStart(2, '0')}`;
-  }
-
-
+function UserMovieList({likeArr}:LikeDataProps) {
+  
   // 초기 페이지 수
   const [currentPage, setCurrentPage] = useState(1);
   // 데이터 개수에 따른 총 페이지 수
-  const totalPage = Math.ceil(mockupData.length / 8);
+  const totalPage = Math.ceil(likeArr.length / 8);
 
   const renderPagination = () => {
     const pageNumbers = [];
@@ -54,14 +38,14 @@ function UserMovieList() {
           </ul>
         </TabBar>
         <MovieList>
-          {mockupData.map((item) => (
+          {likeArr.map((movie) => (
             <li>
               <img
-                src={item.poster_path}
-                alt={item.movieTitle + '포스터입니다'}
+                src={`http://image.tmdb.org/t/p/w342${movie.poster_path}`}
+                alt={movie.movieTitle + '포스터입니다'}
               />
-              <p>{item.movieTitle}</p>
-              <p>출시년도</p>
+              <p>{movie.movieTitle}</p>
+              <p>{movie.release_date}</p>
             </li>
           ))}
         </MovieList>

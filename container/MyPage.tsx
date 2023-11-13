@@ -24,7 +24,7 @@ function MyPageContainer({ likeArr, reviewArr }: UserDataProps) {
   return (
     <MyPageWrapper>
       <UserInfo likeArr={likeArr} reviewArr={reviewArr} />
-      <UserMovieList />
+      <UserMovieList likeArr={likeArr}/>
       <UserReviewList />
     </MyPageWrapper>
   );
