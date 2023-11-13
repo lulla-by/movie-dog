@@ -3,25 +3,71 @@ import styled from 'styled-components';
 import PageNavigatorButton from '../buttons/PageNavigatorButton';
 import { LikeDataProps } from '@/utils/type/UserDataType';
 
-function UserMovieList({likeArr}:LikeDataProps) {
-  
+function UserMovieList({ likeArr }: LikeDataProps) {
   // 초기 페이지 수
   const [currentPage, setCurrentPage] = useState(1);
-  // 데이터 개수에 따른 총 페이지 수
+  //첫번째 렌더 카드 idx
+  const renderFirstCardIdx = currentPage * 8 - 8;
+  // 마지막 렌더 카드 idx
+  const renderLastCardIdx = currentPage * 8;
+
+  //총 페이지 수
   const totalPage = Math.ceil(likeArr.length / 8);
+
+
+  // PageNumButton은 10개 단위로 끊어서 렌더링
+  // direction이 next인 pageNavButton을 한번 클릭할때마다 10씩 증가, prev는 10씩 감소
+  const [nextCount, setNextCount] = useState(10);
+  
+  // 한페이지당 8개의 데이터가 렌더링되어 1-10까지는 총 80개의 데이터 렌더링
+  // 이렇게 만든 한 줄마다의 데이터가 likeArr의 개수보다 작을 경우 true반환
+  const lineRenderData = 8 * nextCount < likeArr.length;
 
   const renderPagination = () => {
     const pageNumbers = [];
     for (let i = 1; i <= totalPage; i++) {
       pageNumbers.push(
-        <PageNumButton className={i === currentPage ? 'active' : ''} key={i}>
+        <PageNumButton
+          className={i === currentPage ? 'active' : ''}
+          key={i}
+          onClick={() => {
+            moveIndex(i);
+          }}
+        >
           {i}
         </PageNumButton>,
       );
     }
     return pageNumbers;
   };
-  const pageNumbers = renderPagination();
+
+  const moveIndex = (i: number) => {
+    setCurrentPage(i);
+  };
+
+  function calculateMinIndex(currentValue: number) {
+    const lowerBound = Math.floor((currentValue - 1) / 10) * 10 + 1;
+    return lowerBound;
+  }
+
+  function calculateMaxIndex(currentValue: number) {
+    const lowerBound = calculateMinIndex(currentValue);
+    const upperBound = lowerBound + 9;
+    return upperBound;
+  }
+  const [indexOfLastItem, setIndexOfLastItem] = useState(
+    calculateMaxIndex(currentPage),
+  );
+  const [indexOfFirstItem, setIndexOfFirstItem] = useState(
+    calculateMinIndex(currentPage),
+  );
+
+  const currentItems = renderPagination().slice(
+    indexOfFirstItem - 1,
+    indexOfLastItem,
+  );
+
+  const renderData = likeArr.slice(renderFirstCardIdx, renderLastCardIdx);
 
   return (
     <MovieListWrapper>
@@ -38,7 +84,7 @@ function UserMovieList({likeArr}:LikeDataProps) {
           </ul>
         </TabBar>
         <MovieList>
-          {likeArr.map((movie) => (
+          {renderData.map((movie) => (
             <li>
               <img
                 src={`http://image.tmdb.org/t/p/w342${movie.poster_path}`}
@@ -50,9 +96,29 @@ function UserMovieList({likeArr}:LikeDataProps) {
           ))}
         </MovieList>
         <PageNavigation>
-          <PageNavigatorButton direction="prev" />
-          {pageNumbers}
-          <PageNavigatorButton direction="next" />
+          {indexOfFirstItem > 10 && (
+            <PageNavigatorButton
+              direction="prev"
+              onClick={() => {
+                setIndexOfFirstItem((prev) => prev - 10);
+                setIndexOfLastItem((prev) => prev - 10);
+                setNextCount((prev) => prev - 10);
+              }}
+            />
+          )}
+          {currentItems}
+
+          {/* 리턴된 페이지갯수가 likeArr의 length보다 작을때만 next버튼 렌더링  */}
+          {lineRenderData && (
+            <PageNavigatorButton
+              direction="next"
+              onClick={() => {
+                setIndexOfFirstItem((prev) => prev + 10);
+                setIndexOfLastItem((prev) => prev + 10);
+                setNextCount((prev) => prev + 10);
+              }}
+            />
+          )}
         </PageNavigation>
       </MovieListBox>
     </MovieListWrapper>
