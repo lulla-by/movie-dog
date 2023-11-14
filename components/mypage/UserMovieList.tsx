@@ -73,15 +73,7 @@ function UserMovieList({ likeArr }: LikeDataProps) {
     <MovieListWrapper>
       <MovieListBox>
         <TabBar>
-          <h2>나의 영화</h2>
-          <ul>
-            <li>
-              <p>찜목록</p>
-            </li>
-            <li>
-              <p>내가 본</p>
-            </li>
-          </ul>
+          <h2>찜한 영화</h2>
         </TabBar>
         <MovieList>
           {renderData.map((movie) => (
@@ -155,25 +147,6 @@ const MovieListBox = styled.div`
 const TabBar = styled.div`
   display: flex;
   align-items: center;
-  ul {
-    margin-left: 16px;
-    display: flex;
-    gap: 8px;
-    li {
-      width: 73px;
-      height: 28px;
-      border-radius: 4px;
-      background: ${({ theme }) => theme.colors.brown5};
-      color: ${({ theme }) => theme.colors.brown1};
-      text-align: center;
-      align-items: center;
-      font-size: ${({ theme }) => theme.fontSize.discription};
-      font-weight: 700;
-      p {
-        line-height: 28px;
-      }
-    }
-  }
 `;
 
 const MovieList = styled.ul`
