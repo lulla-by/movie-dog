@@ -145,24 +145,24 @@ export default function SignUp() {
   return (
     <Container>
       <LoginBox>
-        <Title>회원가입</Title>
+        <TitleBlock>회원가입</TitleBlock>
         <fieldset>
-          <LegendContainer>회원가입 폼</LegendContainer>
+          <LegendBlock>회원가입 폼</LegendBlock>
           <IdCheckBox>
-            <ExtendsEmailInput
+            <InputBlock
               onChange={getInputData}
               state="default"
               placeholder="아이디(이메일 주소)"
               helperText={idText}
             />
-            <ExtendsConfirmButton
+            <ConfirmButton
               onClick={() => {
                 checkEmailDuplication(id);
               }}
               text="중복확인"
             />
           </IdCheckBox>
-          <ExtendsDefaultInput
+          <InputBlock
             onChange={getInputData}
             state="default"
             placeholder="닉네임"
@@ -172,7 +172,7 @@ export default function SignUp() {
                 : defautlHelperText.nickName
             }
           />
-          <ExtendsDefaultInput
+          <InputBlock
             type="password"
             onChange={getInputData}
             state="default"
@@ -183,7 +183,7 @@ export default function SignUp() {
                 : defautlHelperText.password
             }
           />
-          <ExtendsDefaultInput
+          <InputBlock
             type="password"
             onChange={getInputData}
             state="default"
@@ -206,50 +206,50 @@ export default function SignUp() {
 }
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 1280px;
-  margin: auto;
+  max-width: 1280px;
+  padding: 100px 20px;
+  margin: 0 auto;
   text-align: center;
-  padding-bottom: 207px;
 `;
 
 const LoginBox = styled.div`
-  width: 386px;
-  margin: auto;
+  max-width: 386px;
+  margin: 0 auto;
+
+  @media (max-width: 426px) {
+    max-width: 100%;
+  }
 `;
 
-const Title = styled.h1`
+const TitleBlock = styled.h1`
   font-size: ${({ theme }) => theme.fontSize.headline1};
   font-weight: 700;
-  margin: 100px 0px;
+  margin-bottom: 100px;
 `;
 
-const IdCheckBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const ExtendsEmailInput = styled(Input)`
-  width: 300px;
-  margin-bottom: 10px;
-`;
-
-const ExtendsDefaultInput = styled(Input)`
-  margin-bottom: 10px;
-`;
-
-const ExtendsConfirmButton = styled(ConfirmButton)`
-  margin-top: 0px;
-  margin-right: 0px;
-  margin-left: 8px;
-  width: 90px;
-  height: 40px;
-`;
-const LegendContainer = styled.legend`
+const LegendBlock = styled.legend`
   position: absolute;
   width: 1px;
   height: 1px;
   overflow: hidden;
   clip-path: inset(50%);
+`;
+
+const IdCheckBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+
+  div {
+    flex-grow: 1;
+  }
+
+  button {
+    width: 92px;
+    height: 40px;
+  }
+`;
+
+const InputBlock = styled(Input)`
+  margin-bottom: 12px;
 `;

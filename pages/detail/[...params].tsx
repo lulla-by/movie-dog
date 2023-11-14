@@ -1,23 +1,26 @@
 import { useEffect, useState } from 'react';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Image from 'next/image';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { db } from '@/fbase';
+import { getAuth } from 'firebase/auth';
 
 import styled from 'styled-components';
 
 import ConfirmButton from '@/components/buttons/ConfirmButton';
 import MovieReviewSwiper from '@/components/swiper/ReviewSwiper';
 import MovieSwiper from '@/components/swiper/MovieSwiper';
-
-import { options } from '../api/data';
 import ReviewModal from '@/components/modal/ReviewModal';
 import Modal from '@/components/modal/Modal';
 import StarRating from '@/components/StarRating';
+
+import { options } from '../api/data';
 
 type MovieDataTypes = {
   id: number;
   title: string;
   original_title: string;
-  genres: [{ name: string }];
+  genres: { name: string; id: number }[];
   overview: string;
   backdrop_path: string;
   poster_path: string;
@@ -35,12 +38,16 @@ type CreditDataTypes = {
 function Detail({
   params,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const auth = getAuth();
+  const uid = auth.currentUser?.uid;
   const [, movieId] = params.params;
 
   const [movieData, setMovieData] = useState<MovieDataTypes | null>(null);
   const [creditData, setCreditData] = useState<CreditDataTypes | null>(null);
 
   const [isOpened, setIsOpened] = useState(false);
+  const [isLiked, setIsliked] = useState(false);
+  const [likedMovies, setLikedMovies] = useState<number[]>([]);
 
   const getMovieDB = async () => {
     const response = await fetch(
@@ -90,6 +97,14 @@ function Detail({
     setCreditData({ cast: actorList, director: directorName });
   };
 
+  const isLikedMovie = async () => {
+    if (uid) {
+      const docSnap = await getDoc(doc(db, 'likes', uid));
+      setLikedMovies(docSnap.data()?.likedMovies);
+      setIsliked(docSnap.data()?.likedMovies.includes(+movieId));
+    }
+  };
+
   const handleReviewButton = () => {
     if (localStorage.getItem('userData')) {
       setIsOpened(true);
@@ -98,8 +113,42 @@ function Detail({
     }
   };
 
-  const handleLikeButton = () => {
-    if (localStorage.getItem('userData')) {
+  const handleLikeButton = async () => {
+    if (uid) {
+      if (isLiked) {
+        alert('찜목록에서 삭제되었습니다.');
+        await updateDoc(doc(db, 'likes', uid), {
+          likedMovies: likedMovies.filter((item) => item !== +movieId),
+        });
+        setIsliked(false);
+      } else {
+        alert('찜목록에 추가되었습니다.');
+        if (likedMovies) {
+          setDoc(doc(db, 'likes', uid), {
+            likedMovies: [
+              ...likedMovies,
+              {
+                genres: movieData?.genres,
+                movieId: movieData?.id,
+                movieTitle: movieData?.title,
+                poster_path: movieData?.poster_path,
+                release_date: movieData?.release_date,
+              },
+            ],
+          });
+        } else {
+          setDoc(doc(db, 'likes', uid), {
+            likedMovies: {
+              genres: movieData?.genres,
+              movieId: movieData?.id,
+              movieTitle: movieData?.title,
+              poster_path: movieData?.poster_path,
+              release_date: movieData?.release_date,
+            },
+          });
+        }
+        setIsliked(true);
+      }
     } else {
       alert('로그인이 필요한 서비스입니다.');
     }
@@ -108,18 +157,15 @@ function Detail({
   useEffect(() => {
     getMovieDB();
     getCreditList();
-  }, []);
+    isLikedMovie();
+  }, [params]);
 
   return (
     <>
       {movieData && (
         <ContentBlock>
           <Modal setIsOpened={setIsOpened} isOpened={isOpened}>
-            <ReviewModal
-              setIsOpened={setIsOpened}
-              movieId={movieData!.id}
-              movieTitle={movieData!.title}
-            />
+            <ReviewModal setIsOpened={setIsOpened} movieData={movieData} />
           </Modal>
           <DetailBlock>
             <PosterBlock>
@@ -127,12 +173,16 @@ function Detail({
                 src={`http://image.tmdb.org/t/p/w500${movieData.poster_path}`}
                 alt={`${movieData.title}의 포스터`}
                 fill
+                sizes="(max-width: 768px) 50vw,(max-width: 1200px) 70vw"
+                priority
                 className="pc-tablet-img"
               />
               <Image
                 src={`http://image.tmdb.org/t/p/w500${movieData.backdrop_path}`}
                 alt={`${movieData.title}의 스틸컷`}
                 fill
+                sizes="(max-width: 768px) 50vw,(max-width: 1200px) 70vw"
+                priority
                 className="mobile-img"
               />
             </PosterBlock>
@@ -163,7 +213,11 @@ function Detail({
               </p>
               <p>{movieData.overview}</p>
               <div className="buttons">
-                <ConfirmButton text="찜" icon="favorite" />
+                <ConfirmButton
+                  text={isLiked ? '찜 해제' : '찜하기'}
+                  icon={isLiked ? 'favorite-fill' : 'favorite'}
+                  onClick={handleLikeButton}
+                />
                 <ConfirmButton
                   text="한 줄 평 작성"
                   icon="write"
