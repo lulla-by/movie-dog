@@ -6,7 +6,6 @@ function UserInfo({ likeArr, reviewArr }: UserDataProps) {
   const userName = reviewArr[0].userNickName;
   let reviewCount = reviewArr.length == 0 ? '00' : `${reviewArr.length}`;
   let likeMovieCount = likeArr.length == 0 ? '00' : `${likeArr.length}`;
-  let watchMovieCount = `00`;
 
   const noPosterUrl = new URL('../../public/nooposter.png', import.meta.url)
     .href;
@@ -65,7 +64,6 @@ function UserInfo({ likeArr, reviewArr }: UserDataProps) {
             <UserProfielCapion>OOO님의 프로필 사진</UserProfielCapion>
           </FigureBox>
           <ul>
-            <li>내가 본 영화 : {watchMovieCount}개</li>
             <li>
               찜 해 둔 영화 :{' '}
               {parseInt(likeMovieCount) < 10
