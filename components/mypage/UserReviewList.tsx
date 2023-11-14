@@ -107,6 +107,7 @@ const ReviewListwrapper = styled.section`
 `;
 const ReviewListBox = styled.div`
   margin: 20px;
+  margin-bottom: 50px;
   padding: 32px 32px 50px 32px;
   background-color: antiquewhite;
   border: 1px solid ${({ theme }) => theme.colors.brown5};

@@ -16,7 +16,6 @@ function MyPageContainer({ likeArr, reviewArr }: UserDataProps) {
 
 export default MyPageContainer;
 const MyPageWrapper = styled.main`
-  background-color: lightblue;
   max-width: 1200px;
   margin: 0 auto;
 `;
