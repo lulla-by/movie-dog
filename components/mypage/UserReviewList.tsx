@@ -4,25 +4,7 @@ import styled from 'styled-components';
 import ReviewBox from '../ReviewBox';
 import PageNavigatorButton from '../buttons/PageNavigatorButton';
 
-function UserReviewList() {
-
-  function generateReviewsArray(count:number) {
-    const reviewsArray = [];
-    
-    for (let i = 1; i <= count; i++) {
-      const review = {
-        movieTitle: `Movie ${i}`,
-        userNickName: `User ${i}`,
-        content: `This is review ${i}`,
-        rating: Math.floor(Math.random() * 5) + 1, // 랜덤한 평점 생성 (1 ~ 5)
-      };
-      
-      reviewsArray.push(review);
-    }
-    
-    return reviewsArray;
-  }
-  const reviewsArray = generateReviewsArray(20);
+function UserReviewList({ reviewArr }: ReviewDataProps) {
 
   const renderPagination = () => {
     const pageNumbers = [];
@@ -43,7 +25,7 @@ function UserReviewList() {
       <ReviewListBox>
         <h2>나의 한 줄 평</h2>
         <ul>
-          {reviewsArray.map((review) => (
+          {reviewArr.map((review) => (
             <li>
               <ReviewBox review={review} />
             </li>
