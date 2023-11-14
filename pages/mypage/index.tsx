@@ -40,9 +40,7 @@ export default function MyPage() {
 
   return (
     <>
-      {likeArr.length !== 0 && reviewArr.length !== 0 && (
         <MyPageContainer likeArr={likeArr} reviewArr={reviewArr} />
-      )}
     </>
   );
 }

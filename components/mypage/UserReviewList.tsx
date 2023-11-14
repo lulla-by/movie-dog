@@ -5,6 +5,16 @@ import ReviewBox from '../ReviewBox';
 import PageNavigatorButton from '../buttons/PageNavigatorButton';
 
 function UserReviewList({ reviewArr }: ReviewDataProps) {
+  if (reviewArr.length === 0) {
+    return (
+      <ReviewListwrapper>
+      <ReviewListBox>
+        <h2>나의 한 줄 평</h2>
+        작성한 리뷰가 없습니다.
+      </ReviewListBox>
+    </ReviewListwrapper>
+    );
+  }
 
   const [currentPage, setCurrentPage] = useState(1);
   const renderFirstCardIdx = currentPage * 4 - 4;
