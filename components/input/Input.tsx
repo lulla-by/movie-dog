@@ -16,7 +16,7 @@ type InputTypes = {
   disabled?: boolean;
   state?: string;
   className?: string;
-  onChange?:(e:React.ChangeEvent<HTMLInputElement>)=>void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 function Input({
@@ -27,7 +27,7 @@ function Input({
   disabled,
   state,
   className = 'Input',
-  onChange
+  onChange,
 }: InputTypes) {
   const helperIcon: { [key: string]: JSX.Element } = {
     error: <ErrorRounded />,
@@ -39,7 +39,7 @@ function Input({
   return (
     <div className={className}>
       <InputBlock
-      onChange={onChange}
+        onChange={onChange}
         type={type}
         placeholder={placeholder}
         width={width}
@@ -79,6 +79,7 @@ const HelperTextBlock = styled.div<{ state: string | undefined }>`
   flex-direction: row;
   gap: 2px;
   margin-top: 6px;
+  text-align: left;
   color: ${({ state }) => {
     if (state === 'error') return theme.colors.error;
     if (state === 'correct') return theme.colors.correct;
@@ -89,9 +90,8 @@ const HelperTextBlock = styled.div<{ state: string | undefined }>`
 
   p {
     font-size: ${({ theme }) => theme.fontSize.helperText};
-  } */
-
-  svg {
+  }
+  */ svg {
     font-size: ${({ theme }) => theme.fontSize.discription};
     color: ${({ state }) => {
       if (state === 'error') return theme.colors.error;

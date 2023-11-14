@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import styled from 'styled-components';
 
 export default function Footer() {
@@ -5,8 +6,15 @@ export default function Footer() {
     <Container>
       <List>
         <ListItem>MOVIE DOG</ListItem>
-        <ListItem>Github - hardy-is-cat, lulla-by</ListItem>
-        <ListItem>영화 DB 제공 - TMDB</ListItem>
+        <ListItem>
+          Github -{' '}
+          <Link href="https://github.com/hardy-is-cat">hardy-is-cat</Link>,{' '}
+          <Link href="https://github.com/lulla-by">lulla-by</Link>
+        </ListItem>
+        <ListItem>
+          영화 DB 제공 -{' '}
+          <Link href="https://developer.themoviedb.org/docs">TMDB</Link>
+        </ListItem>
       </List>
     </Container>
   );
@@ -39,6 +47,10 @@ const ListItem = styled.li`
   color: ${({ theme }) => theme.colors.brown1};
   font-size: ${({ theme }) => theme.fontSize.discription};
   font-weight: 400;
+
+  a {
+    color: inherit;
+  }
 
   &:first-child {
     font-size: ${({ theme }) => theme.fontSize.headline2};
