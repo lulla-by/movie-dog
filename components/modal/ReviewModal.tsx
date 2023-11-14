@@ -8,7 +8,6 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
 import { ChangeEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -16,8 +15,13 @@ import ConfirmButton from '../buttons/ConfirmButton';
 import StarRating from '../StarRating';
 
 type ReviewModalTypes = {
-  movieId: number;
-  movieTitle: string;
+  movieData: {
+    id: number;
+    title: string;
+    genres: { name: string; id: number }[];
+    poster_path: string;
+    release_date: string;
+  };
   setIsOpened: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -30,7 +34,14 @@ type ExistReviewTypes = {
   userNickName: string;
 };
 
-function ReviewModal({ movieId, movieTitle, setIsOpened }: ReviewModalTypes) {
+function ReviewModal({ movieData, setIsOpened }: ReviewModalTypes) {
+  const {
+    id: movieId,
+    title: movieTitle,
+    genres,
+    poster_path,
+    release_date,
+  } = movieData;
   const [reviewText, setReviewText] = useState('');
   const [reviewRating, setReviewRating] = useState(0);
   const [existReview, setExistReview] = useState<ExistReviewTypes>();
@@ -70,6 +81,12 @@ function ReviewModal({ movieId, movieTitle, setIsOpened }: ReviewModalTypes) {
 
   // 리뷰 작성 및 업데이트 로직
   const submitReview = async () => {
+    // 평점이 없으면 경고
+    if (!reviewRating) {
+      alert('평점은 0.5점 이상이어야 합니다.');
+      return;
+    }
+
     // 유저 닉네임 가져오기
     let userNickName;
     const q = query(collection(db, 'users'), where('uid', '==', uid));
@@ -91,9 +108,12 @@ function ReviewModal({ movieId, movieTitle, setIsOpened }: ReviewModalTypes) {
       alert('리뷰가 작성되었습니다.');
       await addDoc(collection(db, 'reviews'), {
         content: reviewText,
+        genres,
         movieId,
         movieTitle,
+        poster_path,
         rating: reviewRating,
+        release_date,
         uid,
         userNickName,
       });

@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Image from 'next/image';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { db } from '@/fbase';
+import { getAuth } from 'firebase/auth';
 
 import styled from 'styled-components';
 
@@ -12,24 +15,12 @@ import Modal from '@/components/modal/Modal';
 import StarRating from '@/components/StarRating';
 
 import { options } from '../api/data';
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  setDoc,
-  updateDoc,
-  where,
-} from 'firebase/firestore';
-import { db } from '@/fbase';
-import { getAuth } from 'firebase/auth';
 
 type MovieDataTypes = {
   id: number;
   title: string;
   original_title: string;
-  genres: [{ name: string }];
+  genres: { name: string; id: number }[];
   overview: string;
   backdrop_path: string;
   poster_path: string;
@@ -134,11 +125,26 @@ function Detail({
         alert('찜목록에 추가되었습니다.');
         if (likedMovies) {
           setDoc(doc(db, 'likes', uid), {
-            likedMovies: [...likedMovies, +movieId],
+            likedMovies: [
+              ...likedMovies,
+              {
+                genres: movieData?.genres,
+                movieId: movieData?.id,
+                movieTitle: movieData?.title,
+                poster_path: movieData?.poster_path,
+                release_date: movieData?.release_date,
+              },
+            ],
           });
         } else {
           setDoc(doc(db, 'likes', uid), {
-            likedMovies: [+movieId],
+            likedMovies: {
+              genres: movieData?.genres,
+              movieId: movieData?.id,
+              movieTitle: movieData?.title,
+              poster_path: movieData?.poster_path,
+              release_date: movieData?.release_date,
+            },
           });
         }
         setIsliked(true);
@@ -159,11 +165,7 @@ function Detail({
       {movieData && (
         <ContentBlock>
           <Modal setIsOpened={setIsOpened} isOpened={isOpened}>
-            <ReviewModal
-              setIsOpened={setIsOpened}
-              movieId={movieData!.id}
-              movieTitle={movieData!.title}
-            />
+            <ReviewModal setIsOpened={setIsOpened} movieData={movieData} />
           </Modal>
           <DetailBlock>
             <PosterBlock>
