@@ -81,6 +81,12 @@ function ReviewModal({ movieData, setIsOpened }: ReviewModalTypes) {
 
   // 리뷰 작성 및 업데이트 로직
   const submitReview = async () => {
+    // 평점이 없으면 경고
+    if (!reviewRating) {
+      alert('평점은 0.5점 이상이어야 합니다.');
+      return;
+    }
+
     // 유저 닉네임 가져오기
     let userNickName;
     const q = query(collection(db, 'users'), where('uid', '==', uid));
