@@ -40,6 +40,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps = async ({ params }: ParmasType) => {
+  if (!params || !params.id) {
+    return {
+      notFound: true
+    };
+  }
+
   // review data get
   const reviewQuery = query(collection(db, 'reviews'));
   const reviewSnapshot = await getDocs(reviewQuery);
@@ -47,7 +53,7 @@ export const getStaticProps = async ({ params }: ParmasType) => {
   reviewSnapshot.forEach((review) => {
     allReviewArr.push(review.data() as ReviewType);
   });
-  const reviewArr = allReviewArr.filter((item) => item.uid == params.id);
+  const reviewArr = allReviewArr.filter((item) => item.uid == params.id) || null;
 
   // like data get
   const likesDocRef = doc(db, 'likes', params.id);
