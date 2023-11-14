@@ -52,7 +52,7 @@ export const getStaticProps = async ({ params }: ParmasType) => {
   // like data get
   const likesDocRef = doc(db, 'likes', params.id);
   const likesSnap = await getDoc(likesDocRef);
-  const likeArr = likesSnap.data()?.likedMovies;
+  const likeArr = likesSnap.data()?.likedMovies || null;
 
   return {
     props: {
