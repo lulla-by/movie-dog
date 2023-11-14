@@ -7,9 +7,10 @@ import StarRating from './StarRating';
 import NoPosterIcon from '../public/images/icons/icon_errorface.svg';
 
 import { genreArr } from '@/pages/api/data';
+import findGenre from '@/utils/findGenre';
 
 type MovieTypes = {
-  movie?: {
+  movie: {
     id: number;
     title: string;
     vote_average: number;
@@ -23,16 +24,13 @@ type MovieTypes = {
 
 function Card({ movie, ranking }: MovieTypes) {
   const [displayRanking, setDisplayRanking] = useState(false);
+  const genre = findGenre(movie.genre_ids)[0];
 
   const isRankingLessThan10 = () => {
     if (typeof ranking === 'number' && ranking <= 10) {
       setDisplayRanking(true);
     }
   };
-
-  const genreName = genreArr.filter((item) => {
-    return +Object.keys(item)[0] === movie?.genre_ids[0];
-  });
 
   useEffect(() => {
     isRankingLessThan10();
@@ -72,8 +70,7 @@ function Card({ movie, ranking }: MovieTypes) {
               {movie.release_date
                 ? movie.release_date.slice(0, 4)
                 : '개봉일 정보 없음'}
-              ・
-              {genreName[0] ? Object.values(genreName[0])[0] : '장르 분류 없음'}
+              ・{genre || '장르 분류 없음'}
             </p>
             <RatingBlock>
               <StarRating
