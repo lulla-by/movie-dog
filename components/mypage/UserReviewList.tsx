@@ -138,17 +138,17 @@ const ReviewListBox = styled.div`
     margin-bottom: 32px;
   }
   ul {
+    justify-content: space-between;
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
     gap: 20px;
     li {
       display: inline-block;
       width: calc(50% - 20px);
-
       article {
         height: 287px;
         justify-content: flex-start;
+        border: 1px solid ${({ theme }) => theme.colors.brown2};
       }
     }
   }
@@ -162,7 +162,6 @@ const ReviewListBox = styled.div`
   }
 `;
 const PageNavigation = styled.div`
-  border-color: red;
   margin-top: 50px;
   width: 100%;
   display: flex;
