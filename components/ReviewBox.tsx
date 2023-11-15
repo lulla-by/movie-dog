@@ -2,9 +2,11 @@ import styled from 'styled-components';
 
 import StarRating from './StarRating';
 import LikeButton from './buttons/LikeButton';
+import Link from 'next/link';
 
 type ReviewBoxTypes = {
   review: {
+    movieId: number;
     movieTitle: string;
     userNickName: string;
     content: string;
@@ -13,12 +15,14 @@ type ReviewBoxTypes = {
 };
 
 function ReviewBox({ review }: ReviewBoxTypes) {
-  const { movieTitle, userNickName, content, rating } = review;
+  const { movieId, movieTitle, userNickName, content, rating } = review;
   return (
     <ReviewBoxBlock>
       <RatingComponentBlock rating={rating} starSize={24} />
       <p>{content}</p>
-      <h3>- {movieTitle}</h3>
+      <h3>
+        <Link href={`/detail/${movieTitle}/${movieId}`}>- {movieTitle}</Link>
+      </h3>
       <span>By {userNickName}</span>
       {/* <LikeButtonBlock count={like} /> */}
     </ReviewBoxBlock>
@@ -48,6 +52,10 @@ const ReviewBoxBlock = styled.article`
     font-weight: 700;
     font-size: ${({ theme }) => theme.fontSize.headline5};
     color: ${({ theme }) => theme.colors.brown6};
+
+    a {
+      color: inherit;
+    }
   }
 
   span {

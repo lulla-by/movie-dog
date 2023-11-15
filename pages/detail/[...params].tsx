@@ -138,13 +138,15 @@ function Detail({
           });
         } else {
           setDoc(doc(db, 'likes', uid), {
-            likedMovies: {
-              genres: movieData?.genres,
-              movieId: movieData?.id,
-              movieTitle: movieData?.title,
-              poster_path: movieData?.poster_path,
-              release_date: movieData?.release_date,
-            },
+            likedMovies: [
+              {
+                genres: movieData?.genres,
+                movieId: movieData?.id,
+                movieTitle: movieData?.title,
+                poster_path: movieData?.poster_path,
+                release_date: movieData?.release_date,
+              },
+            ],
           });
         }
         setIsliked(true);

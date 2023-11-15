@@ -22,7 +22,7 @@ type SwiperTypes = {
 
 type ReviewDataTypes = {
   movieTitle: string;
-  movieId: string;
+  movieId: number;
   userNickName: string;
   uid: number;
   content: string;
