@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import PageNavigatorButton from '../buttons/PageNavigatorButton';
 import { LikeDataProps } from '@/utils/type/UserDataType';
+import NoPosterIcon from '../../public/images/icons/icon_errorface.svg';
 import Link from 'next/link';
 
 function UserMovieList({ likeArr = [] }: LikeDataProps) {
@@ -92,10 +93,20 @@ function UserMovieList({ likeArr = [] }: LikeDataProps) {
           {renderData?.map((movie) => (
             <li>
               <Link href={`/detail/${movie.movieTitle}/${movie.movieId}`}>
-                <img
-                  src={`http://image.tmdb.org/t/p/w342${movie.poster_path}`}
-                  alt={movie.movieTitle + '포스터입니다'}
-                />
+                {movie.poster_path && (
+                  <img
+                    src={`http://image.tmdb.org/t/p/w342${movie.poster_path}`}
+                    alt={movie.movieTitle + '포스터입니다'}
+                  />
+                )}
+                {!movie.poster_path && (
+                  <NoPosterBlock>
+                    <DescriptionBlock>
+                      <NoPosterIcon />
+                      <span>포스터 준비중</span>
+                    </DescriptionBlock>
+                  </NoPosterBlock>
+                )}
                 <p>{movie.movieTitle}</p>
                 <p>{movie.release_date}</p>
               </Link>
@@ -219,5 +230,31 @@ const PageNumButton = styled.button`
   &.active {
     background-color: ${({ theme }) => theme.colors.brown5};
     color: ${({ theme }) => theme.colors.white};
+  }
+`;
+const NoPosterBlock = styled.div`
+  position: relative;
+  padding-bottom: 150%;
+  margin-bottom: 8px;
+  background-color: ${({ theme }) => theme.colors.gray0};
+`;
+const DescriptionBlock = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+
+  svg {
+    margin-bottom: 8px;
+  }
+
+  svg path {
+    fill: ${({ theme }) => theme.colors.black};
+  }
+
+  span {
+    display: block;
+    color: ${({ theme }) => theme.colors.black};
   }
 `;
