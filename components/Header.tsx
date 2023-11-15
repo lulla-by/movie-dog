@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 
 import { authService } from '@/fbase';
 import { useRecoilState } from 'recoil';
@@ -14,13 +14,18 @@ import PermIdentityRoundedIcon from '@mui/icons-material/PermIdentityRounded';
 
 import Logo from '../public/MovieDogLogo.png';
 
+import useModal from '@/utils/useModal';
+
 import ConfirmButton from './buttons/ConfirmButton';
 import SearchBar from './input/SearchBar';
 import ModeButton from './buttons/ModeButton';
+import Modal from './modal/Modal';
 
 export function Header() {
   const router = useRouter();
   const [isTabBarShowing, setIsTabBarShowing] = useState(true);
+  const { modal: searchModal, toggleModal: toggleSearchModal } =
+    useModal('searchModal');
 
   const [isLogin, setIsLogin] = useRecoilState(LoginsState);
 
@@ -32,10 +37,6 @@ export function Header() {
       return;
     }
     setIsLogin(true);
-  };
-
-  const showSearchModal = () => {
-    console.log('검색 모달 열기!');
   };
 
   useEffect(() => {
@@ -73,6 +74,14 @@ export function Header() {
 
   return (
     <HeaderBlock>
+      {searchModal.isOpened && (
+        <Modal
+          isOpened={searchModal.isOpened}
+          setIsOpened={() => toggleSearchModal(searchModal.isOpened)}
+        >
+          <SearchBar />
+        </Modal>
+      )}
       <WrapperBlock>
         <FlexContainer className="left-block">
           <Link href="/">
@@ -114,7 +123,7 @@ export function Header() {
             </Link>
           </li>
           <li className={router.pathname === '/search' ? 'active' : ''}>
-            <button onClick={showSearchModal}>
+            <button onClick={() => toggleSearchModal(searchModal.isOpened)}>
               <SearchRoundedIcon fontSize="large" />
               <span>검색</span>
             </button>
