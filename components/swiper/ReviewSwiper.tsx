@@ -22,7 +22,7 @@ type SwiperTypes = {
 
 type ReviewDataTypes = {
   movieTitle: string;
-  movieId: string;
+  movieId: number;
   userNickName: string;
   uid: number;
   content: string;
@@ -89,7 +89,7 @@ function ReviewSwiper({ movieId, className }: SwiperTypes) {
         content: doc.data().content,
         rating: doc.data().rating,
       };
-      reviewList.unshift(data);
+      reviewList.push(data);
     });
     setReviewData(reviewList);
   };

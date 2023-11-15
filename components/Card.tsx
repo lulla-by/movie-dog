@@ -4,11 +4,13 @@ import Link from 'next/link';
 import styled from 'styled-components';
 
 import StarRating from './StarRating';
+import NoPosterIcon from '../public/images/icons/icon_errorface.svg';
 
 import { genreArr } from '@/pages/api/data';
+import findGenre from '@/utils/findGenre';
 
 type MovieTypes = {
-  movie?: {
+  movie: {
     id: number;
     title: string;
     vote_average: number;
@@ -22,16 +24,13 @@ type MovieTypes = {
 
 function Card({ movie, ranking }: MovieTypes) {
   const [displayRanking, setDisplayRanking] = useState(false);
+  const genre = findGenre(movie.genre_ids)[0];
 
   const isRankingLessThan10 = () => {
     if (typeof ranking === 'number' && ranking <= 10) {
       setDisplayRanking(true);
     }
   };
-
-  const genreName = genreArr.filter((item) => {
-    return +Object.keys(item)[0] === movie?.genre_ids[0];
-  });
 
   useEffect(() => {
     isRankingLessThan10();
@@ -47,20 +46,31 @@ function Card({ movie, ranking }: MovieTypes) {
                 {typeof ranking === 'number' && ranking + 1}
               </RankingTag>
             )}
-            <ImageBlock>
-              <Image
-                src={`http://image.tmdb.org/t/p/w342${movie.poster_path}`}
-                alt={movie.title}
-                fill
-                sizes="(max-width: 768px) 50vw,(max-width: 1200px) 70vw"
-                loading="eager"
-                priority
-              />
-            </ImageBlock>
+            {movie.poster_path ? (
+              <ImageBlock>
+                <Image
+                  src={`http://image.tmdb.org/t/p/w342${movie.poster_path}`}
+                  alt={movie.title}
+                  fill
+                  sizes="(max-width: 768px) 50vw,(max-width: 1200px) 70vw"
+                  loading="eager"
+                  priority
+                />
+              </ImageBlock>
+            ) : (
+              <NoPosterBlock>
+                <DescriptionBlock>
+                  <NoPosterIcon />
+                  <span>포스터 준비중</span>
+                </DescriptionBlock>
+              </NoPosterBlock>
+            )}
             <h3>{movie.title}</h3>
             <p>
-              {movie.release_date.slice(0, 4)}・
-              {genreName[0] ? Object.values(genreName[0])[0] : '장르 분류 없음'}
+              {movie.release_date
+                ? movie.release_date.slice(0, 4)
+                : '개봉일 정보 없음'}
+              ・{genre || '장르 분류 없음'}
             </p>
             <RatingBlock>
               <StarRating
@@ -102,6 +112,34 @@ const ImageBlock = styled.div`
   position: relative;
   padding-bottom: 150%;
   margin-bottom: 8px;
+`;
+
+const NoPosterBlock = styled.div`
+  position: relative;
+  padding-bottom: 150%;
+  margin-bottom: 8px;
+  background-color: ${({ theme }) => theme.colors.gray0};
+`;
+
+const DescriptionBlock = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+
+  svg {
+    margin-bottom: 8px;
+  }
+
+  svg path {
+    fill: ${({ theme }) => theme.colors.black};
+  }
+
+  span {
+    display: block;
+    color: ${({ theme }) => theme.colors.black};
+  }
 `;
 
 const CardBlock = styled.div`

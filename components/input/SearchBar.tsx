@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 
 import styled from 'styled-components';
 
+import useModal from '@/utils/useModal';
+
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 
 type SearchBarTypes = {
@@ -11,9 +13,11 @@ type SearchBarTypes = {
 };
 
 function SearchBar({ width = 100, className = 'SearchBar' }: SearchBarTypes) {
+  const router = useRouter();
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const router = useRouter();
+  const { modal: searchModal, toggleModal: toggleSearchModal } =
+    useModal('searchModal');
 
   const focusInput = () => {
     setIsFocused(true);
@@ -31,6 +35,7 @@ function SearchBar({ width = 100, className = 'SearchBar' }: SearchBarTypes) {
         query: { keyword: inputRef.current!.value },
       });
       inputRef.current!.value = '';
+      toggleSearchModal(searchModal.isOpened);
     } else {
       e.preventDefault();
       alert('검색어를 입력해주세요.');

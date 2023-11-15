@@ -1,36 +1,47 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
+
+import { authService } from '@/fbase';
+import { useRecoilState } from 'recoil';
+import { LoginsState } from '@/stores/LoginState';
 
 import styled from 'styled-components';
-
-import Logo from '../public/MovieDogLogo.png';
 
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import PermIdentityRoundedIcon from '@mui/icons-material/PermIdentityRounded';
 
+import Logo from '../public/MovieDogLogo.png';
+
+import useModal from '@/utils/useModal';
+
 import ConfirmButton from './buttons/ConfirmButton';
 import SearchBar from './input/SearchBar';
 import ModeButton from './buttons/ModeButton';
-import { useRecoilState } from 'recoil';
-import { LoginsState } from '@/stores/LoginState';
+import Modal from './modal/Modal';
 
 export function Header() {
   const router = useRouter();
   const [isTabBarShowing, setIsTabBarShowing] = useState(true);
+  const { modal: searchModal, toggleModal: toggleSearchModal } =
+    useModal('searchModal');
 
   const [isLogin, setIsLogin] = useRecoilState(LoginsState);
 
-  useEffect(() => {
+  const currentYear = new Date().getFullYear().toString();
+
+  const checkedLogin = () => {
     const isLogin = window.localStorage.getItem('userData');
     if (!isLogin) {
       return;
     }
     setIsLogin(true);
-  }, []);
+  };
 
   useEffect(() => {
+    checkedLogin();
+
     let lastScrollY = document.defaultView?.scrollY;
 
     const onScroll = () => {
@@ -56,24 +67,35 @@ export function Header() {
     if (data) {
       window.localStorage.removeItem('userData');
       setIsLogin(false);
+      authService.signOut();
       location.reload();
     }
   };
 
   return (
     <HeaderBlock>
+      {searchModal.isOpened && (
+        <Modal
+          isOpened={searchModal.isOpened}
+          setIsOpened={() => toggleSearchModal(searchModal.isOpened)}
+        >
+          <SearchBar />
+        </Modal>
+      )}
       <WrapperBlock>
         <FlexContainer className="left-block">
           <Link href="/">
             <LogoIMG src={Logo.src} alt="로고" />
           </Link>
           <nav className="pc-nav">
-            <List>
+            <ul>
               <ListItem>
                 <Link href="/list/genre/28">장르별</Link>
               </ListItem>
-              <ListItem>년도별</ListItem>
-            </List>
+              <ListItem>
+                <Link href={`/list/year/${currentYear}`}>년도별</Link>
+              </ListItem>
+            </ul>
           </nav>
         </FlexContainer>
         <FlexContainer className="right-block">
@@ -95,22 +117,28 @@ export function Header() {
       <TabBarBlock className={isTabBarShowing ? '' : 'hide'}>
         <ul>
           <li className={router.pathname === '/' ? 'active' : ''}>
-            <MenuRoundedIcon fontSize="large" />
-            <span>장르별</span>
+            <Link href="/list/genre/28">
+              <MenuRoundedIcon fontSize="large" />
+              <span>장르별</span>
+            </Link>
           </li>
           <li className={router.pathname === '/search' ? 'active' : ''}>
-            <SearchRoundedIcon fontSize="large" />
-            <span>검색</span>
+            <button onClick={() => toggleSearchModal(searchModal.isOpened)}>
+              <SearchRoundedIcon fontSize="large" />
+              <span>검색</span>
+            </button>
           </li>
           <li
             className={
-              router.pathname === '/login' || router.pathname === '/my-page'
+              router.pathname === '/login' || router.pathname === '/mypage'
                 ? 'active'
                 : ''
             }
           >
-            <PermIdentityRoundedIcon fontSize="large" />
-            <span>로그인</span>
+            <Link href={isLogin ? '/mypage' : '/login'}>
+              <PermIdentityRoundedIcon fontSize="large" />
+              <span>{isLogin ? '마이페이지' : '로그인'}</span>
+            </Link>
           </li>
         </ul>
       </TabBarBlock>
@@ -165,8 +193,6 @@ const LogoIMG = styled.img`
   }
 `;
 
-const List = styled.ul``;
-
 const ListItem = styled.li`
   margin-right: 10px;
   display: inline-block;
@@ -211,11 +237,18 @@ const TabBarBlock = styled.nav`
     }
   }
 
-  li {
+  li a,
+  li button {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: transparent;
+    border: none;
+    font-size: inherit;
+    color: inherit;
+    line-height: inherit;
+    cursor: pointer;
   }
 
   li.active {

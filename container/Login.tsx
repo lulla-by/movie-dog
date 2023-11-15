@@ -31,22 +31,6 @@ export default function Login() {
     }
   };
 
-  // 로그인 유효성 검증
-  const helperText = {
-    id: {
-      valid: '올바른 이메일 형식입니다.',
-      invalid: '아이디는 이메일 형식이어야 합니다.',
-    },
-    password: {
-      valid: '올바른 비밀번호 형식입니다.',
-      invalid:
-        '비밀번호는 8자리 이상이어야 하며, 영문과 숫자를 포함해야 합니다.',
-    },
-  };
-
-  const idValidation = validation('id', id);
-  const passwordValidation = validation('password', password);
-
   // 로그인
   const login = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -74,53 +58,42 @@ export default function Login() {
     }
     window.localStorage.setItem('userData', JSON.stringify(userData));
     isLogin(true);
-    router.push(globalThis.sessionStorage.getItem('prevPath') || '/');
+
+    // 이전 페이지 path
+    const prevPath = globalThis.sessionStorage.getItem('prevPath');
+
+    if (prevPath === '/signup') {
+      router.push('/');
+    } else {
+      router.push(prevPath || '/');
+    }
   };
 
   return (
     <Container>
       <LoginBox>
-        <TitleBox>로그인</TitleBox>
+        <TitleBlock>로그인</TitleBlock>
         <fieldset>
           <LegendContainer>로그인 폼</LegendContainer>
-          <Input
-            onChange={getInputData}
-            placeholder="이메일"
-            helperText={
-              idValidation ? helperText.id.valid : helperText.id.invalid
-            }
-          />
-          <ExtendsPasswordInput
-            type="password"
-            onChange={getInputData}
-            placeholder="비밀번호"
-            helperText={
-              passwordValidation
-                ? helperText.password.valid
-                : helperText.password.invalid
-            }
-          />
-          <ExtendsConfirmButton onClick={login} text="로그인" />
-          <Link href="/signup">
-            <ExtendsConfirmButton text="회원가입" />
-          </Link>
-          <TextBox>
-            <p>OR</p>
-          </TextBox>
-          <ButtonContainer>
-            <ExtendsConfirmButton
-              width={48}
-              icon="github"
-              text="깃허브 로그인"
-              onClick={login}
+          <EmailLoginBlock>
+            <Input type="text" onChange={getInputData} placeholder="이메일" />
+            <Input
+              type="password"
+              onChange={getInputData}
+              placeholder="비밀번호"
             />
-            <ExtendsConfirmButton
-              width={48}
-              icon="google"
-              text="구글 로그인"
-              onClick={login}
-            />
-          </ButtonContainer>
+            <ConfirmButton onClick={login} text="로그인" />
+            <Link href="/signup">
+              <ConfirmButton text="회원가입" />
+            </Link>
+          </EmailLoginBlock>
+          <VerticalBlock>
+            <span>OR</span>
+          </VerticalBlock>
+          <SocialLoginBlock>
+            <ConfirmButton icon="github" text="깃허브 로그인" onClick={login} />
+            <ConfirmButton icon="google" text="구글 로그인" onClick={login} />
+          </SocialLoginBlock>
         </fieldset>
       </LoginBox>
     </Container>
@@ -128,57 +101,25 @@ export default function Login() {
 }
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 1280px;
-  margin: auto;
+  max-width: 1280px;
+  padding: 100px 20px;
+  margin: 0 auto;
   text-align: center;
-  padding-bottom: 200px;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const ExtendsConfirmButton = styled(ConfirmButton)`
-  margin: 20px 0px 0px 0px;
-`;
-
-const ExtendsPasswordInput = styled(Input)`
-  margin-top: 20px;
 `;
 
 const LoginBox = styled.form`
-  width: 386px;
-  margin: auto;
+  max-width: 386px;
+  margin: 0 auto;
+
+  @media (max-width: 426px) {
+    max-width: 100%;
+  }
 `;
 
-const TitleBox = styled.h1`
-  display: block;
+const TitleBlock = styled.h1`
   font-size: ${({ theme }) => theme.fontSize.headline1};
   font-weight: 700;
-  margin: 100px 0px;
-`;
-
-const TextBox = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-  color: ${({ theme }) => theme.colors.brown5};
-  font-size: ${({ theme }) => theme.fontSize.discription};
-  font-weight: 400;
-
-  & p {
-    margin: 0px 12px;
-  }
-  &::before,
-  ::after {
-    content: '';
-    width: 170px;
-    height: 1px;
-    border-bottom: 1px solid ${({ theme }) => theme.colors.brown5};
-  }
+  margin-bottom: 100px;
 `;
 
 const LegendContainer = styled.legend`
@@ -187,4 +128,40 @@ const LegendContainer = styled.legend`
   height: 1px;
   overflow: hidden;
   clip-path: inset(50%);
+`;
+
+const EmailLoginBlock = styled.div`
+  input,
+  button {
+    margin-bottom: 12px;
+  }
+`;
+
+const VerticalBlock = styled.div`
+  display: flex;
+  margin: 16px 0;
+  gap: 12px;
+  color: ${({ theme }) => theme.colors.brown5};
+  font-size: ${({ theme }) => theme.fontSize.discription};
+  font-weight: 400;
+  align-items: center;
+
+  &::before,
+  ::after {
+    content: '';
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.brown5};
+  }
+`;
+
+const SocialLoginBlock = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+
+  @media (max-width: 426px) {
+    flex-flow: column;
+    justify-content: center;
+  }
 `;
