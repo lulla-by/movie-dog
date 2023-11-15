@@ -3,16 +3,17 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import ReviewBox from '../ReviewBox';
 import PageNavigatorButton from '../buttons/PageNavigatorButton';
+import Link from 'next/link';
 
 function UserReviewList({ reviewArr }: ReviewDataProps) {
   if (reviewArr.length === 0) {
     return (
       <ReviewListwrapper>
-      <ReviewListBox>
-        <h2>나의 한 줄 평</h2>
-        작성한 리뷰가 없습니다.
-      </ReviewListBox>
-    </ReviewListwrapper>
+        <ReviewListBox>
+          <h2>나의 한 줄 평</h2>
+          작성한 리뷰가 없습니다.
+        </ReviewListBox>
+      </ReviewListwrapper>
     );
   }
 
@@ -28,12 +29,11 @@ function UserReviewList({ reviewArr }: ReviewDataProps) {
     for (let i = 1; i <= totalPage; i++) {
       pageNumbers.push(
         <PageNumButton
-        className={i === currentPage ? 'active' : ''}
+          className={i === currentPage ? 'active' : ''}
           key={i}
           onClick={() => {
             moveIndex(i);
           }}
-
         >
           {i}
         </PageNumButton>,
@@ -77,7 +77,9 @@ function UserReviewList({ reviewArr }: ReviewDataProps) {
         <ul>
           {renderData.map((review) => (
             <li key={review.movieId}>
-              <ReviewBox review={review} />
+              <Link href={`/detail/${review.movieTitle}/${review.movieId}`}>
+                <ReviewBox review={review} />
+              </Link>
             </li>
           ))}
         </ul>{' '}
@@ -114,6 +116,10 @@ export default UserReviewList;
 const ReviewListwrapper = styled.section`
   margin: auto;
   width: 83%;
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-top: 20px;
+  }
 `;
 const ReviewListBox = styled.div`
   margin: 20px;
@@ -132,29 +138,30 @@ const ReviewListBox = styled.div`
     margin-bottom: 32px;
   }
   ul {
+    justify-content: space-between;
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
     gap: 20px;
     li {
       display: inline-block;
-      height: 280px;
       width: calc(50% - 20px);
-
       article {
         height: 287px;
         justify-content: flex-start;
+        border: 1px solid ${({ theme }) => theme.colors.brown2};
       }
     }
-    @media (max-width: 768px) {
+  }
+  @media (max-width: 768px) {
+    ul{
       li {
         width: calc(100% - 20px);
       }
     }
+    margin: 0px;
   }
 `;
 const PageNavigation = styled.div`
-  border-color: red;
   margin-top: 50px;
   width: 100%;
   display: flex;
