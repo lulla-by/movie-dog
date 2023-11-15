@@ -15,6 +15,7 @@ import Modal from '@/components/modal/Modal';
 import StarRating from '@/components/StarRating';
 
 import { options } from '../api/data';
+import useModal from '@/utils/useModal';
 
 type MovieDataTypes = {
   id: number;
@@ -45,7 +46,8 @@ function Detail({
   const [movieData, setMovieData] = useState<MovieDataTypes | null>(null);
   const [creditData, setCreditData] = useState<CreditDataTypes | null>(null);
 
-  const [isOpened, setIsOpened] = useState(false);
+  const { modal: reviewModal, toggleModal: toggleReviewModal } =
+    useModal('reviewModal');
   const [isLiked, setIsliked] = useState(false);
   const [likedMovies, setLikedMovies] = useState<number[]>([]);
 
@@ -107,7 +109,7 @@ function Detail({
 
   const handleReviewButton = () => {
     if (localStorage.getItem('userData')) {
-      setIsOpened(true);
+      toggleReviewModal(reviewModal.isOpened);
     } else {
       alert('로그인이 필요한 서비스입니다.');
     }
@@ -166,8 +168,14 @@ function Detail({
     <>
       {movieData && (
         <ContentBlock>
-          <Modal setIsOpened={setIsOpened} isOpened={isOpened}>
-            <ReviewModal setIsOpened={setIsOpened} movieData={movieData} />
+          <Modal
+            setIsOpened={() => toggleReviewModal(reviewModal.isOpened)}
+            isOpened={reviewModal.isOpened}
+          >
+            <ReviewModal
+              setIsOpened={() => toggleReviewModal(reviewModal.isOpened)}
+              movieData={movieData}
+            />
           </Modal>
           <DetailBlock>
             <PosterBlock>
@@ -255,7 +263,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-const ContentBlock = styled.main`
+const ContentBlock = styled.div`
   max-width: 1200px;
   padding-bottom: 100px;
   margin: 0 auto;
