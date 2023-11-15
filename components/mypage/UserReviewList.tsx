@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import ReviewBox from '../ReviewBox';
 import PageNavigatorButton from '../buttons/PageNavigatorButton';
+import Link from 'next/link';
 
 function UserReviewList({ reviewArr }: ReviewDataProps) {
   if (reviewArr.length === 0) {
@@ -77,7 +78,9 @@ function UserReviewList({ reviewArr }: ReviewDataProps) {
         <ul>
           {renderData.map((review) => (
             <li key={review.movieId}>
+              <Link href={`/detail/${review.movieTitle}/${review.movieId}`}>
               <ReviewBox review={review} />
+              </Link>
             </li>
           ))}
         </ul>{' '}

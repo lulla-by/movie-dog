@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import PageNavigatorButton from '../buttons/PageNavigatorButton';
 import { LikeDataProps } from '@/utils/type/UserDataType';
+import Link from 'next/link';
 
-function UserMovieList({ likeArr=[] }: LikeDataProps) {
+function UserMovieList({ likeArr = [] }: LikeDataProps) {
   if (likeArr.length === 0) {
     return (
       <MovieListWrapper>
@@ -11,9 +12,7 @@ function UserMovieList({ likeArr=[] }: LikeDataProps) {
           <TabBar>
             <h2>찜한 영화</h2>
           </TabBar>
-          <MovieList>
-            찜 목록에 추가한 영화가 없습니다.
-          </MovieList>
+          <MovieList>찜 목록에 추가한 영화가 없습니다.</MovieList>
         </MovieListBox>
       </MovieListWrapper>
     );
@@ -29,11 +28,10 @@ function UserMovieList({ likeArr=[] }: LikeDataProps) {
   //총 페이지 수
   const totalPage = Math.ceil(likeArr?.length / 8);
 
-
   // PageNumButton은 10개 단위로 끊어서 렌더링
   // direction이 next인 pageNavButton을 한번 클릭할때마다 10씩 증가, prev는 10씩 감소
   const [nextCount, setNextCount] = useState(10);
-  
+
   // 한페이지당 8개의 데이터가 렌더링되어 1-10까지는 총 80개의 데이터 렌더링
   // 이렇게 만든 한 줄마다의 데이터가 likeArr의 개수보다 작을 경우 true반환
   const lineRenderData = 8 * nextCount < likeArr?.length;
@@ -93,12 +91,14 @@ function UserMovieList({ likeArr=[] }: LikeDataProps) {
         <MovieList>
           {renderData?.map((movie) => (
             <li>
-              <img
-                src={`http://image.tmdb.org/t/p/w342${movie.poster_path}`}
-                alt={movie.movieTitle + '포스터입니다'}
-              />
-              <p>{movie.movieTitle}</p>
-              <p>{movie.release_date}</p>
+              <Link href={`/detail/${movie.movieTitle}/${movie.movieId}`}>
+                <img
+                  src={`http://image.tmdb.org/t/p/w342${movie.poster_path}`}
+                  alt={movie.movieTitle + '포스터입니다'}
+                />
+                <p>{movie.movieTitle}</p>
+                <p>{movie.release_date}</p>
+              </Link>
             </li>
           ))}
         </MovieList>
