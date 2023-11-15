@@ -9,11 +9,11 @@ function UserReviewList({ reviewArr }: ReviewDataProps) {
   if (reviewArr.length === 0) {
     return (
       <ReviewListwrapper>
-      <ReviewListBox>
-        <h2>나의 한 줄 평</h2>
-        작성한 리뷰가 없습니다.
-      </ReviewListBox>
-    </ReviewListwrapper>
+        <ReviewListBox>
+          <h2>나의 한 줄 평</h2>
+          작성한 리뷰가 없습니다.
+        </ReviewListBox>
+      </ReviewListwrapper>
     );
   }
 
@@ -29,12 +29,11 @@ function UserReviewList({ reviewArr }: ReviewDataProps) {
     for (let i = 1; i <= totalPage; i++) {
       pageNumbers.push(
         <PageNumButton
-        className={i === currentPage ? 'active' : ''}
+          className={i === currentPage ? 'active' : ''}
           key={i}
           onClick={() => {
             moveIndex(i);
           }}
-
         >
           {i}
         </PageNumButton>,
@@ -79,7 +78,7 @@ function UserReviewList({ reviewArr }: ReviewDataProps) {
           {renderData.map((review) => (
             <li key={review.movieId}>
               <Link href={`/detail/${review.movieTitle}/${review.movieId}`}>
-              <ReviewBox review={review} />
+                <ReviewBox review={review} />
               </Link>
             </li>
           ))}
@@ -117,6 +116,10 @@ export default UserReviewList;
 const ReviewListwrapper = styled.section`
   margin: auto;
   width: 83%;
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-top: 20px;
+  }
 `;
 const ReviewListBox = styled.div`
   margin: 20px;
@@ -141,7 +144,6 @@ const ReviewListBox = styled.div`
     gap: 20px;
     li {
       display: inline-block;
-      height: 280px;
       width: calc(50% - 20px);
 
       article {
@@ -149,11 +151,14 @@ const ReviewListBox = styled.div`
         justify-content: flex-start;
       }
     }
-    @media (max-width: 768px) {
+  }
+  @media (max-width: 768px) {
+    ul{
       li {
         width: calc(100% - 20px);
       }
     }
+    margin: 0px;
   }
 `;
 const PageNavigation = styled.div`

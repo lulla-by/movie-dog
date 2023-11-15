@@ -148,6 +148,10 @@ export default UserMovieList;
 const MovieListWrapper = styled.section`
   margin: auto;
   width: 83%;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const MovieListBox = styled.div`
@@ -167,6 +171,10 @@ const MovieListBox = styled.div`
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+  }
+  @media (max-width: 768px) {
+    margin: 0px;
+    margin-top: 20px;
   }
 `;
 
@@ -200,6 +208,10 @@ const MovieList = styled.ul`
   @media (min-width: 768px) {
     li {
       width: calc(50% - 20px);
+      img {
+      width: 100%;
+      height: auto;
+    }
     }
   }
 
