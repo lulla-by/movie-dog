@@ -1,14 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { useState } from 'react';
 import { Genres, UserDataProps } from '@/utils/type/UserDataType';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '@/fbase';
 
-function UserInfo({ likeArr, reviewArr }: UserDataProps) {
-  const userName = reviewArr[0].userNickName;
-  let reviewCount = reviewArr.length == 0 ? '00' : `${reviewArr.length}`;
-  let likeMovieCount = likeArr.length == 0 ? '00' : `${likeArr.length}`;
+function UserInfo({ likeArr = [], reviewArr }: UserDataProps) {
+  const [userName, setUserName] = useState('');
+
+  const getName = async (uid: string) => {
+    const q = query(collection(db, 'users'), where('uid', '==', uid));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((item) => {
+      const result = item.data();
+      setUserName(result.nickName);
+    });
+  };
+  useEffect(() => {
+    let data;
+    if (typeof window !== 'undefined') {
+      const userData = localStorage.getItem('userData') as string;
+      data = JSON.parse(userData);
+    }
+    const { uid } = data;
+    getName(uid);
+  }, []);
 
   const noPosterUrl = new URL('../../public/nooposter.png', import.meta.url)
     .href;
+
+  let reviewCount = reviewArr.length == 0 ? '0' : `${reviewArr.length}`;
+  let likeMovieCount = likeArr.length == 0 ? '0' : `${likeArr.length}`;
 
   const allData = [...reviewArr, ...likeArr];
 
@@ -67,13 +89,13 @@ function UserInfo({ likeArr, reviewArr }: UserDataProps) {
             <li>
               찜 해 둔 영화 :{' '}
               {parseInt(likeMovieCount) < 10
-                ? `0${likeMovieCount}`
+                ? `${likeMovieCount}`
                 : likeMovieCount}
               개
             </li>
             <li>
               내가 쓴 한 줄 평 :{' '}
-              {parseInt(reviewCount) < 10 ? `0${reviewCount}` : reviewCount}개
+              {parseInt(reviewCount) < 10 ? `${reviewCount}` : reviewCount}개
             </li>
           </ul>
         </LayoutBox>
@@ -81,9 +103,14 @@ function UserInfo({ likeArr, reviewArr }: UserDataProps) {
       <UserGenres>
         <TitleBox>나의 선호 장르</TitleBox>
         <GenresListBox>
-          {sortedGenreCount.map((item) => (
-            <li key={item.name}>{item.name}</li>
-          ))}
+          {sortedGenreCount.length > 0 &&
+            sortedGenreCount.map((item) => (
+              <li key={item.name}>{item.name}</li>
+            ))}
+          {sortedGenreCount.length === 0 && <>
+            <div>찜하기나 리뷰를 작성하여 선호하는 장르를 알아보세요</div>
+          </>
+          }
         </GenresListBox>
       </UserGenres>
     </UserInfoWrapper>

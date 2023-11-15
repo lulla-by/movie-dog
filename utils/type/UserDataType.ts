@@ -28,3 +28,5 @@ export type Genres = {
   };
 
   export type LikeDataProps = Pick<UserDataProps, 'likeArr'>;
+
+  export type ReviewDataProps = Pick<UserDataProps,"reviewArr">;

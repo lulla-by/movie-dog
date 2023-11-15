@@ -3,7 +3,22 @@ import styled from 'styled-components';
 import PageNavigatorButton from '../buttons/PageNavigatorButton';
 import { LikeDataProps } from '@/utils/type/UserDataType';
 
-function UserMovieList({ likeArr }: LikeDataProps) {
+function UserMovieList({ likeArr=[] }: LikeDataProps) {
+  if (likeArr.length === 0) {
+    return (
+      <MovieListWrapper>
+        <MovieListBox>
+          <TabBar>
+            <h2>찜한 영화</h2>
+          </TabBar>
+          <MovieList>
+            찜 목록에 추가한 영화가 없습니다.
+          </MovieList>
+        </MovieListBox>
+      </MovieListWrapper>
+    );
+  }
+
   // 초기 페이지 수
   const [currentPage, setCurrentPage] = useState(1);
   //첫번째 렌더 카드 idx
@@ -12,7 +27,7 @@ function UserMovieList({ likeArr }: LikeDataProps) {
   const renderLastCardIdx = currentPage * 8;
 
   //총 페이지 수
-  const totalPage = Math.ceil(likeArr.length / 8);
+  const totalPage = Math.ceil(likeArr?.length / 8);
 
 
   // PageNumButton은 10개 단위로 끊어서 렌더링
@@ -21,7 +36,7 @@ function UserMovieList({ likeArr }: LikeDataProps) {
   
   // 한페이지당 8개의 데이터가 렌더링되어 1-10까지는 총 80개의 데이터 렌더링
   // 이렇게 만든 한 줄마다의 데이터가 likeArr의 개수보다 작을 경우 true반환
-  const lineRenderData = 8 * nextCount < likeArr.length;
+  const lineRenderData = 8 * nextCount < likeArr?.length;
 
   const renderPagination = () => {
     const pageNumbers = [];
@@ -67,7 +82,7 @@ function UserMovieList({ likeArr }: LikeDataProps) {
     indexOfLastItem,
   );
 
-  const renderData = likeArr.slice(renderFirstCardIdx, renderLastCardIdx);
+  const renderData = likeArr?.slice(renderFirstCardIdx, renderLastCardIdx);
 
   return (
     <MovieListWrapper>
@@ -76,7 +91,7 @@ function UserMovieList({ likeArr }: LikeDataProps) {
           <h2>찜한 영화</h2>
         </TabBar>
         <MovieList>
-          {renderData.map((movie) => (
+          {renderData?.map((movie) => (
             <li>
               <img
                 src={`http://image.tmdb.org/t/p/w342${movie.poster_path}`}
