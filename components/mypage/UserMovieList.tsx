@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import PageNavigatorButton from '../buttons/PageNavigatorButton';
 import { LikeDataProps } from '@/utils/type/UserDataType';
+import NoPosterIcon from '../../public/images/icons/icon_errorface.svg';
+import Link from 'next/link';
+import Image from 'next/image';
 
 function UserMovieList({ likeArr = [] }: LikeDataProps) {
   if (likeArr.length === 0) {
@@ -90,12 +93,30 @@ function UserMovieList({ likeArr = [] }: LikeDataProps) {
         <MovieList>
           {renderData?.map((movie) => (
             <li key={movie.movieId}>
-              <img
-                src={`http://image.tmdb.org/t/p/w342${movie.poster_path}`}
-                alt={movie.movieTitle + '포스터입니다'}
-              />
-              <p>{movie.movieTitle}</p>
-              <p>{movie.release_date}</p>
+              <Link href={`/detail/${movie.movieTitle}/${movie.movieId}`}>
+                {movie.poster_path && (
+                  <ImageBlock>
+                    <Image
+                      src={`http://image.tmdb.org/t/p/w342${movie.poster_path}`}
+                      alt={movie.movieTitle}
+                      fill
+                      sizes="(max-width: 768px) 50vw,(max-width: 1200px) 70vw"
+                      loading="eager"
+                      priority
+                    />
+                  </ImageBlock>
+                )}
+                {!movie.poster_path && (
+                  <NoPosterBlock>
+                    <DescriptionBlock>
+                      <NoPosterIcon />
+                      <span>포스터 준비중</span>
+                    </DescriptionBlock>
+                  </NoPosterBlock>
+                )}
+                <p>{movie.movieTitle}</p>
+                <p>{movie.release_date}</p>
+              </Link>
             </li>
           ))}
         </MovieList>
@@ -134,6 +155,10 @@ export default UserMovieList;
 const MovieListWrapper = styled.section`
   margin: auto;
   width: 83%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const MovieListBox = styled.div`
@@ -153,6 +178,10 @@ const MovieListBox = styled.div`
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+  }
+  @media (max-width: 768px) {
+    margin: 0px;
+    margin-top: 20px;
   }
 `;
 
@@ -177,15 +206,31 @@ const MovieList = styled.ul`
         color: ${({ theme }) => theme.colors.black};
         font-size: ${({ theme }) => theme.fontSize.headline3};
         font-weight: 700;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1; /* 라인수 */
+        -webkit-box-orient: vertical;
+        word-wrap: break-word;
+        line-height: 1.2em;
+        height: 1.2em;
       }
-
       &:last-of-type {
+        margin-top: 8px;
+        color: var(--gray-1, #767676);
+        font-size: ${({ theme }) => theme.fontSize.discription};
+        font-weight: 400;
+        line-height: 150%;
       }
     }
   }
   @media (min-width: 768px) {
     li {
       width: calc(50% - 20px);
+      img {
+        width: 100%;
+        height: auto;
+      }
     }
   }
 
@@ -217,4 +262,35 @@ const PageNumButton = styled.button`
     background-color: ${({ theme }) => theme.colors.brown5};
     color: ${({ theme }) => theme.colors.white};
   }
+`;
+const NoPosterBlock = styled.div`
+  position: relative;
+  padding-bottom: 150%;
+  margin-bottom: 8px;
+  background-color: ${({ theme }) => theme.colors.gray0};
+`;
+const DescriptionBlock = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+
+  svg {
+    margin-bottom: 8px;
+  }
+
+  svg path {
+    fill: ${({ theme }) => theme.colors.black};
+  }
+
+  span {
+    display: block;
+    color: ${({ theme }) => theme.colors.black};
+  }
+`;
+const ImageBlock = styled.div`
+  position: relative;
+  padding-bottom: 150%;
+  margin-bottom: 8px;
 `;
