@@ -95,6 +95,13 @@ export function Header() {
               <ListItem>
                 <Link href={`/list/year/${currentYear}`}>년도별</Link>
               </ListItem>
+              {isLogin && (
+                <ListItem>
+                  <Link href="/mypage" className="pc-nav">
+                    마이페이지
+                  </Link>
+                </ListItem>
+              )}
             </ul>
           </nav>
         </FlexContainer>
@@ -102,14 +109,16 @@ export function Header() {
           <SearchBar className="pc-nav" />
           {isLogin === false ? (
             <Link href="/login">
-              <ConfirmButton className="login-btn pc-nav" text="로그인" />
+              <ConfirmButton className="login-btn" text="로그인" />
             </Link>
           ) : (
-            <ConfirmButton
-              onClick={logout}
-              className="login-btn pc-nav"
-              text="로그아웃"
-            />
+            <>
+              <ConfirmButton
+                onClick={logout}
+                className="login-btn"
+                text="로그아웃"
+              />
+            </>
           )}
           <ModeButton mode="light" />
         </FlexContainer>
@@ -164,6 +173,7 @@ const HeaderBlock = styled.header`
 
 const WrapperBlock = styled.div`
   display: flex;
+  justify-content: space-between;
   max-width: 1200px;
   height: 100%;
   padding: 0 20px;
@@ -172,7 +182,6 @@ const WrapperBlock = styled.div`
 
 const FlexContainer = styled.div`
   display: flex;
-  width: 50%;
   align-items: center;
 
   &.right-block {
@@ -204,7 +213,7 @@ const ListItem = styled.li`
   }
 
   @media (min-width: 800px) {
-    margin-right: 40px;
+    margin-right: 24px;
   }
 `;
 
