@@ -65,18 +65,32 @@ function ReviewModal({ movieData, setIsOpened }: ReviewModalTypes) {
     );
     const querySnapshot = await getDocs(q);
 
-    querySnapshot.forEach((doc) => {
+    // 페이지 이동시 existReview 초기화
+    if (!querySnapshot.docs[0]) {
       setExistReview({
-        reviewId: doc.id,
-        content: doc.data().content,
-        movieId: doc.data().movieId,
-        movieTitle: doc.data().movieTitle,
-        rating: doc.data().rating,
-        userNickName: doc.data().userNickName,
+        reviewId: '',
+        content: '',
+        movieId: 0,
+        movieTitle: '',
+        rating: 0,
+        userNickName: '',
       });
-      setReviewText(doc.data().content);
-      setReviewRating(doc.data().rating);
-    });
+      setReviewText('');
+      setReviewRating(0);
+    } else {
+      querySnapshot.forEach((doc) => {
+        setExistReview({
+          reviewId: doc.id,
+          content: doc.data().content,
+          movieId: doc.data().movieId,
+          movieTitle: doc.data().movieTitle,
+          rating: doc.data().rating,
+          userNickName: doc.data().userNickName,
+        });
+        setReviewText(doc.data().content);
+        setReviewRating(doc.data().rating);
+      });
+    }
   };
 
   // 리뷰 작성 및 업데이트 로직
@@ -97,7 +111,7 @@ function ReviewModal({ movieData, setIsOpened }: ReviewModalTypes) {
     });
 
     // 이미 작성된 리뷰가 있을 경우 나눠지는 로직
-    if (existReview) {
+    if (existReview?.content) {
       alert('리뷰가 수정되었습니다.');
       await updateDoc(doc(db, 'reviews', existReview.reviewId), {
         content: reviewText,
@@ -124,7 +138,8 @@ function ReviewModal({ movieData, setIsOpened }: ReviewModalTypes) {
 
   useEffect(() => {
     if (localStorage.getItem('userData')) loadExistReview();
-  }, []);
+    console.log(movieId);
+  }, [movieData, movieId]);
 
   return (
     <>
