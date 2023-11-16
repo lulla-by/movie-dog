@@ -96,7 +96,7 @@ function ReviewSwiper({ movieId, className }: SwiperTypes) {
 
   useEffect(() => {
     loadExistReview();
-  }, []);
+  }, [movieId]);
 
   return (
     <>

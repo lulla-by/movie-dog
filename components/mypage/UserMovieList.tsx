@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import PageNavigatorButton from '../buttons/PageNavigatorButton';
 import { LikeDataProps } from '@/utils/type/UserDataType';
+import NoPosterIcon from '../../public/images/icons/icon_errorface.svg';
+import Link from 'next/link';
+import Image from 'next/image';
 
-function UserMovieList({ likeArr=[] }: LikeDataProps) {
+function UserMovieList({ likeArr = [] }: LikeDataProps) {
   if (likeArr.length === 0) {
     return (
       <MovieListWrapper>
@@ -11,9 +14,7 @@ function UserMovieList({ likeArr=[] }: LikeDataProps) {
           <TabBar>
             <h2>찜한 영화</h2>
           </TabBar>
-          <MovieList>
-            찜 목록에 추가한 영화가 없습니다.
-          </MovieList>
+          <MovieList>찜 목록에 추가한 영화가 없습니다.</MovieList>
         </MovieListBox>
       </MovieListWrapper>
     );
@@ -29,11 +30,10 @@ function UserMovieList({ likeArr=[] }: LikeDataProps) {
   //총 페이지 수
   const totalPage = Math.ceil(likeArr?.length / 8);
 
-
   // PageNumButton은 10개 단위로 끊어서 렌더링
   // direction이 next인 pageNavButton을 한번 클릭할때마다 10씩 증가, prev는 10씩 감소
   const [nextCount, setNextCount] = useState(10);
-  
+
   // 한페이지당 8개의 데이터가 렌더링되어 1-10까지는 총 80개의 데이터 렌더링
   // 이렇게 만든 한 줄마다의 데이터가 likeArr의 개수보다 작을 경우 true반환
   const lineRenderData = 8 * nextCount < likeArr?.length;
@@ -92,13 +92,31 @@ function UserMovieList({ likeArr=[] }: LikeDataProps) {
         </TabBar>
         <MovieList>
           {renderData?.map((movie) => (
-            <li>
-              <img
-                src={`http://image.tmdb.org/t/p/w342${movie.poster_path}`}
-                alt={movie.movieTitle + '포스터입니다'}
-              />
-              <p>{movie.movieTitle}</p>
-              <p>{movie.release_date}</p>
+            <li key={movie.movieId}>
+              <Link href={`/detail/${movie.movieTitle}/${movie.movieId}`}>
+                {movie.poster_path && (
+                  <ImageBlock>
+                    <Image
+                      src={`http://image.tmdb.org/t/p/w342${movie.poster_path}`}
+                      alt={movie.movieTitle}
+                      fill
+                      sizes="(max-width: 768px) 50vw,(max-width: 1200px) 70vw"
+                      loading="eager"
+                      priority
+                    />
+                  </ImageBlock>
+                )}
+                {!movie.poster_path && (
+                  <NoPosterBlock>
+                    <DescriptionBlock>
+                      <NoPosterIcon />
+                      <span>포스터 준비중</span>
+                    </DescriptionBlock>
+                  </NoPosterBlock>
+                )}
+                <p>{movie.movieTitle}</p>
+                <p>{movie.release_date}</p>
+              </Link>
             </li>
           ))}
         </MovieList>
@@ -137,6 +155,10 @@ export default UserMovieList;
 const MovieListWrapper = styled.section`
   margin: auto;
   width: 83%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const MovieListBox = styled.div`
@@ -156,6 +178,10 @@ const MovieListBox = styled.div`
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+  }
+  @media (max-width: 768px) {
+    margin: 0px;
+    margin-top: 20px;
   }
 `;
 
@@ -180,15 +206,31 @@ const MovieList = styled.ul`
         color: ${({ theme }) => theme.colors.black};
         font-size: ${({ theme }) => theme.fontSize.headline3};
         font-weight: 700;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1; /* 라인수 */
+        -webkit-box-orient: vertical;
+        word-wrap: break-word;
+        line-height: 1.2em;
+        height: 1.2em;
       }
-
       &:last-of-type {
+        margin-top: 8px;
+        color: var(--gray-1, #767676);
+        font-size: ${({ theme }) => theme.fontSize.discription};
+        font-weight: 400;
+        line-height: 150%;
       }
     }
   }
   @media (min-width: 768px) {
     li {
       width: calc(50% - 20px);
+      img {
+        width: 100%;
+        height: auto;
+      }
     }
   }
 
@@ -220,4 +262,35 @@ const PageNumButton = styled.button`
     background-color: ${({ theme }) => theme.colors.brown5};
     color: ${({ theme }) => theme.colors.white};
   }
+`;
+const NoPosterBlock = styled.div`
+  position: relative;
+  padding-bottom: 150%;
+  margin-bottom: 8px;
+  background-color: ${({ theme }) => theme.colors.gray0};
+`;
+const DescriptionBlock = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+
+  svg {
+    margin-bottom: 8px;
+  }
+
+  svg path {
+    fill: ${({ theme }) => theme.colors.black};
+  }
+
+  span {
+    display: block;
+    color: ${({ theme }) => theme.colors.black};
+  }
+`;
+const ImageBlock = styled.div`
+  position: relative;
+  padding-bottom: 150%;
+  margin-bottom: 8px;
 `;

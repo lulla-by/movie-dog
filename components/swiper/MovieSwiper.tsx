@@ -89,7 +89,7 @@ function MovieSwiper({ urlKey, ranking, className, movieId }: SwiperTypes) {
 
   useEffect(() => {
     getMovieDB();
-  }, []);
+  }, [movieId]);
 
   return (
     <SwiperBlock {...swiperOptions} className={className}>

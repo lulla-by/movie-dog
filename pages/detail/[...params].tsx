@@ -14,8 +14,17 @@ import ReviewModal from '@/components/modal/ReviewModal';
 import Modal from '@/components/modal/Modal';
 import StarRating from '@/components/StarRating';
 
-import { options } from '../api/data';
 import useModal from '@/utils/useModal';
+
+import { options } from '../api/data';
+
+type LikedMovieTypes = {
+  genres: { name: string; id: number }[];
+  movieId: number;
+  movieTitle: string;
+  poster_path: string;
+  release_date: string;
+};
 
 type MovieDataTypes = {
   id: number;
@@ -49,7 +58,7 @@ function Detail({
   const { modal: reviewModal, toggleModal: toggleReviewModal } =
     useModal('reviewModal');
   const [isLiked, setIsliked] = useState(false);
-  const [likedMovies, setLikedMovies] = useState<number[]>([]);
+  const [likedMovies, setLikedMovies] = useState<LikedMovieTypes[]>([]);
 
   const getMovieDB = async () => {
     const response = await fetch(
@@ -99,14 +108,6 @@ function Detail({
     setCreditData({ cast: actorList, director: directorName });
   };
 
-  const isLikedMovie = async () => {
-    if (uid) {
-      const docSnap = await getDoc(doc(db, 'likes', uid));
-      setLikedMovies(docSnap.data()?.likedMovies);
-      setIsliked(docSnap.data()?.likedMovies.includes(+movieId));
-    }
-  };
-
   const handleReviewButton = () => {
     if (localStorage.getItem('userData')) {
       toggleReviewModal(reviewModal.isOpened);
@@ -115,18 +116,34 @@ function Detail({
     }
   };
 
+  const isLikedMovie = async () => {
+    if (uid) {
+      const docSnap = await getDoc(doc(db, 'likes', uid));
+      const likedMoviesData = docSnap.data()?.likedMovies || [];
+
+      setLikedMovies(likedMoviesData);
+
+      const isMovieLiked = likedMoviesData.some(
+        (item: any) => item.movieId === +movieId,
+      );
+
+      setIsliked(isMovieLiked);
+    }
+  };
+
   const handleLikeButton = async () => {
     if (uid) {
       if (isLiked) {
-        alert('찜목록에서 삭제되었습니다.');
+        // 찜목록에 있을 경우
         await updateDoc(doc(db, 'likes', uid), {
-          likedMovies: likedMovies.filter((item) => item !== +movieId),
+          likedMovies: likedMovies.filter((item) => item.movieId !== +movieId),
         });
         setIsliked(false);
+        alert('찜목록에서 삭제되었습니다.');
       } else {
-        alert('찜목록에 추가되었습니다.');
+        // 찜목록에 추가
         if (likedMovies) {
-          setDoc(doc(db, 'likes', uid), {
+          await setDoc(doc(db, 'likes', uid), {
             likedMovies: [
               ...likedMovies,
               {
@@ -139,7 +156,7 @@ function Detail({
             ],
           });
         } else {
-          setDoc(doc(db, 'likes', uid), {
+          await setDoc(doc(db, 'likes', uid), {
             likedMovies: [
               {
                 genres: movieData?.genres,
@@ -152,6 +169,7 @@ function Detail({
           });
         }
         setIsliked(true);
+        alert('찜목록에 추가되었습니다.');
       }
     } else {
       alert('로그인이 필요한 서비스입니다.');
@@ -161,8 +179,15 @@ function Detail({
   useEffect(() => {
     getMovieDB();
     getCreditList();
-    isLikedMovie();
   }, [params]);
+
+  // 새로고침해도 찜한 영화정보를 불러오는 로직
+  useEffect(() => {
+    const fetchData = async () => {
+      await isLikedMovie();
+    };
+    fetchData();
+  }, [uid, movieId, isLiked]);
 
   return (
     <>

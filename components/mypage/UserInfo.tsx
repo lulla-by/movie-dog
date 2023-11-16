@@ -121,25 +121,18 @@ export default UserInfo;
 
 const UserInfoWrapper = styled.section`
   margin: auto;
+  display: flex;
+  gap: 20px;
+  margin: auto;
+  flex-direction: row;
   width: 83%;
+  padding: 50px 20px 0px 20px;
+
   @media (max-width: 768px) {
-    padding: 0px;
-    flex-direction: row;
-  }
-  @media (min-width: 769px) {
-    padding: 0px;
-    flex-direction: row;
-  }
-  @media (min-width: 1200px) {
-    margin: auto;
     margin-top: 50px;
-    display: flex;
-    gap: 20px;
-    width: 83%;
-    padding-left: 20px;
-    padding-right: 20px;
-    justify-content: space-between;
-    flex-direction: row;
+    width: 100%;
+    padding: 0px;
+    flex-direction: column;
   }
 `;
 
@@ -150,6 +143,11 @@ const LayoutBox = styled.div`
   margin: auto;
   margin-top: 32px;
   padding-left: 164px;
+  p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
   li {
     margin-top: 8px;
@@ -162,26 +160,18 @@ const LayoutBox = styled.div`
 `;
 const UserInfoBox = styled.div`
   position: relative;
-  min-width: 380px;
   border: 1px solid ${({ theme }) => theme.colors.brown5};
   background-color: ${({ theme }) => theme.colors.brown1};
   height: 189px;
   border-radius: 10px;
+  width: 50%;
+
   @media (max-width: 768px) {
-    margin: auto;
     width: 100%;
-  }
-  @media (min-width: 769px) {
-    padding: 0px;
-    width: 80%;
     margin: auto;
-  }
-  @media (min-width: 1200px) {
-    width: 50%;
   }
 `;
 const UserGenres = styled.div`
-  min-width: 380px;
   border: 1px solid ${({ theme }) => theme.colors.brown5};
   background-color: ${({ theme }) => theme.colors.brown1};
   height: 189px;
@@ -190,14 +180,7 @@ const UserGenres = styled.div`
     width: 100%;
     margin: auto;
   }
-  @media (min-width: 769px) {
-    padding: 0px;
-    width: 80%;
-    margin: auto;
-  }
-  @media (min-width: 1200px) {
-    width: 50%;
-  }
+  width: 50%;
 
   h2 {
     margin-top: 32px;
