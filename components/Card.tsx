@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import StarRating from './StarRating';
 import NoPosterIcon from '../public/images/icons/icon_errorface.svg';
 
-import { genreArr } from '@/pages/api/data';
 import findGenre from '@/utils/findGenre';
 
 type MovieTypes = {
