@@ -74,14 +74,16 @@ export function Header() {
 
   return (
     <HeaderBlock>
-      {searchModal.isOpened && (
-        <Modal
-          isOpened={searchModal.isOpened}
-          setIsOpened={() => toggleSearchModal(searchModal.isOpened)}
-        >
-          <SearchBar />
-        </Modal>
-      )}
+      <ModalBlock>
+        {searchModal.isOpened && (
+          <Modal
+            isOpened={searchModal.isOpened}
+            setIsOpened={() => toggleSearchModal(searchModal.isOpened)}
+          >
+            <SearchBar />
+          </Modal>
+        )}
+      </ModalBlock>
       <WrapperBlock>
         <FlexContainer className="left-block">
           <Link href="/">
@@ -168,6 +170,12 @@ const HeaderBlock = styled.header`
     .pc-nav {
       display: block;
     }
+  }
+`;
+
+const ModalBlock = styled.div`
+  @media (min-width: 768px) {
+    display: none;
   }
 `;
 
