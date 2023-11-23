@@ -37,12 +37,21 @@ React + Next.js를 이용한 영화정보 반응형 사이트
 - 로그인시 마이페이지 메뉴가 나타납니다.
   
 ### 회원가입
+
+![회원가입1](https://github.com/movie-dog/movie-dog/assets/107671084/7969e507-c7c7-4aa7-8203-db51f1aca778)
+![회원가입2](https://github.com/movie-dog/movie-dog/assets/107671084/ff2fc791-aeb5-44c9-afb9-c4ad529a3280)
+![회원가입3](https://github.com/movie-dog/movie-dog/assets/107671084/fa423406-be83-441a-a880-467f7f8c417a)
+
 - 유효성 검증을 추가하여 모든 로직 통과시에만 회원가입 버튼이 활성화 됩니다.
 - 이메일/비밀번호 회원가입이 가능하며 파이어베이스 authentication을 사용했습니다.
 - gamil.com으로 끝나는 아이디는 구글 로그인을 하도록 메세지를 추가했습니다.
 - 깃허브와 구글계정으로 소셜로그인이 가능합니다.
   
 ### 로그인
+
+![일반로그인](https://github.com/movie-dog/movie-dog/assets/107671084/a7e2d110-2278-4a06-b8bd-24b2276f6e2e)
+![소셜로그인](https://github.com/movie-dog/movie-dog/assets/107671084/83e40439-af24-4a79-9cbd-70af7839f5d1)
+
 - 소셜로그인(깃허브, 구글로그인)과 이메일/비밀번호 방식으로 로그인 할 수 있습니다.
 
   
@@ -77,11 +86,14 @@ React + Next.js를 이용한 영화정보 반응형 사이트
 - 해당되는 영화 정보가 없을 경우 사용자에게 안내합니다.
 
 ### 마이페이지
+![찜과 한줄평 없을때](https://github.com/movie-dog/movie-dog/assets/107671084/30035b63-854d-4be3-a97b-0c7208a9e149)
+![좋아요 마이페이지](https://github.com/movie-dog/movie-dog/assets/107671084/c05e87c1-925a-4952-817a-22c90d344d8e)
+![리뷰 마이페이지](https://github.com/movie-dog/movie-dog/assets/107671084/a1455075-a3a9-4e57-8fa2-4e99d33e047e)
+![마이페이지 전체 렌더링](https://github.com/movie-dog/movie-dog/assets/107671084/b300079c-9fb1-4a08-b41b-4fe55d096f01)
 
 - 마이페이지는 user의 정보를 알려주는 카드와 선호장르 카드, 찜한 영화목록과 작성한 리뷰들의 목록을 보여줍니다.
 - 찜한 영화와 리뷰가 없을 경우에는 안내메세지가 나옵니다.
 - 유져의 카드에는 찜 한 영화와 작성한 리뷰의 개수를 나타냅니다.
 - 나의 선호 장르에는 찜한 영화와 작성한 리뷰를 바탕으로 선호하는 장르를 산출합니다.
-- 찜한 영화 목록에는 좋아요를 누른 영화의 목록이 8개씩 렌더링 됩니다.
-- 작성한 리뷰들의 목록이 4개씩 렌더링 됩니다.
+- 각 목록에는 좋아요를 누른 영화의 목록이 8개씩, 작성한 리뷰들은 4개씩 렌더링 됩니다.
 
