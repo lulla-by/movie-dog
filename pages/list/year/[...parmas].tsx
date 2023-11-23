@@ -12,7 +12,7 @@ interface YearMainProps {
   idx: string;
 }
 
-function YearMain({ data, year, idx}: YearMainProps) {
+function YearMain({ data, year, idx }: YearMainProps) {
   return (
     <WrapperBlock>
       <Category />
@@ -49,7 +49,9 @@ const WrapperBlock = styled.div`
   }
 `;
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
   const params: ParsedUrlQuery | undefined = context.params;
 
   //params가 undefined인지 확인하고, 해당 경우 기본값인 year와 idx를 설정
@@ -58,19 +60,23 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
   if (params && params.parmas) {
     // params.parmas가 존재하고 배열인지 여부를 확인하고, 값에 접근하여 year와 idx 변수를 설정
-    const paramArray = Array.isArray(params.parmas) ? params.parmas : [params.parmas];
+    const paramArray = Array.isArray(params.parmas)
+      ? params.parmas
+      : [params.parmas];
     year = paramArray[0] as string;
-    idx = paramArray[1] ? paramArray[1] as string : '1';
+    idx = paramArray[1] ? (paramArray[1] as string) : '1';
   }
 
-  const response = await fetch(`http://localhost:3000/api/movie/${year}/${idx}`);
+  const response = await fetch(
+    `https://movie-dog.vercel.app/api/movie/${year}/${idx}`,
+  );
   const { results } = await response.json();
 
   return {
     props: {
       data: results,
       year: year,
-      idx: idx
+      idx: idx,
     },
   };
 };
