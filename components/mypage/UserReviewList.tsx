@@ -145,11 +145,6 @@ const ReviewListBox = styled.div`
     li {
       display: inline-block;
       width: calc(50% - 20px);
-      article {
-        height: 287px;
-        justify-content: flex-start;
-        border: 1px solid ${({ theme }) => theme.colors.brown2};
-      }
     }
   }
   @media (max-width: 768px) {
