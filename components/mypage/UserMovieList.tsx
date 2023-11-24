@@ -192,10 +192,12 @@ const TabBar = styled.div`
 
 const MovieList = styled.ul`
   padding: 32px 0px 50px 0px;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
   li {
-    width: calc(100% - 20px);
+    display: inline-block;
+    width: 100%;
     img {
       width: 100%;
       height: auto;
@@ -226,7 +228,7 @@ const MovieList = styled.ul`
   }
   @media (min-width: 768px) {
     li {
-      width: calc(50% - 20px);
+      width: calc(50% - 10px);
       img {
         width: 100%;
         height: auto;
@@ -236,7 +238,7 @@ const MovieList = styled.ul`
 
   @media (min-width: 1200px) {
     li {
-      width: calc(25% - 20px);
+      width: calc(25% - 15px);
     }
   }
 `;

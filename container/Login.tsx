@@ -62,7 +62,7 @@ export default function Login() {
     // 이전 페이지 path
     const prevPath = globalThis.sessionStorage.getItem('prevPath');
 
-    if (prevPath === '/signup') {
+    if (prevPath === '/signup' || prevPath ==='/login') {
       router.push('/');
     } else {
       router.push(prevPath || '/');

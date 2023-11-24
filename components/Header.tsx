@@ -23,6 +23,7 @@ import Modal from './modal/Modal';
 
 export function Header() {
   const router = useRouter();
+  
   const [isTabBarShowing, setIsTabBarShowing] = useState(true);
   const { modal: searchModal, toggleModal: toggleSearchModal } =
     useModal('searchModal');
@@ -68,7 +69,11 @@ export function Header() {
       window.localStorage.removeItem('userData');
       setIsLogin(false);
       authService.signOut();
-      location.reload();
+      if(router.pathname === "/mypage"){
+        router.push('/')
+      }else{
+        location.reload();
+      }
     }
   };
 
