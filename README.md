@@ -2,6 +2,8 @@
 
 React + Next.js를 이용한 영화정보 반응형 사이트
 
+### URL:https://movie-dog.vercel.app/
+
 ## 🎞️ 프로젝트 소개
 
 영화정보 사이트인 [TMDB](https://www.themoviedb.org/?language=ko)의 API를 이용하여,
