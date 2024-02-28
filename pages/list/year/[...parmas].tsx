@@ -16,7 +16,7 @@ function YearMain({ data, year, idx }: YearMainProps) {
   return (
     <WrapperBlock>
       <Category />
-      {/* <YearList year={year} data={data} idx={idx} /> */}
+      <YearList year={year} data={data} idx={idx} />
     </WrapperBlock>
   );
 }
@@ -49,32 +49,32 @@ const WrapperBlock = styled.div`
   }
 `;
 
-// export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-//   const params = context.params;
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const params = context.params;
 
-//   // params가 undefined인지 확인하고, 해당 경우 기본값인 year와 idx를 설정
-//   let year = '2020';
-//   let idx = '1';
+  // params가 undefined인지 확인하고, 해당 경우 기본값인 year와 idx를 설정
+  let year = '2020';
+  let idx = '1';
 
-//   if (params && params.year) {
-//     // params.year가 존재하고 배열인지 여부를 확인하고, 값에 접근하여 year와 idx 변수를 설정
-//     const paramArray = Array.isArray(params.year)
-//       ? params.year
-//       : [params.year];
-//     year = paramArray[0] as string;
-//     idx = params.idx ? (params.idx as string) : '1';
-//   }
+  if (params && params.year) {
+    // params.year가 존재하고 배열인지 여부를 확인하고, 값에 접근하여 year와 idx 변수를 설정
+    const paramArray = Array.isArray(params.year)
+      ? params.year
+      : [params.year];
+    year = paramArray[0] as string;
+    idx = params.idx ? (params.idx as string) : '1';
+  }
 
-//   const response = await fetch(
-//     `https://movie-dog.vercel.app/api/movie/${year}/${idx}`,
-//   );
-//   const { results } = await response.json();
+  const response = await fetch(
+    `https://movie-dog.vercel.app/api/movie/${year}/${idx}`,
+  );
+  const { results } = await response.json();
 
-//   return {
-//     props: {
-//       data: results,
-//       year,
-//       idx,
-//     },
-//   };
-// };
+  return {
+    props: {
+      data: results,
+      year,
+      idx,
+    },
+  };
+};
