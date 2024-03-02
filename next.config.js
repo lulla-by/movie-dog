@@ -3,7 +3,6 @@
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY_AUTH;
 const currentYear = new Date().getFullYear().toString();
 const nextConfig = {
-  target: 'serverless',
   reactStrictMode: true,
   images: {
     remotePatterns: [
