@@ -3,6 +3,7 @@
 React + Next.js를 이용한 영화정보 반응형 사이트
 
 ### URL:[https://movie-dog.vercel.app/](https://main.drpe221ejddia.amplifyapp.com/)
+(기존 프로젝트 repo에서 발생한 배포 이슈로 개인 repo에서 재배포를 진행했습니다.)
 
 ## 🎞️ 프로젝트 소개
 
