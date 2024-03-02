@@ -63,7 +63,7 @@ export const getServerSideProps = async (context: any) => {
     idx = params[1];
   }
   const response = await fetch(
-    `https://movie-dog.vercel.app/api/movie/${year}/${idx}`,
+    `https://main.drpe221ejddia.amplifyapp.com/api/movie/${year}/${idx}`,
   );
 
   const { results } = await response.json();
