@@ -53,7 +53,7 @@ export const getServerSideProps = async (context: any) => {
 
   const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY_AUTH;
   // params가 undefined인지 확인하고, 해당 경우 기본값인 year와 idx를 설정
-  let year = '2020';
+  let year = new Date().getFullYear().toString();;
   let idx = '1';
   if (params[0]) {
     year = params[0];
