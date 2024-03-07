@@ -19,6 +19,7 @@ export default function PageNavigatorButton({
   return (
     <>
       <NavigatorBox
+        aria-label={`${direction} 10 page navigation button`}
         ref={buttonRef}
         onClick={onClick}
         className={`${className} ${direction}-button`}
