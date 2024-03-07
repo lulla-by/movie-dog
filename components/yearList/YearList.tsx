@@ -133,7 +133,7 @@ const PageNumButton = styled.button`
   width: 32px;
   height: 32px;
   margin: 0 2px;
-  color: ${({ theme }) => theme.colors.brown5};
+  color: ${({ theme }) => theme.colors.brown8};
   font-size: ${({ theme }) => theme.fontSize.headline5};
   font-weight: 700;
   border: none;
@@ -142,7 +142,7 @@ const PageNumButton = styled.button`
   background: none;
 
   &.active {
-    background-color: ${({ theme }) => theme.colors.brown5};
+    background-color: ${({ theme }) => theme.colors.brown8};
     color: ${({ theme }) => theme.colors.white};
   }
 `;

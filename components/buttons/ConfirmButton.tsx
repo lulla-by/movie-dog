@@ -58,9 +58,9 @@ const ButtonBlock = styled.button<{ width: number }>`
   gap: 4px;
   width: ${({ width }) => width + '%'};
   padding: 8px 10px;
-  color: ${({ theme }) => theme.colors.brown5};
+  color: ${({ theme }) => theme.colors.brown8};
   background-color: ${({ theme }) => theme.colors.white};
-  border: 1px solid ${({ theme }) => theme.colors.brown5};
+  border: 1px solid ${({ theme }) => theme.colors.brown8};
   border-radius: 4px;
   transition: all 0.2s;
   cursor: pointer;

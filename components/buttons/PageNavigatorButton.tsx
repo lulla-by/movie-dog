@@ -36,9 +36,9 @@ const NavigatorBox = styled.button`
   justify-content: center;
   width: 40px;
   height: 40px;
-  border: 1px solid ${({ theme }) => theme.colors.brown6};
+  border: 1px solid ${({ theme }) => theme.colors.brown8};
   border-radius: 100%;
-  color: ${({ theme }) => theme.colors.brown6};
+  color: ${({ theme }) => theme.colors.brown8};
   background-color: ${({ theme }) => theme.colors.brown1};
   /* filter: drop-shadow(0px 0px 5px rgba(98, 66, 42, 0.15)); */
   cursor: pointer;

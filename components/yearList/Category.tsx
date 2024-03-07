@@ -63,7 +63,7 @@ export default Category;
 const SidebarBlock = styled.aside`
   h2 {
     padding: 12px 20px;
-    background-color: ${({ theme }) => theme.colors.brown5};
+    background-color: ${({ theme }) => theme.colors.brown8};
     border-radius: 4px 4px 0 0;
     color: ${({ theme }) => theme.colors.brown1};
     font-size: ${({ theme }) => theme.fontSize.headline4};
