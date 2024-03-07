@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PageNavigatorButton from '../buttons/PageNavigatorButton';
 import YearItem from './YearItem';
 import { useRouter } from 'next/router';
 import { Movie } from '@/utils/type/MovieType';
+import Meta from '@/utils/MetaTag';
+
 type YearMainsProps = {
   year: string;
   data: Movie[];
   idx: string;
 };
+
 
 const YearList = ({ year, data, idx }: YearMainsProps) => {
   const router = useRouter();
@@ -62,6 +65,11 @@ const YearList = ({ year, data, idx }: YearMainsProps) => {
 
   return (
     <WrapperBlock>
+      <Meta
+        title={`${year}년도 리스트`}
+        description={`${year}년도 리스트 페이지입니다`}
+        url={`https://main.drpe221ejddia.amplifyapp.com/list/${year}/${idx}`}
+      />
       <CardListBlock>
         {data &&
           data.map((movie: Movie) => {
